@@ -1,0 +1,800 @@
+[
+  {
+    "id":"1e71c989e93eafa2b61f2c1711925545d805e734",
+    "artist":"Christopher Rush",
+    "cmc":5,
+    "colorIdentity":[
+      "G",
+      "R"
+    ],
+    "colors":[
+      "Green"
+    ],
+    "flavor":"Its belly produces a boiling-hot fluid it can spit as a weapon or spin slowly enough to freeze into a defensive web.",
+    "imageName":"steam spitter",
+    "layout":"normal",
+    "manaCost":"{4}{G}",
+    "multiverseid":121240,
+    "name":"Steam Spitter",
+    "number":"124",
+    "power":"1",
+    "rarity":"Uncommon",
+    "subtypes":[
+      "Spider"
+    ],
+    "text":"Reach (This creature can block creatures with flying.)\n{R}: Steam Spitter gets +1/+0 until end of turn.",
+    "toughness":"5",
+    "type":"Creature — Spider",
+    "types":[
+      "Creature"
+    ],
+    "setIcon":"csp",
+    "cardsInCollection":1
+  },
+  {
+    "id":"9a3fe8b76d7d68a252070df883ab492edf7d3cf4",
+    "artist":"Ryan Pancoast",
+    "cmc":2,
+    "colorIdentity":[
+      "G"
+    ],
+    "colors":[
+      "Green"
+    ],
+    "flavor":"The massive dominate through might. The tiny survive with guile. Beware the tiny who become massive.",
+    "imageName":"titanic growth",
+    "layout":"normal",
+    "manaCost":"{1}{G}",
+    "mciNumber":"203",
+    "multiverseid":383415,
+    "name":"Titanic Growth",
+    "number":"203",
+    "rarity":"Common",
+    "text":"Target creature gets +4/+4 until end of turn.",
+    "type":"Instant",
+    "types":[
+      "Instant"
+    ],
+    "setIcon":"m15",
+    "cardsInCollection":1
+  },
+  {
+    "id":"a2e082cc66a458370ea4df85ae64969288cdb5b4",
+    "artist":"David Palumbo",
+    "cmc":3,
+    "colorIdentity":[
+      "G"
+    ],
+    "colors":[
+      "Green"
+    ],
+    "flavor":"First you lose your enemy's trail. Then you lose all sense of direction. Then you hear the growls . . .",
+    "imageName":"hunter's ambush",
+    "layout":"normal",
+    "manaCost":"{2}{G}",
+    "mciNumber":"180",
+    "multiverseid":383271,
+    "name":"Hunter's Ambush",
+    "number":"180",
+    "rarity":"Common",
+    "text":"Prevent all combat damage that would be dealt by nongreen creatures this turn.",
+    "type":"Instant",
+    "types":[
+      "Instant"
+    ],
+    "setIcon":"m15",
+    "cardsInCollection":2
+  },
+  {
+    "id":"ff22b50bc40d4992b9c85f01fd36a9bec21758fa",
+    "artist":"Karl Kopinski",
+    "cmc":3,
+    "colorIdentity":[
+      "G"
+    ],
+    "colors":[
+      "Green"
+    ],
+    "imageName":"arachnus web",
+    "layout":"normal",
+    "manaCost":"{2}{G}",
+    "mciNumber":"163",
+    "multiverseid":220283,
+    "name":"Arachnus Web",
+    "number":"163",
+    "rarity":"Common",
+    "subtypes":[
+      "Aura"
+    ],
+    "text":"Enchant creature\nEnchanted creature can't attack or block, and its activated abilities can't be activated.\nAt the beginning of the end step, if enchanted creature's power is 4 or greater, destroy Arachnus Web.",
+    "type":"Enchantment — Aura",
+    "types":[
+      "Enchantment"
+    ],
+    "setIcon":"m12",
+    "cardsInCollection":3
+  },
+  {
+    "id":"84ea2f085eb301bf69f23b6dbb10beee1b997bc2",
+    "artist":"Karl Kopinski",
+    "cmc":6,
+    "colorIdentity":[
+      "G"
+    ],
+    "colors":[
+      "Green"
+    ],
+    "imageName":"arachnus spinner",
+    "layout":"normal",
+    "manaCost":"{5}{G}",
+    "mciNumber":"162",
+    "multiverseid":220242,
+    "name":"Arachnus Spinner",
+    "number":"162",
+    "power":"5",
+    "rarity":"Rare",
+    "subtypes":[
+      "Spider"
+    ],
+    "text":"Reach (This creature can block creatures with flying.)\nTap an untapped Spider you control: Search your graveyard and/or library for a card named Arachnus Web and put it onto the battlefield attached to target creature. If you search your library this way, shuffle it.",
+    "toughness":"7",
+    "type":"Creature — Spider",
+    "types":[
+      "Creature"
+    ],
+    "setIcon":"m12",
+    "cardsInCollection":2
+  },
+  {
+    "id":"1a8c7be4fbe4fd0d1a5224506fa8f0978afe567e",
+    "artist":"Kev Walker",
+    "cmc":1,
+    "colorIdentity":[
+      "G"
+    ],
+    "colors":[
+      "Green"
+    ],
+    "flavor":"One bone broken for every twig snapped underfoot.\n—Llanowar penalty for trespassing",
+    "imageName":"llanowar elves",
+    "layout":"normal",
+    "manaCost":"{G}",
+    "mciNumber":"182",
+    "multiverseid":221892,
+    "name":"Llanowar Elves",
+    "number":"182",
+    "power":"1",
+    "rarity":"Common",
+    "subtypes":[
+      "Elf",
+      "Druid"
+    ],
+    "text":"{T}: Add {G} to your mana pool.",
+    "toughness":"1",
+    "type":"Creature — Elf Druid",
+    "types":[
+      "Creature"
+    ],
+    "setIcon":"m12",
+    "cardsInCollection":2
+  },
+  {
+    "id":"62815d5d9829fd05f0e89d555e0a3d393ed2d289",
+    "artist":"Filip Burburan",
+    "cmc":6,
+    "colorIdentity":[
+      "G"
+    ],
+    "colors":[
+      "Green"
+    ],
+    "flavor":"The only thing more ill-tempered than a griffin in a web is the spider that must subdue it.",
+    "imageName":"skysnare spider",
+    "layout":"normal",
+    "manaCost":"{4}{G}{G}",
+    "mciNumber":"197",
+    "multiverseid":398650,
+    "name":"Skysnare Spider",
+    "number":"197",
+    "power":"6",
+    "rarity":"Uncommon",
+    "subtypes":[
+      "Spider"
+    ],
+    "text":"Vigilance (Attacking doesn't cause this creature to tap.)\nReach (This creature can block creatures with flying.)",
+    "toughness":"6",
+    "type":"Creature — Spider",
+    "types":[
+      "Creature"
+    ],
+    "setIcon":"ori",
+    "cardsInCollection":1
+  },
+  {
+    "id":"2ee09ca064c9393e06cdb4b6a06058187638c326",
+    "artist":"Iain McCaig",
+    "cmc":5,
+    "colorIdentity":[
+      "G"
+    ],
+    "colors":[
+      "Green"
+    ],
+    "flavor":"By the time the spider comes to slurp up its dinner, its victims have been partially dissolved by acidic silk.",
+    "imageName":"silklash spider",
+    "layout":"normal",
+    "manaCost":"{3}{G}{G}",
+    "mciNumber":"214",
+    "multiverseid":389672,
+    "name":"Silklash Spider",
+    "number":"214",
+    "power":"2",
+    "rarity":"Rare",
+    "subtypes":[
+      "Spider"
+    ],
+    "text":"Reach\n{X}{G}{G}: Silklash Spider deals X damage to each creature with flying.",
+    "toughness":"7",
+    "type":"Creature — Spider",
+    "types":[
+      "Creature"
+    ],
+    "setIcon":"c14",
+    "cardsInCollection":1
+  },
+  {
+    "id":"4b3738153e9862a601e149e3339c2c2ea568a409",
+    "artist":"Efrem Palacios",
+    "cmc":2,
+    "colorIdentity":[
+      "G"
+    ],
+    "colors":[
+      "Green"
+    ],
+    "imageName":"garruk's companion",
+    "layout":"normal",
+    "manaCost":"{G}{G}",
+    "mciNumber":"175",
+    "multiverseid":226896,
+    "name":"Garruk's Companion",
+    "number":"175",
+    "power":"3",
+    "rarity":"Common",
+    "subtypes":[
+      "Beast"
+    ],
+    "text":"Trample (This creature can deal excess combat damage to defending player or planeswalker while attacking.)",
+    "toughness":"2",
+    "type":"Creature — Beast",
+    "types":[
+      "Creature"
+    ],
+    "setIcon":"m12",
+    "cardsInCollection":2
+  },
+  {
+    "id":"76d01fec2dcd812bad44b9a584768b3f4b850290",
+    "artist":"Randy Gallegos",
+    "cmc":4,
+    "colorIdentity":[
+      "G"
+    ],
+    "colors":[
+      "Green"
+    ],
+    "flavor":"\"The wild is always changing, but it does have a few constants.\"\n—Garruk Wildspeaker",
+    "imageName":"giant spider",
+    "layout":"normal",
+    "manaCost":"{3}{G}",
+    "mciNumber":"177",
+    "multiverseid":233232,
+    "name":"Giant Spider",
+    "number":"177",
+    "power":"2",
+    "rarity":"Common",
+    "subtypes":[
+      "Spider"
+    ],
+    "text":"Reach (This creature can block creatures with flying.)",
+    "toughness":"4",
+    "type":"Creature — Spider",
+    "types":[
+      "Creature"
+    ],
+    "setIcon":"m12",
+    "cardsInCollection":1
+  },
+  {
+    "id":"4717829189f455cafdeb2a6db364c04279aa82bb",
+    "artist":"Terese Nielsen",
+    "cmc":3,
+    "colorIdentity":[
+      "G"
+    ],
+    "colors":[
+      "Green"
+    ],
+    "flavor":"\"The predator knows the true way of the world. Life is conflict. Only the strong survive.\"\n—Garruk Wildspeaker",
+    "imageName":"hunter's insight",
+    "layout":"normal",
+    "manaCost":"{2}{G}",
+    "mciNumber":"180",
+    "multiverseid":220291,
+    "name":"Hunter's Insight",
+    "number":"180",
+    "rarity":"Uncommon",
+    "text":"Choose target creature you control. Whenever that creature deals combat damage to a player or planeswalker this turn, draw that many cards.",
+    "type":"Instant",
+    "types":[
+      "Instant"
+    ],
+    "setIcon":"m12",
+    "cardsInCollection":2
+  },
+  {
+    "id":"ed37abec3dac911ce8da502d86fe1e44bfc88ebd",
+    "artist":"Wesley Burt",
+    "cmc":1,
+    "colorIdentity":[
+      "G"
+    ],
+    "colors":[
+      "Green"
+    ],
+    "flavor":"\"Life grows everywhere. My kin merely find those places where it grows strongest.\"\n—Nissa Revane",
+    "imageName":"elvish mystic",
+    "layout":"normal",
+    "manaCost":"{G}",
+    "mciNumber":"173",
+    "multiverseid":383229,
+    "name":"Elvish Mystic",
+    "number":"173",
+    "power":"1",
+    "rarity":"Common",
+    "subtypes":[
+      "Elf",
+      "Druid"
+    ],
+    "text":"{T}: Add {G} to your mana pool.",
+    "toughness":"1",
+    "type":"Creature — Elf Druid",
+    "types":[
+      "Creature"
+    ],
+    "setIcon":"m15",
+    "cardsInCollection":3
+  },
+  {
+    "id":"ea7e6d77fb70fcb45e0b852138f44e798a0eb81c",
+    "artist":"Vincent Proce",
+    "cmc":4,
+    "colorIdentity":[
+      "G"
+    ],
+    "colors":[
+      "Green"
+    ],
+    "flavor":"Its silk is highly prized, but then again, so is your life.",
+    "imageName":"kessig recluse",
+    "layout":"normal",
+    "manaCost":"{2}{G}{G}",
+    "multiverseid":243233,
+    "name":"Kessig Recluse",
+    "number":"121",
+    "power":"2",
+    "rarity":"Common",
+    "subtypes":[
+      "Spider"
+    ],
+    "text":"Reach (This creature can block creatures with flying.)\nDeathtouch (Any amount of damage this deals to a creature is enough to destroy it.)",
+    "toughness":"3",
+    "type":"Creature — Spider",
+    "types":[
+      "Creature"
+    ],
+    "setIcon":"dka",
+    "cardsInCollection":1
+  },
+  {
+    "id":"511b4dbbed7ff4e74d22286963fc1513550bfc49",
+    "artist":"Dave Allsop",
+    "cmc":5,
+    "colorIdentity":[
+      "G"
+    ],
+    "colors":[
+      "Green"
+    ],
+    "flavor":"The juiciest prey is that which grows lazy, thinking itself beyond the reach of danger.",
+    "imageName":"stingerfling spider",
+    "layout":"normal",
+    "manaCost":"{4}{G}",
+    "mciNumber":"197",
+    "multiverseid":220075,
+    "name":"Stingerfling Spider",
+    "number":"197",
+    "power":"2",
+    "rarity":"Uncommon",
+    "subtypes":[
+      "Spider"
+    ],
+    "text":"Reach\nWhen Stingerfling Spider enters the battlefield, you may destroy target creature with flying.",
+    "toughness":"5",
+    "type":"Creature — Spider",
+    "types":[
+      "Creature"
+    ],
+    "setIcon":"m12",
+    "cardsInCollection":1
+  },
+  {
+    "id":"30f33cdc973b2cedf3329101cf99962c536c681a",
+    "artist":"Ryan Barger",
+    "cmc":1,
+    "colorIdentity":[
+      "G"
+    ],
+    "colors":[
+      "Green"
+    ],
+    "flavor":"\"A grudge is a tattoo worn on the inside.\"\n—Setessan warrior saying",
+    "imageName":"hunt the hunter",
+    "layout":"normal",
+    "manaCost":"{G}",
+    "mciNumber":"159",
+    "multiverseid":373668,
+    "name":"Hunt the Hunter",
+    "number":"159",
+    "rarity":"Uncommon",
+    "text":"Target green creature you control gets +2/+2 until end of turn. It fights target green creature an opponent controls.",
+    "type":"Sorcery",
+    "types":[
+      "Sorcery"
+    ],
+    "setIcon":"ths",
+    "cardsInCollection":1
+  },
+  {
+    "id":"40d851e7e3d2039a560e8c3c91e3ddc255e8dc27",
+    "artist":"Warren Mahy",
+    "cmc":2,
+    "colorIdentity":[
+      "G"
+    ],
+    "colors":[
+      "Green"
+    ],
+    "flavor":"Even dragons fear its silken strands.",
+    "imageName":"deadly recluse",
+    "layout":"normal",
+    "manaCost":"{1}{G}",
+    "mciNumber":"168",
+    "multiverseid":370582,
+    "name":"Deadly Recluse",
+    "number":"168",
+    "power":"1",
+    "rarity":"Common",
+    "subtypes":[
+      "Spider"
+    ],
+    "text":"Reach (This creature can block creatures with flying.)\nDeathtouch (Any amount of damage this deals to a creature is enough to destroy it.)",
+    "toughness":"2",
+    "type":"Creature — Spider",
+    "types":[
+      "Creature"
+    ],
+    "setIcon":"m14",
+    "cardsInCollection":1
+  },
+  {
+    "id":"ad41a04b22802fa13d837e9d0e0f7f22f8e3d375",
+    "artist":"Mark Tedin",
+    "cmc":2,
+    "colorIdentity":[
+      "G"
+    ],
+    "colors":[
+      "Green"
+    ],
+    "flavor":"It grows to hate you.",
+    "imageName":"vinelasher kudzu",
+    "layout":"normal",
+    "manaCost":"{1}{G}",
+    "multiverseid":380244,
+    "name":"Vinelasher Kudzu",
+    "number":"50",
+    "power":"1",
+    "rarity":"Rare",
+    "subtypes":[
+      "Plant"
+    ],
+    "text":"Whenever a land enters the battlefield under your control, put a +1/+1 counter on Vinelasher Kudzu.",
+    "toughness":"1",
+    "type":"Creature — Plant",
+    "types":[
+      "Creature"
+    ],
+    "setIcon":"ddm",
+    "cardsInCollection":1
+  },
+  {
+    "id":"838edcaf9051e4c0f25779eb14a291f3e840ae7d",
+    "artist":"Yohann Schepacz",
+    "cmc":3,
+    "colorIdentity":[
+      "G"
+    ],
+    "colors":[
+      "Green"
+    ],
+    "flavor":"It is an expert at culling individuals who stray too far from the herd.",
+    "imageName":"netcaster spider",
+    "layout":"normal",
+    "manaCost":"{2}{G}",
+    "mciNumber":"186",
+    "multiverseid":383325,
+    "name":"Netcaster Spider",
+    "number":"186",
+    "power":"2",
+    "rarity":"Common",
+    "subtypes":[
+      "Spider"
+    ],
+    "text":"Reach (This creature can block creatures with flying.)\nWhenever Netcaster Spider blocks a creature with flying, Netcaster Spider gets +2/+0 until end of turn.",
+    "toughness":"3",
+    "type":"Creature — Spider",
+    "types":[
+      "Creature"
+    ],
+    "setIcon":"m15",
+    "cardsInCollection":1
+  },
+  {
+    "id":"cc9ebbea2644ef88c24312259d15bc8e459b9978",
+    "artist":"Steven Belledin",
+    "cmc":2,
+    "colorIdentity":[
+      "G"
+    ],
+    "colors":[
+      "Green"
+    ],
+    "flavor":"Nature grows solutions to its problems.",
+    "imageName":"rampant growth",
+    "layout":"normal",
+    "manaCost":"{1}{G}",
+    "mciNumber":"190",
+    "multiverseid":233231,
+    "name":"Rampant Growth",
+    "number":"190",
+    "rarity":"Common",
+    "text":"Search your library for a basic land card and put that card onto the battlefield tapped. Then shuffle your library.",
+    "type":"Sorcery",
+    "types":[
+      "Sorcery"
+    ],
+    "setIcon":"m12",
+    "cardsInCollection":3
+  },
+  {
+    "id":"4300210245b32c0804f11764349849fbcda14a95",
+    "artist":"Steve Prescott",
+    "cmc":7,
+    "colorIdentity":[
+      "G"
+    ],
+    "colors":[
+      "Green"
+    ],
+    "imageName":"garruk's horde",
+    "layout":"normal",
+    "manaCost":"{5}{G}{G}",
+    "mciNumber":"176",
+    "multiverseid":220077,
+    "name":"Garruk's Horde",
+    "number":"176",
+    "power":"7",
+    "rarity":"Rare",
+    "subtypes":[
+      "Beast"
+    ],
+    "text":"Trample\nPlay with the top card of your library revealed.\nYou may cast the top card of your library if it's a creature card. (Do this only any time you could cast that creature card. You still pay the spell's costs.)",
+    "toughness":"7",
+    "type":"Creature — Beast",
+    "types":[
+      "Creature"
+    ],
+    "setIcon":"m12",
+    "cardsInCollection":1
+  },
+  {
+    "id":"43a37af89dd050c8f3e5b2f1e4afcdb4cad05973",
+    "artist":"Volkan Baga",
+    "cmc":5,
+    "colorIdentity":[
+      "G"
+    ],
+    "colors":[
+      "Green"
+    ],
+    "flavor":"Stensian vampires encourage spiders near their manors so they can rob the webs.",
+    "imageName":"somberwald spider",
+    "layout":"normal",
+    "manaCost":"{4}{G}",
+    "multiverseid":237013,
+    "name":"Somberwald Spider",
+    "number":"202",
+    "power":"2",
+    "rarity":"Common",
+    "subtypes":[
+      "Spider"
+    ],
+    "text":"Reach (This creature can block creatures with flying.)\nMorbid — Somberwald Spider enters the battlefield with two +1/+1 counters on it if a creature died this turn.",
+    "toughness":"4",
+    "type":"Creature — Spider",
+    "types":[
+      "Creature"
+    ],
+    "setIcon":"isd",
+    "cardsInCollection":1
+  },
+  {
+    "id":"91b23913c777735c30bf65da10926735751ec326",
+    "artist":"Tim Hildebrandt",
+    "cmc":2,
+    "colorIdentity":[
+      "G"
+    ],
+    "colors":[
+      "Green"
+    ],
+    "flavor":"\"When your cities and trinkets crumble, only nature will remain.\"\n—Garruk Wildspeaker",
+    "imageName":"naturalize",
+    "layout":"normal",
+    "manaCost":"{1}{G}",
+    "mciNumber":"185",
+    "multiverseid":221894,
+    "name":"Naturalize",
+    "number":"185",
+    "rarity":"Common",
+    "text":"Destroy target artifact or enchantment.",
+    "type":"Instant",
+    "types":[
+      "Instant"
+    ],
+    "setIcon":"m12",
+    "cardsInCollection":1
+  },
+  {
+    "id":"2a7390253f736fe8d2f0f3b1bd59a4de707e3dc1",
+    "artist":"Karl Kopinski",
+    "cmc":5,
+    "colorIdentity":[
+      "G"
+    ],
+    "colors":[
+      "Green"
+    ],
+    "imageName":"acidic slime",
+    "layout":"normal",
+    "manaCost":"{3}{G}{G}",
+    "mciNumber":"161",
+    "multiverseid":226906,
+    "name":"Acidic Slime",
+    "number":"161",
+    "power":"2",
+    "rarity":"Uncommon",
+    "subtypes":[
+      "Ooze"
+    ],
+    "text":"Deathtouch (Any amount of damage this deals to a creature is enough to destroy it.)\nWhen Acidic Slime enters the battlefield, destroy target artifact, enchantment, or land.",
+    "toughness":"2",
+    "type":"Creature — Ooze",
+    "types":[
+      "Creature"
+    ],
+    "setIcon":"m12",
+    "cardsInCollection":2
+  },
+  {
+    "id":"82df2235e5a5e4d5cb96e6d2e49e288ecd2df58f",
+    "artist":"Eytan Zana",
+    "colorIdentity":[
+      "B",
+      "G"
+    ],
+    "imageName":"jungle hollow",
+    "layout":"normal",
+    "multiverseid":386577,
+    "name":"Jungle Hollow",
+    "number":"235",
+    "rarity":"Common",
+    "text":"Jungle Hollow enters the battlefield tapped.\nWhen Jungle Hollow enters the battlefield, you gain 1 life.\n{T}: Add {B} or {G} to your mana pool.",
+    "type":"Land",
+    "types":[
+      "Land"
+    ],
+    "setIcon":"ktk",
+    "cardsInCollection":1
+  },
+  {
+    "id":"1e38da6573938a810dbc63384b9fd450b97469c5",
+    "artist":"Eytan Zana",
+    "colorIdentity":[
+      "B",
+      "G"
+    ],
+    "imageName":"jungle hollow",
+    "layout":"normal",
+    "multiverseid":391865,
+    "name":"Jungle Hollow",
+    "number":"169",
+    "rarity":"Common",
+    "text":"Jungle Hollow enters the battlefield tapped.\nWhen Jungle Hollow enters the battlefield, you gain 1 life.\n{T}: Add {B} or {G} to your mana pool.",
+    "type":"Land",
+    "types":[
+      "Land"
+    ],
+    "setIcon":"frf",
+    "cardsInCollection":1
+  },
+  {
+    "id":"7c8abe7e72dfa7263beee5e5bece013d4deaf284",
+    "artist":"Carl Critchlow",
+    "cmc":5,
+    "colorIdentity":[
+      "G"
+    ],
+    "colors":[
+      "Green"
+    ],
+    "imageName":"overrun",
+    "layout":"normal",
+    "manaCost":"{2}{G}{G}{G}",
+    "mciNumber":"186",
+    "multiverseid":238574,
+    "name":"Overrun",
+    "number":"186",
+    "rarity":"Uncommon",
+    "text":"Creatures you control get +3/+3 and gain trample until end of turn.",
+    "type":"Sorcery",
+    "types":[
+      "Sorcery"
+    ],
+    "setIcon":"m12",
+    "cardsInCollection":1
+  },
+  {
+    "id":"3219787edf74afa9fb315d4dde1f6f13180580ce",
+    "artist":"Richard Wright",
+    "cmc":4,
+    "colorIdentity":[
+      "G",
+      "B"
+    ],
+    "colors":[
+      "Green"
+    ],
+    "flavor":"Cloaks woven from its webs are durable and waterproof but said to bring on nightmares.",
+    "imageName":"graverobber spider",
+    "layout":"normal",
+    "manaCost":"{3}{G}",
+    "multiverseid":378494,
+    "name":"Graverobber Spider",
+    "number":"122",
+    "power":"2",
+    "rarity":"Uncommon",
+    "subtypes":[
+      "Spider"
+    ],
+    "text":"Reach\n{3}{B}: Graverobber Spider gets +X/+X until end of turn, where X is the number of creature cards in your graveyard. Activate this ability only once each turn.",
+    "toughness":"4",
+    "type":"Creature — Spider",
+    "types":[
+      "Creature"
+    ],
+    "setIcon":"bng",
+    "cardsInCollection":1
+  }
+]
