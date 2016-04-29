@@ -1,9 +1,9 @@
 import Card from 'models/Card'
+import _ from 'lodash'
 
-const _ = require('lodash')
-
-const updateLocalStorage = (collection) => {
-  localStorage.setItem('mtgdbCollectionRK', JSON.stringify(collection))
+const updateLocalStorage = (cardCollection) => {
+  const reducedCollection = _.map(cardCollection, (singleCard) => singleCard.formatForLocalStorage())
+  localStorage.setItem('mtgdbReducedCollectionRK', JSON.stringify(reducedCollection))
 }
 
 // ------------------------------------

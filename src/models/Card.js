@@ -23,6 +23,16 @@ export default class Card extends Generic {
     this.cardsInCollection--
   }
 
+  formatForLocalStorage () {
+    const forLocalStorage = {}
+
+    if (this.id) forLocalStorage.id = this.id
+    if (this.cardsInCollection) forLocalStorage.cardsInCollection = this.cardsInCollection
+    if (this.setIcon) forLocalStorage.setIcon = this.setIcon
+
+    return forLocalStorage
+  }
+
   formatForWire () {
     const forWire = {}
 

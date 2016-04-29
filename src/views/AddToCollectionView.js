@@ -11,6 +11,8 @@ import CardNamesList from 'components/CardNamesList'
 // import DecksPanel from 'components/DecksPanel'
 import Search from 'components/Search'
 import Modal from 'components/Modal'
+import _ from 'lodash'
+import Card from 'models/Card'
 
 const $ = window.jQuery
 
@@ -38,7 +40,8 @@ class AddToCollectionView extends React.Component {
       cardsToDisplay: 50,
       cardArtworks: [],
       databaseStatus: 'downloading',
-      searchResults: []
+      searchResults: [],
+      showSearchPanel: false // Shows search panel when true
     }
     this._addCardToCollection = this._addCardToCollection.bind(this)
     this._removeCardFromCollection = this._removeCardFromCollection.bind(this)
@@ -67,13 +70,7 @@ class AddToCollectionView extends React.Component {
   }
 
   componentWillMount () {
-    const retrievedCollection = JSON.parse(localStorage.getItem('mtgdbCollectionRK'))
-
-    if (retrievedCollection && retrievedCollection.length) {
-      this.props.collectionActions.restoreCollection(retrievedCollection)
-    }
-
-    // Save to state, don't download if already in state
+    // Save in the store, don't download if already in store
     if (!this.props.database.allCards.length && !this.props.database.allSets.length) {
       Promise
       .all([
@@ -81,10 +78,35 @@ class AddToCollectionView extends React.Component {
         $.ajax({url: './AllSetsArray.json', dataType: 'json', cache: true})
       ])
       .then(function (data) { // function (data, status, xhr) {
+        const allSets = data[1]
+        // Save all card data in the store
         console.log('%cPobrano AllCards.json', 'color: #6FB3D2;')
         this.props.saveAjaxActions.saveCards({'name': 'allCards', 'data': Object.values(data[0])})
         console.log('%cPobrano AllSetsArray.json', 'color: #6FB3D2;')
-        this.props.saveAjaxActions.saveCards({'name': 'allSets', 'data': data[1]})
+        this.props.saveAjaxActions.saveCards({'name': 'allSets', 'data': allSets})
+        // Retrieve card data from local Storage
+        const retrievedReducedCollection = JSON.parse(localStorage.getItem('mtgdbReducedCollectionRK'))
+        // For each card from the 'retrievedCollection'...
+        const transformedRetrievedReducedCollection = _.map(
+          retrievedReducedCollection,
+          (retrievedCard) => {
+            // For each card set...
+            for (let i = 0; i < allSets.length; i++) {
+              // And for each card in each set...
+              for (let j = 0; j < allSets[i].cards.length; j++) {
+                // If that card's id is the same as the id of the retrieved card...
+                if (allSets[i].cards[j].id === retrievedCard.id) {
+                  // Return it
+                  return new Card({ ...allSets[i].cards[j], ...retrievedCard })
+                }
+              }
+            }
+          }
+        )
+        // Save retrievedCollection in the store
+        if (transformedRetrievedReducedCollection.length) {
+          this.props.collectionActions.restoreCollection(transformedRetrievedReducedCollection)
+        }
       }.bind(this))
       .catch(function (xhr, status, error) {
         this.setState({databaseStatus: 'error'})
@@ -110,9 +132,13 @@ class AddToCollectionView extends React.Component {
     console.log('You clicked on a ' + card.name, card)
     let cards = []
     const allSets = this.props.database.allSets
+    // For each card set...
     for (let i = 0; i < allSets.length; i++) {
+      // And for each card in each set...
       for (let j = 0; j < allSets[i].cards.length; j++) {
+        // If that card's name is the same as clicked card name and it has a 'multiverseid'...
         if (allSets[i].cards[j].name === card.name && allSets[i].cards[j].multiverseid) {
+          // Add that card to an array
           cards.push({
             ...allSets[i].cards[j],
             setIcon: allSets[i].code.toLowerCase()
@@ -131,6 +157,8 @@ class AddToCollectionView extends React.Component {
   _updateCardNamesList (searchResults = []) {
     this.setState({ searchResults, cardArtworks: [] })
   }
+
+  // DECKS
 
   _addNewDeck (deckData) {
     this.props.decksActions.createDeck(deckData)
@@ -159,22 +187,27 @@ class AddToCollectionView extends React.Component {
   }
 
   render () {
-    const { searchResults, cardArtworks, cardsToDisplay } = this.state
+    const { searchResults, cardArtworks, cardsToDisplay, showSearchPanel } = this.state
     const { collection } = this.props
+    const numberOfCardsInCollection = collection.reduce((a, b) => a + b.cardsInCollection, 0)
 
-    const numberOfCardsInCollection = collection.reduce((a, b) => {
-      return a + b.cardsInCollection
-    }, 0)
+    console.log('collection', collection);
 
     return (
       <div className='search-in-collection-view'>
         {this.props.modals[0] === 'testId' ? <Modal /> : null}
-        <Search
-          collectionToSearchIn={this.props.database.allCards}
-          onSearch={this._updateCardNamesList}
-        />
+        {
+          showSearchPanel ?
+            <Search
+              collectionToSearchIn={this.props.database.allCards}
+              onSearch={this._updateCardNamesList}
+            />
+            : null
+        }
         <div className='test'>
-          <div><i className='fa fa-search' /></div>
+          <div onClick={() => { this.setState({ showSearchPanel: !this.state.showSearchPanel }) }} >
+            <i className='fa fa-search' />
+          </div>
           <div><i className='fa fa-plus-circle' /></div>
           <div><i className='fa fa-clone' /></div>
         </div>
