@@ -4,7 +4,7 @@ import counter from './modules/counter'
 import collection from './modules/collection'
 import database from './modules/saveCardsFromAjax'
 import application from './modules/application'
-import modals from './modules/modals'
+import modal from './modules/modal'
 import decks from './modules/decks'
 
 export default combineReducers({
@@ -13,6 +13,6 @@ export default combineReducers({
   collection,
   database,
   application,
-  modals,
+  modal,
   decks
 })

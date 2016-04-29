@@ -2,7 +2,7 @@ import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { actions as collectionActions } from 'redux/modules/collection'
-import { actions as modalsActions } from 'redux/modules/modals'
+import { actions as modalActions } from 'redux/modules/modal'
 import { actions as saveAjaxActions } from 'redux/modules/saveCardsFromAjax'
 import { actions as decksActions } from 'redux/modules/decks'
 import { actions as applicationActions } from 'redux/modules/application'
@@ -20,13 +20,13 @@ const mapStateToProps = (state) => ({
   application: state.application,
   collection: state.collection,
   database: state.database,
-  modals: state.modals,
+  modal: state.modal,
   decks: state.decks
 })
 
 const mapDispatchToProps = (dispatch) => ({
   collectionActions: bindActionCreators(collectionActions, dispatch),
-  modalsActions: bindActionCreators(modalsActions, dispatch),
+  modalActions: bindActionCreators(modalActions, dispatch),
   saveAjaxActions: bindActionCreators(saveAjaxActions, dispatch),
   decksActions: bindActionCreators(decksActions, dispatch),
   applicationActions: bindActionCreators(applicationActions, dispatch)
@@ -61,11 +61,11 @@ class AddToCollectionView extends React.Component {
     collection: React.PropTypes.array,
     database: React.PropTypes.object,
     collectionActions: React.PropTypes.object,
-    modalsActions: React.PropTypes.object,
+    modalActions: React.PropTypes.object,
     saveAjaxActions: React.PropTypes.object,
     decksActions: React.PropTypes.object,
     applicationActions: React.PropTypes.object,
-    modals: React.PropTypes.array,
+    modal: React.PropTypes.object,
     decks: React.PropTypes.array
   }
 
@@ -115,9 +115,8 @@ class AddToCollectionView extends React.Component {
     }
   }
 
-  _openModal (card) {
-    console.log('card.id', card.id)
-    this.props.modalsActions.openModal('testId')
+  _openModal (cardToDisplay) {
+    this.props.modalActions.openModal({ modalName: 'card-details', cardToDisplay })
   }
 
   _addCardToCollection (card) {
@@ -129,7 +128,7 @@ class AddToCollectionView extends React.Component {
   }
 
   _searchInSets (card) {
-    console.log('You clicked on a ' + card.name, card)
+    // console.log('You clicked on a ' + card.name, card)
     let cards = []
     const allSets = this.props.database.allSets
     // For each card set...
@@ -143,7 +142,7 @@ class AddToCollectionView extends React.Component {
             ...allSets[i].cards[j],
             setIcon: allSets[i].code.toLowerCase()
           })
-          console.log('   I found it in ' + allSets[i].name, allSets[i])
+          // console.log('   I found it in ' + allSets[i].name, allSets[i])
         }
       }
     }
@@ -191,11 +190,11 @@ class AddToCollectionView extends React.Component {
     const { collection } = this.props
     const numberOfCardsInCollection = collection.reduce((a, b) => a + b.cardsInCollection, 0)
 
-    console.log('collection', collection);
-
     return (
       <div className='search-in-collection-view'>
-        {this.props.modals[0] === 'testId' ? <Modal /> : null}
+        {
+          this.props.modal ? <Modal /> : null
+        }
         {
           showSearchPanel ?
             <Search

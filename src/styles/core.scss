@@ -266,34 +266,22 @@ ul {
   position: absolute;
   top: 0; right: 0; bottom: 0; left: 0;
   z-index: 9999;
-  .closeModal-button {
-    flex: none;
-    position: absolute;
-    top: -5px; right: -26px;
-    font-size: 27px;
-    cursor: pointer;
-  }
-  .emptyModal {}
   .modal-window {
     @include flex(column, nowrap, flex-start, stretch);
-    flex: 0 0 65%;
-    margin-top: 100px;
-    background: white;
     position: relative;
-    main {
-      @include flex(column, nowrap, flex-start, stretch);
-      header {
-        @include flex(row, nowrap, flex-start, center);
-        font-size: 1.25em;
-        font-weight: bold;
-        flex: 0 0 50px;
-        padding: 0 30px;
-      }
-      section {
-        @include flex(column, nowrap, flex-start, stretch);
-        padding: 0 30px;
-        flex: 1;
-      }
+    width: 700px;
+    margin-top: 50px;
+    background: white;
+    .fa-times {
+      flex: none;
+      position: absolute;
+      top: -5px; right: -26px;
+      font-size: 27px;
+      cursor: pointer;
+      color: white;
+    }
+    .card-details-modal {
+      padding: 10px;
     }
   }
 }

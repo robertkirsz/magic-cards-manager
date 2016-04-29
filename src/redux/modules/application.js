@@ -52,7 +52,7 @@ const ACTION_HANDLERS = {
 // Reducer
 // ------------------------------------
 const initialState = {
-  locked: false,
+  locked: true,
   activeDeck: null
 }
 export default function temporaryCollectionReducer (state = initialState, action) {

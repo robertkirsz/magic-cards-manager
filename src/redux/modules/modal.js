@@ -9,14 +9,13 @@ export const CLOSE_MODAL = 'CLOSE_MODAL'
 // ------------------------------------
 // Actions
 // ------------------------------------
-export const openModal = (modalId) => ({
+export const openModal = (modalData) => ({
   type: OPEN_MODAL,
-  payload: modalId
+  payload: modalData
 })
 
-export const closeModal = (modalId) => ({
-  type: CLOSE_MODAL,
-  payload: modalId
+export const closeModal = () => ({
+  type: CLOSE_MODAL
 })
 
 export const actions = {
@@ -29,25 +28,18 @@ export const actions = {
 // ------------------------------------
 const ACTION_HANDLERS = {
   [OPEN_MODAL]: (state, { payload }) => {
-    if (_.indexOf(state, payload) >= 0) return state
-    return [
-      // ...state,
-      payload
-    ]
+    // console.log('OPEN_MODAL state', state)
+    // console.log('OPEN_MODAL payload', payload)
+    // if (_.indexOf(state, payload) >= 0) return state
+    return payload
   },
-  [CLOSE_MODAL]: (state, { payload }) => {
-    const modalIndex = _.indexOf(state, payload)
-    return [
-      ...state.slice(0, modalIndex),
-      ...state.slice(modalIndex + 1)
-    ]
-  }
+  [CLOSE_MODAL]: () => initialState
 }
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
-const initialState = []
+const initialState = null
 
 export default function temporaryCollectionReducer (state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type]
