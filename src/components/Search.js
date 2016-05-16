@@ -139,8 +139,8 @@ class Search extends React.Component {
           value={this.state.queryText}
           onChange={this._handleChangeText}
         />
-        <div className='manaCheckboxes'>
-          <label>White
+        <div className='mana-checkboxes'>
+          <label>
             <input
               type='checkbox'
               value='White'
@@ -148,11 +148,11 @@ class Search extends React.Component {
               onChange={this._handleChangeMana}
             />
             <i
-              className={this.state.mana.White ? 'mtg white' : 'mtg plains'}
-              style={!this.state.mana.White ? {opacity: 0.4} : {}}
+              className='ms ms-cost ms-w'
+              style={!this.state.mana.White ? {opacity: 0.4, backgroundColor: 'transparent'} : {}}
             />
           </label>
-          <label>Blue
+          <label>
             <input
               type='checkbox'
               value='Blue'
@@ -160,8 +160,8 @@ class Search extends React.Component {
               onChange={this._handleChangeMana}
             />
             <i
-              className={this.state.mana.Blue ? 'mtg blue' : 'mtg island'}
-              style={!this.state.mana.Blue ? {opacity: 0.4} : {}}
+              className='ms ms-cost ms-u'
+              style={!this.state.mana.Blue ? {opacity: 0.4, backgroundColor: 'transparent'} : {}}
             />
           </label>
           <label>
@@ -172,8 +172,8 @@ class Search extends React.Component {
               onChange={this._handleChangeMana}
             />
             <i
-              className={this.state.mana.Black ? 'mtg black' : 'mtg swamp'}
-              style={!this.state.mana.Black ? {opacity: 0.4} : {}}
+              className='ms ms-cost ms-b'
+              style={!this.state.mana.Black ? {opacity: 0.4, backgroundColor: 'transparent'} : {}}
             />
           </label>
           <label>
@@ -184,8 +184,8 @@ class Search extends React.Component {
               onChange={this._handleChangeMana}
             />
             <i
-              className={this.state.mana.Red ? 'mtg red' : 'mtg mountain'}
-              style={!this.state.mana.Red ? {opacity: 0.4} : {}}
+              className='ms ms-cost ms-r'
+              style={!this.state.mana.Red ? {opacity: 0.4, backgroundColor: 'transparent'} : {}}
             />
           </label>
           <label>
@@ -196,15 +196,16 @@ class Search extends React.Component {
               onChange={this._handleChangeMana}
             />
             <i
-              className={this.state.mana.Green ? 'mtg green' : 'mtg forest'}
-              style={!this.state.mana.Green ? {opacity: 0.4} : {}}
+              className='ms ms-cost ms-g'
+              style={!this.state.mana.Green ? {opacity: 0.4, backgroundColor: 'transparent'} : {}}
             />
           </label>
-          <br />
-          <label className='radio-inline'>
+        </div>
+        <div className='all-none-checkboxes'>
+          <label>
             <input type='radio' name='allNone' value='all' onChange={this._toggleAll} />All
           </label>
-          <label className='radio-inline'>
+          <label>
             <input type='radio' name='allNone' value='none' onChange={this._toggleNone} />None
           </label>
         </div>

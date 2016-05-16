@@ -246,16 +246,31 @@ ul {
   margin-left: 0.3em;
 }
 
-.manaCheckboxes {
+.mana-checkboxes {
+  margin: 5px 0 0;
   text-align: center;
-  label.checkbox-inline {
+  label {
     display: inline-flex;
     padding: 0;
-    input {
-      display: none;
-    }
+    cursor: pointer;
+    &:not(:last-child) { margin: 0 5px 0 0; }
+    input { display: none; }
     i {
-      font-size: 2em;
+      font-size: 1.5em;
+      transition: all 0.2s;
+    }
+  }
+}
+
+.all-none-checkboxes {
+  margin: 5px 0 0;
+  text-align: center;
+  label {
+    cursor: pointer;
+    &:not(:last-child) { margin: 0 5px 0 0; }
+    input {
+      margin: 0 2px 0 0;
+      cursor: pointer;
     }
   }
 }
