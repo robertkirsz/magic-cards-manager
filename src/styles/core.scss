@@ -95,7 +95,7 @@ ul {
           margin: 5px 0;
           text-align: center;
         }
-        .search, .cardArtworks, .collection, .test {
+        .search-panel, .cardArtworks, .collection, .test {
           @include flex(column, nowrap, flex-start, stretch);
           padding: 10px;
           overflow-y: auto; //zamienić na wrappery
@@ -118,8 +118,43 @@ ul {
             }
           }
         }
-        .search {
+        .search-panel {
           flex: none;
+          .search-inputs {
+            input {
+              display: block;
+              &:not(:last-child) {
+                margin: 0 0 5px;
+              }
+            }
+          }
+          .mana-checkboxes {
+            margin: 5px 0 0;
+            text-align: center;
+            label {
+              display: inline-flex;
+              padding: 0;
+              cursor: pointer;
+              &:not(:last-child) { margin: 0 5px 0 0; }
+              input { display: none; }
+              i {
+                font-size: 1.5em;
+                transition: all 0.2s;
+              }
+            }
+          }
+          .all-none-checkboxes {
+            margin: 5px 0 0;
+            text-align: center;
+            label {
+              cursor: pointer;
+              &:not(:last-child) { margin: 0 5px 0 0; }
+              input {
+                margin: 0 2px 0 0;
+                cursor: pointer;
+              }
+            }
+          }
         }
         .cardArtworks {
           .cardList {
@@ -244,35 +279,6 @@ ul {
 
 .manaCost {
   margin-left: 0.3em;
-}
-
-.mana-checkboxes {
-  margin: 5px 0 0;
-  text-align: center;
-  label {
-    display: inline-flex;
-    padding: 0;
-    cursor: pointer;
-    &:not(:last-child) { margin: 0 5px 0 0; }
-    input { display: none; }
-    i {
-      font-size: 1.5em;
-      transition: all 0.2s;
-    }
-  }
-}
-
-.all-none-checkboxes {
-  margin: 5px 0 0;
-  text-align: center;
-  label {
-    cursor: pointer;
-    &:not(:last-child) { margin: 0 5px 0 0; }
-    input {
-      margin: 0 2px 0 0;
-      cursor: pointer;
-    }
-  }
 }
 
 .modal-cover {

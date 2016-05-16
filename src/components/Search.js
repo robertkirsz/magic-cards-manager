@@ -119,26 +119,28 @@ class Search extends React.Component {
     console.log('%cSearch', 'color: #79BDA8;')
 
     return (
-      <div className='search'>
+      <div className='search-panel'>
         <h3>Search</h3>
-        <input
-          type='text'
-          placeholder='Name'
-          value={this.state.queryName}
-          onChange={this._handleChangeName}
-        />
-        <input
-          type='text'
-          placeholder='Types'
-          value={this.state.queryTypes}
-          onChange={this._handleChangeTypes}
-        />
-        <input
-          type='text'
-          placeholder='Text'
-          value={this.state.queryText}
-          onChange={this._handleChangeText}
-        />
+        <div className='search-inputs'>
+          <input
+            type='text'
+            placeholder='Name'
+            value={this.state.queryName}
+            onChange={this._handleChangeName}
+          />
+          <input
+            type='text'
+            placeholder='Types'
+            value={this.state.queryTypes}
+            onChange={this._handleChangeTypes}
+          />
+          <input
+            type='text'
+            placeholder='Text'
+            value={this.state.queryText}
+            onChange={this._handleChangeText}
+          />
+        </div>
         <div className='mana-checkboxes'>
           <label>
             <input
