@@ -3,7 +3,9 @@ import React from 'react'
 class Search extends React.Component {
   static propTypes = {
     collectionToSearchIn: React.PropTypes.array,
-    onSearch: React.PropTypes.func
+    onSearch: React.PropTypes.func,
+    title: React.PropTypes.string,
+    allowToFilterWholeCollection: React.PropTypes.bool // Allows to filter whole collection by mana (no need to type name or text first)
   }
 
   constructor () {
@@ -53,7 +55,8 @@ class Search extends React.Component {
     for (let key in state.mana) {
       if (state.mana[key]) manaArray.push(key)
     }
-    if (queryName.length > 0 || queryTypes.length > 0 || queryText.length > 0) {
+    // Filter by mana if 'allowToFilterWholeCollection' is true or if name, types or text is specified
+    if (this.props.allowToFilterWholeCollection || queryName.length > 0 || queryTypes.length > 0 || queryText.length > 0) {
       return this.props.collectionToSearchIn.filter(
         (card) =>
           card.name.toLowerCase().indexOf(queryName) > -1 &&
@@ -120,7 +123,7 @@ class Search extends React.Component {
 
     return (
       <div className='search-panel'>
-        <h3>Search</h3>
+        <h3>{this.props.title}</h3>
         <div className='search-inputs'>
           <input
             type='text'

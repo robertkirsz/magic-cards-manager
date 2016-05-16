@@ -41,7 +41,9 @@ class AddToCollectionView extends React.Component {
       cardArtworks: [],
       databaseStatus: 'downloading',
       searchResults: [],
-      showSearchPanel: false // Shows search panel when true
+      searchCollectionResults: [],
+      showSearchDatabasePanel: false, // Shows search database panel when true
+      showSearchCollectionPanel: false // Shows search collection panel when true
     }
     this._addCardToCollection = this._addCardToCollection.bind(this)
     this._removeCardFromCollection = this._removeCardFromCollection.bind(this)
@@ -54,6 +56,7 @@ class AddToCollectionView extends React.Component {
     this._clearDecks = this._clearDecks.bind(this)
     this._addCardToDeck = this._addCardToDeck.bind(this)
     this._makeDeckActive = this._makeDeckActive.bind(this)
+    this._filterCollection = this._filterCollection.bind(this)
   }
 
   static propTypes = {
@@ -157,6 +160,10 @@ class AddToCollectionView extends React.Component {
     this.setState({ searchResults, cardArtworks: [] })
   }
 
+  _filterCollection (searchCollectionResults = []) {
+    this.setState({ searchCollectionResults, searchResults: [], cardArtworks: [] })
+  }
+
   // DECKS
 
   _addNewDeck (deckData) {
@@ -186,8 +193,12 @@ class AddToCollectionView extends React.Component {
   }
 
   render () {
-    const { searchResults, cardArtworks, cardsToDisplay, showSearchPanel } = this.state
-    const { collection } = this.props
+    const {
+      searchResults, cardArtworks, cardsToDisplay,
+      searchCollectionResults,
+      showSearchDatabasePanel, showSearchCollectionPanel
+    } = this.state
+    const { database, collection } = this.props
     const numberOfCardsInCollection = collection.reduce((a, b) => a + b.cardsInCollection, 0)
 
     return (
@@ -196,18 +207,31 @@ class AddToCollectionView extends React.Component {
           this.props.modal ? <Modal /> : null
         }
         {
-          showSearchPanel ?
+          showSearchDatabasePanel ?
             <Search
-              collectionToSearchIn={this.props.database.allCards}
+              title='Search Database'
+              collectionToSearchIn={database.allCards}
               onSearch={this._updateCardNamesList}
             />
             : null
         }
+        {
+          showSearchCollectionPanel ?
+            <Search
+              title='Search Collection'
+              collectionToSearchIn={collection}
+              onSearch={this._filterCollection}
+              allowToFilterWholeCollection
+            />
+            : null
+        }
         <div className='test'>
-          <div onClick={() => { this.setState({ showSearchPanel: !this.state.showSearchPanel }) }} >
+          <div onClick={() => { this.setState({ showSearchCollectionPanel: !showSearchCollectionPanel, showSearchDatabasePanel: false }) }} >
             <i className='fa fa-search' />
           </div>
-          <div><i className='fa fa-plus-circle' /></div>
+          <div onClick={() => { this.setState({ showSearchDatabasePanel: !showSearchDatabasePanel, showSearchCollectionPanel: false }) }} >
+            <i className='fa fa-plus-circle' />
+          </div>
           <div><i className='fa fa-clone' /></div>
         </div>
         {
@@ -237,7 +261,7 @@ class AddToCollectionView extends React.Component {
             <div className='collection'>
               <h3>Collection ({numberOfCardsInCollection})</h3>
               <CardsList
-                cards={collection}
+                cards={searchCollectionResults.length ? searchCollectionResults : collection}
                 openModal={this._openModal}
                 addCard={this._addCardToCollection}
                 removeCard={this._removeCardFromCollection}
