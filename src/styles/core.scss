@@ -205,9 +205,8 @@ ul {
       margin: 2px;
       border: 1px solid black;
       cursor: pointer;
-      &--owned {
-        background: rgb(50, 170, 50);
-      }
+      &--owned { background: rgb(50, 170, 50); }
+      .ms-land { margin-left: 0.3em; }
     }
   }
 }

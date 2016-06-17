@@ -65,7 +65,7 @@ class Search extends React.Component {
           : this.state.mana.Colorless
 
           // Do not allow basic lands
-          if (card.rarity === 'Basic Land') return false
+          if (card.supertypes && card.supertypes[0] === 'Basic') return false
           // Do not allow tokens
           if (card.layout === 'token') return false
 
