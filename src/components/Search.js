@@ -60,14 +60,16 @@ class Search extends React.Component {
     if (this.props.allowToFilterWholeCollection || queryName.length > 0 || queryTypes.length > 0 || queryText.length > 0) {
       return this.props.collectionToSearchIn.filter(
         (card) => {
+          // Hide basic lands
+          if (card.supertypes && card.supertypes[0] === 'Basic') return false
+          // Hide tokens
+          if (card.layout === 'token') return false
+          // Hide cards with no text when text is specified
+          if (queryText && !card.text) return false
+
           const manaOk = card.colors
           ? manaArray.filter((val) => card.colors.indexOf(val) !== -1).length > 0
           : this.state.mana.Colorless
-
-          // Do not allow basic lands
-          if (card.supertypes && card.supertypes[0] === 'Basic') return false
-          // Do not allow tokens
-          if (card.layout === 'token') return false
 
           return (
             card.name.toLowerCase().indexOf(queryName) > -1 &&
