@@ -2,8 +2,8 @@
  * Global */
 // @font-face {
 //   font-family: 'Keyrune';
-//   src: url('../fonts/keyrune.eot?v=1.5');
-//   src: url('../fonts/keyrune.eot?#iefix&v=1.5') format('embedded-opentype'), url('../fonts/keyrune.woff2?v=1.5') format('woff2'), url('../fonts/keyrune.woff?v=1.5') format('woff'), url('../fonts/keyrune.ttf?v=1.5') format('truetype'), url('../fonts/keyrune.svg?v=1.5#keyrune') format('svg');
+//   src: url('../fonts/keyrune.eot?v=1.5.6');
+//   src: url('../fonts/keyrune.eot?#iefix&v=1.5.6') format('embedded-opentype'), url('../fonts/keyrune.woff2?v=1.5.6') format('woff2'), url('../fonts/keyrune.woff?v=1.5.6') format('woff'), url('../fonts/keyrune.ttf?v=1.5.6') format('truetype'), url('../fonts/keyrune.svg?v=1.5.6#keyrune') format('svg');
 //   font-weight: normal;
 //   font-style: normal;
 // }
@@ -17,10 +17,8 @@
   speak: none;
   text-transform: none;
   vertical-align: middle;
-  /* Better font rendering  */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* default if the set does not exist yet, or setcode does not match */
 }
 .ss:before {
   content: "\e684";
@@ -433,6 +431,9 @@
 .ss-c15:before {
   content: "\e900";
 }
+.ss-cn2:before {
+  content: "\e904";
+}
 /**
  * Reprint */
 .ss-chr:before {
@@ -456,6 +457,9 @@
 .ss-mm2:before {
   content: "\e695";
 }
+.ss-ema:before {
+  content: "\e903";
+}
 /**
  * Beginner */
 .ss-por:before {
@@ -472,6 +476,9 @@
 }
 .ss-s00:before {
   content: "\e668";
+}
+.ss-w16:before {
+  content: "\e907";
 }
 /**
  * Duel Decks */
@@ -523,6 +530,9 @@
 .ss-ddp:before {
   content: "\e698";
 }
+.ss-ddq:before {
+  content: "\e908";
+}
 /**
  * From the Vault */
 .ss-drb:before {
@@ -545,6 +555,12 @@
 }
 .ss-v14:before {
   content: "\e67e";
+}
+.ss-v15:before {
+  content: "\e905";
+}
+.ss-v16:before {
+  content: "\e906";
 }
 /**
  * Premium Deck Series */
@@ -594,6 +610,12 @@
 }
 .ss-exp:before {
   content: "\e69a";
+}
+.ss-psalvat05:before {
+  content: "\e909";
+}
+.ss-psalvat11:before {
+  content: "\e90a";
 }
 /**
  * Online */
