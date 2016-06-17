@@ -59,11 +59,23 @@ class Search extends React.Component {
     // Filter by mana if 'allowToFilterWholeCollection' is true or if name, types or text is specified
     if (this.props.allowToFilterWholeCollection || queryName.length > 0 || queryTypes.length > 0 || queryText.length > 0) {
       return this.props.collectionToSearchIn.filter(
-        (card) =>
-          card.name.toLowerCase().indexOf(queryName) > -1 &&
-          card.type.toLowerCase().indexOf(queryTypes) > -1 &&
-          (card.text ? card.text.toLowerCase().indexOf(queryText) > -1 : true) &&
-          (card.colors ? manaArray.filter((val) => card.colors.indexOf(val) !== -1).length : true)
+        (card) => {
+          const manaOk = card.colors
+          ? manaArray.filter((val) => card.colors.indexOf(val) !== -1).length > 0
+          : this.state.mana.Colorless
+
+          // Do not allow basic lands
+          if (card.rarity === 'Basic Land') return false
+          // Do not allow tokens
+          if (card.layout === 'token') return false
+
+          return (
+            card.name.toLowerCase().indexOf(queryName) > -1 &&
+            card.type.toLowerCase().indexOf(queryTypes) > -1 &&
+            (card.text ? card.text.toLowerCase().indexOf(queryText) > -1 : true) &&
+            manaOk
+          )
+        }
       )
     }
   }
@@ -102,7 +114,8 @@ class Search extends React.Component {
         'Blue': true,
         'Black': true,
         'Red': true,
-        'Green': true
+        'Green': true,
+        'Colorless': true
       }
     })
   }
@@ -114,7 +127,8 @@ class Search extends React.Component {
         'Blue': false,
         'Black': false,
         'Red': false,
-        'Green': false
+        'Green': false,
+        'Colorless': false
       }
     })
   }
