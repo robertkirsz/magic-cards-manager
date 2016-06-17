@@ -19,7 +19,8 @@ class Search extends React.Component {
         'Blue': true,
         'Black': true,
         'Red': true,
-        'Green': true
+        'Green': true,
+        'Colorless': true
       }
     }
     this._handleChangeName = this._handleChangeName.bind(this)
@@ -203,6 +204,18 @@ class Search extends React.Component {
             <i
               className='ms ms-cost ms-g'
               style={!this.state.mana.Green ? {opacity: 0.4, backgroundColor: 'transparent'} : {}}
+            />
+          </label>
+          <label>
+            <input
+              type='checkbox'
+              value='Colorless'
+              checked={this.state.mana.Colorless}
+              onChange={this._handleChangeMana}
+            />
+            <i
+              className='ms ms-cost ms-c'
+              style={!this.state.mana.Colorless ? {opacity: 0.4, backgroundColor: 'transparent'} : {}}
             />
           </label>
         </div>
