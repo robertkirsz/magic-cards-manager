@@ -54,8 +54,7 @@ class Header extends React.Component {
         <span>
           Card data <i className={databaseStatusClass} />
         </span>
-        <Link to='/'>Home</Link>
-        <Link to='/collection'>Collection</Link>
+        {/* <Link to='/'>Home</Link> */}
         <i
           className={'lockApplication fa fa-' + (this.props.application.locked ? 'lock' : 'unlock')}
           onClick={this._lockCollection}

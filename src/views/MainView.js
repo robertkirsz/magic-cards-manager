@@ -13,6 +13,9 @@ import Search from 'components/Search'
 import Modal from 'components/Modal'
 import _ from 'lodash'
 import Card from 'models/Card'
+import CollectionStats from 'components/CollectionStats'
+
+// TODO - czyścić stan wyszukiwania pomiędzy przelączaniem Searcha
 
 const $ = window.jQuery
 
@@ -32,7 +35,7 @@ const mapDispatchToProps = (dispatch) => ({
   applicationActions: bindActionCreators(applicationActions, dispatch)
 })
 
-class AddToCollectionView extends React.Component {
+class MainView extends React.Component {
   constructor () {
     super()
     this.state = {
@@ -212,6 +215,7 @@ class AddToCollectionView extends React.Component {
               title='Search Database'
               collectionToSearchIn={database.allCards}
               onSearch={this._updateCardNamesList}
+              allowToFilterWholeCollection
             />
             : null
         }
@@ -260,6 +264,7 @@ class AddToCollectionView extends React.Component {
           collection.length ?
             <div className='collection'>
               <h3>Collection ({numberOfCardsInCollection})</h3>
+              <CollectionStats />
               <CardsList
                 cards={searchCollectionResults.length ? searchCollectionResults : collection}
                 openModal={this._openModal}
@@ -280,4 +285,4 @@ class AddToCollectionView extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddToCollectionView)
+export default connect(mapStateToProps, mapDispatchToProps)(MainView)
