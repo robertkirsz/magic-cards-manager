@@ -8,14 +8,15 @@ const CardName = ({ card, onCardClick, collection }) => {
   // Na podstawie tablicy wygeneruj ikony many
   const manaCost = (card.manaCost !== undefined) ? <ManaCost manaArray={manaCostArray} /> : null
   const landIcon = card.types && card.types[0] === 'Land' ? <i className='ms ms-land' /> : null
+  const artifactIcon = card.types && card.types[0] === 'Artifact' ? <i className='ms ms-artifact' /> : null
   const inCollection = _.find(collection, { 'name': card.name })
 
   return (
     <li
       className={'search-results__list__item' + (inCollection ? ' search-results__list__item--owned' : '')}
-      onClick={onCardClick.bind(this, card)}
+      onClick={() => { onCardClick(card) }}
     >
-      {card.name}{manaCost}{landIcon}
+      {landIcon}{artifactIcon}{card.name}{manaCost}
     </li>
   )
 }

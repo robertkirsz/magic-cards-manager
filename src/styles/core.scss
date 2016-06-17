@@ -206,7 +206,8 @@ ul {
       border: 1px solid black;
       cursor: pointer;
       &--owned { background: rgb(50, 170, 50); }
-      .ms-land { margin-left: 0.3em; }
+      .ms-land { margin-right: 0.3em; }
+      .ms-artifact { margin-right: 0.3em; }
     }
   }
 }
@@ -225,6 +226,11 @@ ul {
   }
   &__image {
     width: 120px;
+    transition: transform 0.3s;
+    &:hover {
+      transform: scale(2);
+      z-index: 9999;
+    }
     img {
       width: 100%;
       max-width: 310px;
@@ -264,6 +270,7 @@ ul {
     text-shadow: 2px 2px 3px rgba(black, 0.75);
     transition: all 0.2s;
     opacity: 0;
+    z-index: 10000;
     &:active {
       transform: scale(0.8);
     }
