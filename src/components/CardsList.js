@@ -15,8 +15,7 @@ const Card = ({
   const manaCost = (card.manaCost !== undefined) ? <ManaCost manaArray={manaCostArray} /> : null
   const rarity = card.rarity.toLowerCase()
   const setIcon = card.setIcon ? <i className={'ss ss-' + card.setIcon + ' ss-' + rarity}></i> : null
-  const cardsInCollection = card.cardsInCollection > 1
-    ? <i className='cardsInCollection'>{card.cardsInCollection}</i> : null
+  const cardsInCollection = card.cardsInCollection > 1 ? <i className='cardsInCollection'>{card.cardsInCollection}</i> : null
 
   return (
     <div className='card'>

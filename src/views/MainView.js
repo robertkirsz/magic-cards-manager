@@ -215,7 +215,6 @@ class MainView extends React.Component {
               title='Search Database'
               collectionToSearchIn={database.allCards}
               onSearch={this._updateCardNamesList}
-              allowToFilterWholeCollection
             />
             : null
         }
