@@ -14,6 +14,8 @@ class Search extends React.Component {
       queryName: '',
       queryTypes: '',
       queryText: '',
+      convertedManaCost: 0,
+      cmcType: 'minimum',
       mana: {
         'White': true,
         'Blue': true,
@@ -27,6 +29,7 @@ class Search extends React.Component {
     this._handleChangeTypes = this._handleChangeTypes.bind(this)
     this._handleChangeText = this._handleChangeText.bind(this)
     this._handleChangeMana = this._handleChangeMana.bind(this)
+    this._handleChangeConvertedManaCost = this._handleChangeConvertedManaCost.bind(this)
     this._toggleAll = this._toggleAll.bind(this)
     this._toggleNone = this._toggleNone.bind(this)
     this._search = this._search.bind(this)
@@ -46,40 +49,6 @@ class Search extends React.Component {
   shouldComponentUpdate (nextProps, nextState) {
     console.log('   %cSearch shouldComponentUpdate()', 'color: #79BDA8;', nextState !== this.state)
     return nextState !== this.state
-  }
-
-  _search (state) {
-    const queryName = state.queryName.trim().toLowerCase()
-    const queryTypes = state.queryTypes.trim().toLowerCase()
-    const queryText = state.queryText.trim().toLowerCase()
-    let manaArray = []
-    for (let key in state.mana) {
-      if (state.mana[key]) manaArray.push(key)
-    }
-    // Filter by mana if 'allowToFilterWholeCollection' is true or if name, types or text is specified
-    if (this.props.allowToFilterWholeCollection || queryName.length > 0 || queryTypes.length > 0 || queryText.length > 0) {
-      return this.props.collectionToSearchIn.filter(
-        (card) => {
-          // Hide basic lands
-          if (card.supertypes && card.supertypes[0] === 'Basic') return false
-          // Hide tokens
-          if (card.layout === 'token') return false
-          // Hide cards with no text when text is specified
-          if (queryText && !card.text) return false
-
-          const manaOk = card.colors
-          ? manaArray.filter((val) => card.colors.indexOf(val) !== -1).length > 0
-          : this.state.mana.Colorless
-
-          return (
-            card.name.toLowerCase().indexOf(queryName) > -1 &&
-            card.type.toLowerCase().indexOf(queryTypes) > -1 &&
-            (card.text ? card.text.toLowerCase().indexOf(queryText) > -1 : true) &&
-            manaOk
-          )
-        }
-      )
-    }
   }
 
   _handleChangeName (e) {
@@ -109,6 +78,12 @@ class Search extends React.Component {
     })
   }
 
+  _handleChangeConvertedManaCost (e) {
+    this.setState({
+      convertedManaCost: parseInt(e.target.value, 10)
+    })
+  }
+
   _toggleAll () {
     this.setState({
       mana: {
@@ -135,8 +110,43 @@ class Search extends React.Component {
     })
   }
 
+  _search (state) {
+    const queryName = state.queryName.trim().toLowerCase()
+    const queryTypes = state.queryTypes.trim().toLowerCase()
+    const queryText = state.queryText.trim().toLowerCase()
+    let manaArray = []
+    for (let key in state.mana) {
+      if (state.mana[key]) manaArray.push(key)
+    }
+    // Filter by mana if 'allowToFilterWholeCollection' is true or if name, types or text is specified
+    if (this.props.allowToFilterWholeCollection || queryName.length > 0 || queryTypes.length > 0 || queryText.length > 0) {
+      return this.props.collectionToSearchIn.filter(
+        (card) => {
+          // Hide basic lands
+          if (card.supertypes && card.supertypes[0] === 'Basic') return false
+          // Hide tokens
+          if (card.layout === 'token') return false
+          // Hide cards with no text when text is specified
+          if (queryText && !card.text) return false
+
+          const nameOk = card.name.toLowerCase().indexOf(queryName) > -1
+          const typeOk = card.type.toLowerCase().indexOf(queryTypes) > -1
+          const textOk = card.text ? card.text.toLowerCase().indexOf(queryText) > -1 : true
+          const manaOk = card.colors ? manaArray.filter((val) => card.colors.indexOf(val) !== -1).length > 0 : this.state.mana.Colorless
+          let cmcOk = false
+          if (this.state.cmcType === 'minimum' && (card.cmc || 0) >= this.state.convertedManaCost) cmcOk = true
+          if (this.state.cmcType === 'exactly' && (card.cmc || 0) === this.state.convertedManaCost) cmcOk = true
+          if (this.state.cmcType === 'maximum' && (card.cmc || 0) <= this.state.convertedManaCost) cmcOk = true
+
+          return nameOk && typeOk && textOk && manaOk && cmcOk
+        }
+      )
+    }
+  }
+
   render () {
-    console.log('%cSearch', 'color: #79BDA8;')
+    // TODO - all/none checkboxes should check state on load
+    // console.log('%cSearch', 'color: #79BDA8;')
 
     return (
       <div className='search-panel'>
@@ -243,29 +253,52 @@ class Search extends React.Component {
             <input type='radio' name='allNone' value='none' onChange={this._toggleNone} />None
           </label>
         </div>
-        {/* <div>
-          <select className='form-control'>
-            <option value=''>Card Type:</option>
-            <option value='Artifact'>Artifact</option>
-            <option value='Basic'>Basic</option>
-            <option value='Conspiracy'>Conspiracy</option>
-            <option value='Creature'>Creature</option>
-            <option value='Enchantment'>Enchantment</option>
-            <option value='Instant'>Instant</option>
-            <option value='Land'>Land</option>
-            <option value='Legendary'>Legendary</option>
-            <option value='Ongoing'>Ongoing</option>
-            <option value='Phenomenon'>Phenomenon</option>
-            <option value='Plane'>Plane</option>
-            <option value='Planeswalker'>Planeswalker</option>
-            <option value='Scheme'>Scheme</option>
-            <option value='Snow'>Snow</option>
-            <option value='Sorcery'>Sorcery</option>
-            <option value='Tribal'>Tribal</option>
-            <option value='Vanguard'>Vanguard</option>
-            <option value='World'>World</option>
-          </select>
-        </div> */}
+        <div className='cmc-inputs'>
+          CMC
+          <input
+            className='cmc-inputs__value-input'
+            type='number'
+            min='0'
+            step='1'
+            max='20'
+            value={this.state.convertedManaCost}
+            onChange={this._handleChangeConvertedManaCost}
+          />
+          <br />
+          <label>
+            <input
+              className='cmc-inputs__type-input'
+              type='radio'
+              name='cmcType'
+              value='minimum'
+              checked={this.state.cmcType === 'minimum'}
+              onChange={() => { this.setState({ cmcType: 'minimum' }); }}
+            />
+            Minimum
+          </label>
+          <label>
+            <input
+              className='cmc-inputs__type-input'
+              type='radio'
+              name='cmcType'
+              value='exactly'
+              checked={this.state.cmcType === 'exactly'}
+              onChange={() => { this.setState({ cmcType: 'exactly' }); }}
+            />
+            Exactly
+          </label>
+          <label>
+            <input
+              className='cmc-inputs__type-input'
+              type='radio'
+              name='cmcType'
+              value='maximum'
+              checked={this.state.cmcType === 'maximum'}
+              onChange={() => { this.setState({ cmcType: 'maximum' }); }}
+            />
+            Maximum
+          </label>
+        </div>
       </div>
     )
   }

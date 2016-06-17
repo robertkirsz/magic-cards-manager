@@ -283,6 +283,13 @@ ul {
   }
 }
 
+.cmc-inputs {
+  &__value-input {
+    margin: 0 0 0 5px;
+    width: 3em;
+  }
+}
+
 .manaCost {
   margin-left: 0.3em;
 }
