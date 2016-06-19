@@ -8,7 +8,7 @@ import { actions as decksActions } from 'redux/modules/decks'
 import { actions as applicationActions } from 'redux/modules/application'
 import CardsList from 'components/CardsList'
 import CardNamesList from 'components/CardNamesList'
-// import DecksPanel from 'components/DecksPanel'
+import DecksPanel from 'components/DecksPanel'
 import Search from 'components/Search'
 import Modal from 'components/Modal'
 import _ from 'lodash'
@@ -46,7 +46,8 @@ class MainView extends React.Component {
       searchResults: [],
       searchCollectionResults: [],
       showSearchDatabasePanel: false, // Shows search database panel when true
-      showSearchCollectionPanel: false // Shows search collection panel when true
+      showSearchCollectionPanel: false, // Shows search collection panel when true
+      showDecksPanel: false // Shows search collection panel when true
     }
     this._addCardToCollection = this._addCardToCollection.bind(this)
     this._removeCardFromCollection = this._removeCardFromCollection.bind(this)
@@ -54,12 +55,8 @@ class MainView extends React.Component {
     this._showMoreCards = this._showMoreCards.bind(this)
     this._updateCardNamesList = this._updateCardNamesList.bind(this)
     this._openModal = this._openModal.bind(this)
-    this._addNewDeck = this._addNewDeck.bind(this)
-    this._deleteDeck = this._deleteDeck.bind(this)
-    this._clearDecks = this._clearDecks.bind(this)
-    this._addCardToDeck = this._addCardToDeck.bind(this)
-    this._makeDeckActive = this._makeDeckActive.bind(this)
     this._filterCollection = this._filterCollection.bind(this)
+    this._addCardToDeck = this._addCardToDeck.bind(this)
   }
 
   static propTypes = {
@@ -169,36 +166,16 @@ class MainView extends React.Component {
 
   // DECKS
 
-  _addNewDeck (deckData) {
-    this.props.decksActions.createDeck(deckData)
-  }
-
-  _deleteDeck (deckId) {
-    // Deactivate deck if it's active
-    if (this.props.application.activeDeck === deckId) this._makeDeckActive(deckId)
-    // Delete deck
-    this.props.decksActions.deleteDeck(deckId)
-  }
-
-  _clearDecks () {
-    // Delete all decks
-    this.props.decksActions.clearDecks()
-  }
-
   _addCardToDeck (cardId) {
     // TODO ten cardId to teraz name. Może zamiast samego name i amount trzymać teżjakieś id?
     // Add card to the deck
     this.props.decksActions.addCardToDeck(cardId, this.props.application.activeDeck)
   }
 
-  _makeDeckActive (deckId) {
-    this.props.applicationActions.activateDeck(deckId)
-  }
-
   render () {
     const {
       searchResults, cardArtworks, cardsToDisplay,
-      searchCollectionResults,
+      searchCollectionResults, showDecksPanel,
       showSearchDatabasePanel, showSearchCollectionPanel
     } = this.state
     const { database, collection } = this.props
@@ -215,8 +192,7 @@ class MainView extends React.Component {
               title='Search Database'
               collectionToSearchIn={database.allCards}
               onSearch={this._updateCardNamesList}
-            />
-            : null
+            /> : null
         }
         {
           showSearchCollectionPanel ?
@@ -235,7 +211,9 @@ class MainView extends React.Component {
           <div onClick={() => { this.setState({ showSearchDatabasePanel: !showSearchDatabasePanel, showSearchCollectionPanel: false }) }} >
             <i className='fa fa-plus-circle' />
           </div>
-          <div><i className='fa fa-clone' /></div>
+          <div onClick={() => { this.setState({ showDecksPanel: !showDecksPanel }) }} >
+            <i className='fa fa-clone' />
+          </div>
         </div>
         {
           searchResults.length ?
@@ -273,12 +251,9 @@ class MainView extends React.Component {
               />
             </div> : null
         }
-        {/* }<DecksPanel
-          onNewDeckAdd={this._addNewDeck}
-          onDeleteDeck={this._deleteDeck}
-          onClearDecks={this._clearDecks}
-          onMakeDeckActive={this._makeDeckActive}
-        /> */}
+        {
+          showDecksPanel ? <DecksPanel /> : null
+        }
       </div>
     )
   }

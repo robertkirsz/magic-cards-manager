@@ -42,12 +42,17 @@ body {
   box-sizing: inherit;
 }
 
-@mixin flex($flex-direction: row, $flex-wrap : nowrap, $justify-content: center, $align-items: center) {
-  display: flex;
-  flex-direction: $flex-direction;
-  flex-wrap: $flex-wrap;
-  justify-content: $justify-content;
-  align-items: $align-items;
+.button {
+  cursor: pointer;
+  &--icon {
+    margin: 0; padding: 5px;
+    border: none;
+    background: none;
+    outline: none;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+    &:hover { opacity: 1; }
+  }
 }
 
 ul, li {
@@ -95,12 +100,16 @@ ul {
           margin: 5px 0;
           text-align: center;
         }
-        .search-panel, .cardArtworks, .collection, .test {
+        .search-panel, .cardArtworks, .collection, .test, .decks-panel {
           @include flex(column, nowrap, flex-start, stretch);
           padding: 10px;
           overflow-y: auto; //zamienić na wrappery
           flex: 1 0;
           border-right: 1px solid black;
+        }
+        .decks-panel {
+          border-left: 1px solid black;
+          flex: none;
         }
         .test {
           flex: none;
@@ -173,14 +182,33 @@ ul {
 }
 
 .deck {
-  margin: 5px;
-  padding: 5px;
+  @include flex(row, nowrap, flex-start, stretch);
+  position: relative;
+  margin: 5px 0 0;
   border: 1px solid;
   &.active {
-    background: green;
+    background: rgba(green, 0.2);
+    .activate-deck-button { opacity: 1; }
   }
-  li {
-    font-size: 0.6em;
+  &__body {
+    flex: 1;
+    padding: 5px;
+    > p {
+      font-size: 0.9em;
+      margin: 0 0 3px;
+    }
+    > ul {
+      li { font-size: 0.6em; }
+    }
+  }
+  &__buttons {
+    flex: none;
+    padding: 5px;
+    @include flex(column, nowrap, flex-start, center);
+    .delete-deck-button {
+    }
+    .activate-deck-button {
+    }
   }
 }
 

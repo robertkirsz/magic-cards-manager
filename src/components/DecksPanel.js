@@ -5,6 +5,8 @@ import { actions as decksActions } from 'redux/modules/decks'
 import { actions as applicationActions } from 'redux/modules/application'
 import _ from 'lodash'
 
+import Deck from 'components/Deck'
+
 const mapStateToProps = (state) => ({
   decksCollection: state.decks,
   cardsCollection: state.collection,
@@ -23,10 +25,7 @@ class DecksPanel extends React.Component {
     applicationState: React.PropTypes.object,
     decksActions: React.PropTypes.object,
     applicationActions: React.PropTypes.object,
-    onNewDeckAdd: React.PropTypes.func,
-    onDeleteDeck: React.PropTypes.func,
-    onMakeDeckActive: React.PropTypes.func,
-    onClearDecks: React.PropTypes.func
+    onNewDeckAdd: React.PropTypes.func
   }
 
   constructor () {
@@ -35,7 +34,6 @@ class DecksPanel extends React.Component {
     this._addNewDeck = this._addNewDeck.bind(this)
     this._setNewDeckName = this._setNewDeckName.bind(this)
     this._deleteDeck = this._deleteDeck.bind(this)
-    this._clearDecks = this._clearDecks.bind(this)
     this._makeDeckActive = this._makeDeckActive.bind(this)
   }
 
@@ -51,25 +49,22 @@ class DecksPanel extends React.Component {
     event.preventDefault()
     if (!this.state.newDeckName) return false
 
-    this.props.onNewDeckAdd({ name: this.state.newDeckName })
+    this.props.decksActions.createDeck({ name: this.state.newDeckName })
   }
 
-  _setNewDeckName (event) {
-    event.preventDefault()
-    this.setState({ newDeckName: event.target.value })
+  _setNewDeckName (e) {
+    this.setState({ newDeckName: e.target.value })
   }
 
-  _deleteDeck (deckId, event) {
-    event.stopPropagation()
-    this.props.onDeleteDeck(deckId)
-  }
-
-  _clearDecks () {
-    this.props.onClearDecks()
+  _deleteDeck (deckId) {
+    // Deactivate deck if it's active
+    if (this.props.applicationState.activeDeck === deckId) this._makeDeckActive(deckId)
+    // Delete deck
+    this.props.decksActions.deleteDeck(deckId)
   }
 
   _makeDeckActive (deckId) {
-    this.props.onMakeDeckActive(deckId)
+    this.props.applicationActions.activateDeck(deckId)
   }
 
   render () {
@@ -78,44 +73,19 @@ class DecksPanel extends React.Component {
 
     return (
       <div className='decks-panel'>
-        <h3>Decks Panel! <i className='fa fa-times' onClick={this._clearDecks} /></h3>
+        <h3>Decks</h3>
         <form onSubmit={this._addNewDeck}>
-          <input onChange={this._setNewDeckName}/>
+          <input onChange={this._setNewDeckName} />
           <button type='submit'>Add new deck</button>
         </form>
-        <h4>store</h4>
-        {
-          decksCollection.map((deck) => {
-            const numberOfCardsInDeck = deck.cards.reduce((a, b) => {
-              return a + b.amount
-            }, 0)
-            return (
-              <div
-                key={deck.id}
-                className={'deck' + (applicationState.activeDeck === deck.id ? ' active' : '')}
-                onClick={this._makeDeckActive.bind(this, deck.id)}
-              >
-                <p>ID: {deck.id}</p>
-                <p>Name: {deck.name}</p>
-                <p>Unique spells: {deck.cards.length}</p>
-                <p>Number of cards: {numberOfCardsInDeck}</p>
-                <ul>
-                  {
-                    deck.cards.map((cardInDeck, i) => {
-                      const cardObject = _.find(cardsCollection, (cardInCollection) => cardInCollection.name === cardInDeck.name)
-                      return (
-                        <li key={i}>
-                          {cardObject.name} ({cardInDeck.amount})
-                        </li>
-                      )
-                    })
-                  }
-                </ul>
-                <button onClick={this._deleteDeck.bind(this, deck.id)}>Delete</button>
-              </div>
-            )
-          })
-        }
+        { decksCollection.map(singleDeck => (
+          <Deck
+            key={singleDeck.id}
+            deckData={singleDeck}
+            onMakeDeckActive={this._makeDeckActive}
+            onDeleteDeck={this._deleteDeck}
+          />
+        )) }
       </div>
     )
   }

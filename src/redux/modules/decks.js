@@ -11,7 +11,6 @@ const updateLocalStorage = (decks) => {
 export const CREATE_DECK = 'CREATE_DECK'
 export const DELETE_DECK = 'DELETE_DECK'
 export const UPDATE_DECK = 'UPDATE_DECK'
-export const CLEAR_DECKS = 'CLEAR_DECKS'
 export const ADD_CARD_TO_DECK = 'ADD_CARD_TO_DECK'
 export const RESTORE_DECK_COLLECTION = 'RESTORE_DECK_COLLECTION'
 
@@ -33,10 +32,6 @@ export const updateDeck = (deckId, propertyName, newValue) => ({
   payload: { deckId, propertyName, newValue }
 })
 
-export const clearDecks = () => ({
-  type: CLEAR_DECKS
-})
-
 export const addCardToDeck = (cardId, deckId) => ({
   type: ADD_CARD_TO_DECK,
   payload: { cardId, deckId }
@@ -51,7 +46,6 @@ export const actions = {
   createDeck,
   deleteDeck,
   updateDeck,
-  clearDecks,
   addCardToDeck,
   restoreDeckCollection
 }
@@ -104,12 +98,6 @@ const ACTION_HANDLERS = {
     updateLocalStorage(newState)
 
     return newState
-  },
-  [CLEAR_DECKS]: (state) => {
-    console.log('%cCLEAR_DECKS', 'color: #A1C659;')
-    updateLocalStorage([])
-
-    return []
   },
   [ADD_CARD_TO_DECK]: (state, { payload }) => {
     console.log('%cADD_CARD_TO_DECK payload', 'color: #A1C659;', payload)
