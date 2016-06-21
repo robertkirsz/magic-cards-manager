@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import _ from 'lodash'
 
 const mapStateToProps = (state) => ({
   cardsCollection: state.collection,
@@ -48,18 +49,17 @@ class Deck extends React.Component {
           <p>Number of cards: {numberOfCardsInDeck}</p>
           <ul>
             {
-              cardsCollection.length ?
-                deck.cards.map((cardInDeck, i) => {
-                  const cardObject = _.find(cardsCollection, (cardInCollection) => cardInCollection.name === cardInDeck.name)
-                  return (
-                    <li key={i}>
-                      {cardObject.name} ({cardInDeck.amount})
-                    </li>
-                  )
-                })
-                :
+              cardsCollection.length ? deck.cards.map((cardInDeck, i) => {
+                const cardObject = _.find(cardsCollection, (cardInCollection) => cardInCollection.name === cardInDeck.name)
+                return (
+                  <li key={i}>
+                    {cardObject.name} ({cardInDeck.amount})
+                  </li>
+                )
+              })
+              :
                 <li>Loading cards...</li>
-              }
+            }
           </ul>
         </main>
         <div className='deck__buttons'>
@@ -81,4 +81,4 @@ class Deck extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, )(Deck)
+export default connect(mapStateToProps)(Deck)

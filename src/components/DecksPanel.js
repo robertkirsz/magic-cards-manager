@@ -3,7 +3,6 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { actions as decksActions } from 'redux/modules/decks'
 import { actions as applicationActions } from 'redux/modules/application'
-import _ from 'lodash'
 
 import Deck from 'components/Deck'
 
@@ -69,7 +68,7 @@ class DecksPanel extends React.Component {
 
   render () {
     console.log('%cDecksPanel', 'color: #79BDA8;')
-    const { decksCollection, cardsCollection, applicationState } = this.props
+    const { decksCollection } = this.props
 
     return (
       <div className='decks-panel'>
@@ -78,14 +77,16 @@ class DecksPanel extends React.Component {
           <input onChange={this._setNewDeckName} />
           <button type='submit'>Add new deck</button>
         </form>
-        { decksCollection.map(singleDeck => (
-          <Deck
-            key={singleDeck.id}
-            deckData={singleDeck}
-            onMakeDeckActive={this._makeDeckActive}
-            onDeleteDeck={this._deleteDeck}
-          />
-        )) }
+        {
+          decksCollection.map(singleDeck => (
+            <Deck
+              key={singleDeck.id}
+              deckData={singleDeck}
+              onMakeDeckActive={this._makeDeckActive}
+              onDeleteDeck={this._deleteDeck}
+            />
+          ))
+        }
       </div>
     )
   }
