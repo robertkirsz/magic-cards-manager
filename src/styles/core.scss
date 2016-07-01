@@ -100,32 +100,9 @@ ul {
           margin: 5px 0;
           text-align: center;
         }
-        .search-panel, .cardArtworks, .collection, .test, .decks-panel {
-          @include flex(column, nowrap, flex-start, stretch);
-          padding: 10px;
-          overflow-y: auto; //zamienić na wrappery
-          flex: 1 0;
-          border-right: 1px solid black;
-        }
         .decks-panel {
           border-left: 1px solid black;
           flex: none;
-        }
-        .test {
-          flex: none;
-          padding: 0;
-          border-right: none;
-          font-size: 1.5em;
-          > div {
-            padding: 10px;
-            background: rgba(red, 0.2);
-            margin-bottom: 5px;
-            cursor: pointer;
-            transition: background 0.2s;
-            &:hover {
-              background: rgba(red, 0.5);
-            }
-          }
         }
         .search-panel {
           flex: none;
@@ -165,19 +142,44 @@ ul {
             }
           }
         }
-        .cardArtworks {
-          .cardList {
-            @include flex(row, wrap, flex-start, flex-start);
-          }
-        }
-        .collection {
-          border-right: none;
-          .cardList {
-            @include flex(row, wrap, flex-start, flex-start);
-          }
-        }
       }
     }
+  }
+}
+
+.search-panel, .card-artworks-panel, .cards-collection-panel, .panels-navigation-buttons, .decks-panel {
+  @include flex(column, nowrap, flex-start, stretch);
+  padding: 10px;
+  overflow-y: auto; //zamienić na wrappery
+  flex: 1 0;
+  border-right: 1px solid black;
+}
+
+.panels-navigation-buttons {
+  flex: none;
+  padding: 0;
+  border-right: none;
+  font-size: 1.5em;
+  &__button {
+    margin: 0 0 5px; padding: 10px;
+    background: rgba(red, 0.2);
+    cursor: pointer;
+    transition: background 0.2s;
+    &:hover, &--active { background: rgba(red, 0.5); }
+    .icon {}
+  }
+}
+
+.card-artworks-panel {
+  .cardList {
+    @include flex(row, wrap, flex-start, flex-start);
+  }
+}
+
+.cards-collection-panel {
+  border-right: none;
+  .cardList {
+    @include flex(row, wrap, flex-start, flex-start);
   }
 }
 
@@ -244,70 +246,64 @@ ul {
   @include flex(column, nowrap, flex-start, center);
   position: relative;
   margin: 2px;
-  &:hover {
-    .card__controls button, .fa-search, .fa-clone {
-      opacity: 1;
-    }
+  transition: all 0.3s;
+  .fa {
+    transition: all 0.3s;
+    opacity: 0.5;
+    cursor: pointer;
+    color: white;
+    text-shadow: 2px 2px 3px rgba(black, 0.75);
+    &:hover { opacity: 1; }
+    &:active { transform: scale(0.4); }
   }
-  .ss {
-    font-size: 1.75em;
+  &:hover {
+    .card__image {
+      transform: scale(2.5);
+      z-index: 100;
+    }
+    .card__info {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    .card__buttons {
+      transform: scale(1.5);
+      padding: 0;
+      opacity: 1;
+      z-index: 200;
+      &__controls { width: 180px; }
+    }
+    .fa { transform: scale(0.666); }
   }
   &__image {
-    width: 120px;
-    transition: transform 0.3s;
-    &:hover {
-      transform: scale(2);
-      z-index: 9999;
-    }
-    img {
-      width: 100%;
-      max-width: 310px;
-      height: auto;
-    }
+    width: 120px; height: 168px;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-size: contain;
+    transition: all 0.3s;
   }
-  &__controls {
-    @include flex(row, wrap, space-around, flex-start);
+  &__details{
+    // display: none;
+  }
+  &__buttons {
+    @include flex(column, nowrap, space-around, center);
     position: absolute;
-    top: 58%;
-    width: 100%;
-    button {
-      transition: all 0.2s;
-      opacity: 0;
-      font-size: 2em;
-      color: white;
-      text-shadow: 2px 2px 2px rgba(black, 0.75);
-      border: none;
-      background: none;
-      font-size: 1.5em;
-      outline: none;
-      &:active {
-        transform: scale(0.8);
-      }
+    top: 0; right: 0; bottom: 0; left: 0;
+    padding-bottom: 35px;
+    opacity: 0;
+    transition: all 0.3s;
+    .fa { font-size: 2em; }
+    .fa-search {}
+    .fa-clone {}
+    &__controls {
+      @include flex(row, wrap, space-around, flex-start);
+      width: 66px;
+      transition: all 0.3s;
+      .fa { font-size: 1.5em; }
     }
   }
   &__info {
-    display: none;
-  }
-  .fa-search, .fa-clone {
-    position: absolute;
-    cursor: pointer;
-    width: 100%;
-    text-align: center;
-    font-size: 2em;
-    color: white;
-    text-shadow: 2px 2px 3px rgba(black, 0.75);
-    transition: all 0.2s;
-    opacity: 0;
-    z-index: 10000;
-    &:active {
-      transform: scale(0.8);
-    }
-  }
-  .fa-search {
-    top: 20%;
-  }
-  .fa-clone {
-    top: 40%;
+    transition: all 0.3s;
+    .ss { font-size: 1.75em; }
   }
 }
 

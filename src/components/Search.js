@@ -281,7 +281,7 @@ class Search extends React.Component {
             name='cmcType'
             value='minimum'
             checked={this.state.cmcType === 'minimum'}
-            onChange={() => { this.setState({ cmcType: 'minimum' }); }}
+            onChange={() => { this.setState({ cmcType: 'minimum' }) }}
           />
           Minimum
         </label>
@@ -292,7 +292,7 @@ class Search extends React.Component {
             name='cmcType'
             value='exactly'
             checked={this.state.cmcType === 'exactly'}
-            onChange={() => { this.setState({ cmcType: 'exactly' }); }}
+            onChange={() => { this.setState({ cmcType: 'exactly' }) }}
           />
           Exactly
         </label>
@@ -303,7 +303,7 @@ class Search extends React.Component {
             name='cmcType'
             value='maximum'
             checked={this.state.cmcType === 'maximum'}
-            onChange={() => { this.setState({ cmcType: 'maximum' }); }}
+            onChange={() => { this.setState({ cmcType: 'maximum' }) }}
           />
           Maximum
         </label>

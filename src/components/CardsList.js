@@ -19,36 +19,37 @@ const Card = ({
 
   return (
     <div className='card'>
-      <div className='card__image'>
-        <img src={'http://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=' + card.multiverseid} />
+      <div
+        className='card__image'
+        style={{ backgroundImage: 'url(http://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=' + card.multiverseid + ')' }}
+      />
+      <div className='card__buttons'>
+        <i className='fa fa-info-circle' onClick={function () { openModal(card) }} />
+        {showAddToDeckButton ? <i className='fa fa-clone' onClick={addCardToDeck} /> : null}
+        {
+          showControls ?
+            <div className='card__buttons__controls'>
+              <i className='fa fa-plus-circle' onClick={addCardToCollection} />
+              {
+                card.cardsInCollection ?
+                  <i className='fa fa-minus-circle' onClick={removeCardFromCollection} />
+                  : null
+              }
+            </div>
+            : null
+        }
       </div>
-      <span>{setIcon} {cardsInCollection}</span>
-      <i className='fa fa-search' onClick={function () { openModal(card) }} />
-      {showAddToDeckButton ? <i className='fa fa-clone' onClick={addCardToDeck} /> : null}
-      {
-        showControls ?
-          <div className='card__controls'>
-            <button onClick={addCardToCollection}>
-              <i className='fa fa-plus-circle' />
-            </button>
-            {
-              card.cardsInCollection ?
-                <button onClick={removeCardFromCollection}>
-                  <i className='fa fa-minus-circle' />
-                </button>
-                : null
-            }
-          </div>
-          : null
-      }
       <div className='card__info'>
+        {setIcon} {cardsInCollection}
+      </div>
+      {/* <div className='card__details'>
         <p>{card.name}{manaCost}</p>
         <p>{card.type} <i className={'mtg magic-origins ' + rarity}></i></p>
         <p>{card.text}</p>
         <p><em>{card.flavor}</em></p>
         <p>{card.number} {card.artist}</p>
         <p>{card.power}/{card.toughness}</p>
-      </div>
+      </div> */}
     </div>
   )
 }

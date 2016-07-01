@@ -21,7 +21,7 @@ const $ = window.jQuery
 
 const mapStateToProps = (state) => ({
   application: state.application,
-  collection: state.collection,
+  cardsCollectionFromStore: state.collection,
   database: state.database,
   modal: state.modal,
   decks: state.decks
@@ -47,7 +47,8 @@ class MainView extends React.Component {
       searchCollectionResults: [],
       showSearchDatabasePanel: false, // Shows search database panel when true
       showSearchCollectionPanel: false, // Shows search collection panel when true
-      showDecksPanel: false // Shows search collection panel when true
+      showDecksPanel: false, // Shows search collection panel when true
+      sampledCardsCollecion: null
     }
     this._addCardToCollection = this._addCardToCollection.bind(this)
     this._removeCardFromCollection = this._removeCardFromCollection.bind(this)
@@ -61,7 +62,7 @@ class MainView extends React.Component {
 
   static propTypes = {
     application: React.PropTypes.object,
-    collection: React.PropTypes.array,
+    cardsCollectionFromStore: React.PropTypes.array,
     database: React.PropTypes.object,
     collectionActions: React.PropTypes.object,
     modalActions: React.PropTypes.object,
@@ -115,6 +116,17 @@ class MainView extends React.Component {
         this.setState({databaseStatus: 'error'})
         console.error('Error', arguments)
       }.bind(this))
+    }
+  }
+
+  componentWillReceiveProps (nextProps) {
+    // Get sample from a collection when it arives
+    if (
+      this.props.cardsCollectionFromStore.length === 0 &&
+      nextProps.cardsCollectionFromStore.length !== 0 &&
+      !this.state.sampledCardsCollecion
+    ) {
+      this.setState({ sampledCardsCollecion: _.sampleSize(nextProps.cardsCollectionFromStore, 15) })
     }
   }
 
@@ -176,84 +188,92 @@ class MainView extends React.Component {
     const {
       searchResults, cardArtworks, cardsToDisplay,
       searchCollectionResults, showDecksPanel,
-      showSearchDatabasePanel, showSearchCollectionPanel
+      showSearchDatabasePanel, showSearchCollectionPanel, sampledCardsCollecion
     } = this.state
-    const { database, collection } = this.props
-    const numberOfCardsInCollection = collection.reduce((a, b) => a + b.cardsInCollection, 0)
+    const { database, cardsCollectionFromStore } = this.props
+    const numberOfCardsInCollection = cardsCollectionFromStore.reduce((a, b) => a + b.cardsInCollection, 0)
+
+    const cardsCollectionPanel = (
+      <div className='cards-collection-panel'>
+        <h3>Collection ({numberOfCardsInCollection})</h3>
+        <CollectionStats />
+        <CardsList
+          cards={searchCollectionResults.length ? searchCollectionResults : sampledCardsCollecion}
+          openModal={this._openModal}
+          addCard={this._addCardToCollection}
+          removeCard={this._removeCardFromCollection}
+          addCardToDeck={this._addCardToDeck}
+        />
+      </div>
+    )
+    const cardNamesList = (
+      <CardNamesList
+        cards={searchResults.slice(0, cardsToDisplay)}
+        collection={cardsCollectionFromStore}
+        moreCardsToShow={searchResults.length > cardsToDisplay}
+        onCardClick={this._searchInSets}
+        onMoreClick={this._showMoreCards}
+      />
+    )
+    const cardArtworksPanel = (
+      <div className='card-artworks-panel'>
+        <h3>Artworks</h3>
+        <CardsList
+          cards={cardArtworks}
+          openModal={this._openModal}
+          addCard={this._addCardToCollection}
+          removeCard={this._removeCardFromCollection}
+        />
+      </div>
+    )
+    const panelsNavigationButtons = (
+      <div className='panels-navigation-buttons'>
+        <div
+          className={'panels-navigation-buttons__button' + (showSearchCollectionPanel ? ' panels-navigation-buttons__button--active' : '')}
+          onClick={() => { this.setState({ showSearchCollectionPanel: !showSearchCollectionPanel, showSearchDatabasePanel: false }) }}
+        >
+          <i className='icon fa fa-search' />
+        </div>
+        <div
+          className={'panels-navigation-buttons__button' + (showSearchDatabasePanel ? ' panels-navigation-buttons__button--active' : '')}
+          onClick={() => { this.setState({ showSearchDatabasePanel: !showSearchDatabasePanel, showSearchCollectionPanel: false }) }}
+        >
+          <i className='icon fa fa-plus-circle' />
+        </div>
+        <div
+          className={'panels-navigation-buttons__button' + (showDecksPanel ? ' panels-navigation-buttons__button--active' : '')}
+          onClick={() => { this.setState({ showDecksPanel: !showDecksPanel }) }}
+        >
+          <i className='icon fa fa-clone' />
+        </div>
+      </div>
+    )
+    const searchDatabasePanel = (
+      <Search
+        title='Search Database'
+        collectionToSearchIn={database.allCards}
+        onSearch={this._updateCardNamesList}
+      />
+    )
+    const searchCollectionPanel = (
+      <Search
+        title='Search Collection'
+        collectionToSearchIn={cardsCollectionFromStore}
+        onSearch={this._filterCollection}
+        allowToFilterWholeCollection
+      />
+    )
 
     return (
       <div className='search-in-collection-view'>
-        {
-          this.props.modal ? <Modal /> : null
-        }
-        {
-          showSearchDatabasePanel ?
-            <Search
-              title='Search Database'
-              collectionToSearchIn={database.allCards}
-              onSearch={this._updateCardNamesList}
-            /> : null
-        }
-        {
-          showSearchCollectionPanel ?
-            <Search
-              title='Search Collection'
-              collectionToSearchIn={collection}
-              onSearch={this._filterCollection}
-              allowToFilterWholeCollection
-            />
-            : null
-        }
-        <div className='test'>
-          <div onClick={() => { this.setState({ showSearchCollectionPanel: !showSearchCollectionPanel, showSearchDatabasePanel: false }) }} >
-            <i className='fa fa-search' />
-          </div>
-          <div onClick={() => { this.setState({ showSearchDatabasePanel: !showSearchDatabasePanel, showSearchCollectionPanel: false }) }} >
-            <i className='fa fa-plus-circle' />
-          </div>
-          <div onClick={() => { this.setState({ showDecksPanel: !showDecksPanel }) }} >
-            <i className='fa fa-clone' />
-          </div>
-        </div>
-        {
-          searchResults.length ?
-            <CardNamesList
-              cards={searchResults.slice(0, cardsToDisplay)}
-              collection={collection}
-              moreCardsToShow={searchResults.length > cardsToDisplay}
-              onCardClick={this._searchInSets}
-              onMoreClick={this._showMoreCards}
-            /> : null
-        }
-        {
-          cardArtworks.length ?
-            <div className='cardArtworks'>
-              <h3>Artworks</h3>
-              <CardsList
-                cards={cardArtworks}
-                openModal={this._openModal}
-                addCard={this._addCardToCollection}
-                removeCard={this._removeCardFromCollection}
-              />
-            </div> : null
-        }
-        {
-          collection.length ?
-            <div className='collection'>
-              <h3>Collection ({numberOfCardsInCollection})</h3>
-              <CollectionStats />
-              <CardsList
-                cards={searchCollectionResults.length ? searchCollectionResults : collection}
-                openModal={this._openModal}
-                addCard={this._addCardToCollection}
-                removeCard={this._removeCardFromCollection}
-                addCardToDeck={this._addCardToDeck}
-              />
-            </div> : null
-        }
-        {
-          showDecksPanel ? <DecksPanel /> : null
-        }
+        {this.props.modal ? <Modal /> : null}
+        {showSearchDatabasePanel ? searchDatabasePanel : null}
+        {showSearchCollectionPanel ? searchCollectionPanel : null}
+        {panelsNavigationButtons}
+        {searchResults.length ? cardNamesList : null}
+        {cardArtworks.length ? cardArtworksPanel : null}
+        {cardsCollectionFromStore.length ? cardsCollectionPanel : null}
+        {showDecksPanel ? <DecksPanel /> : null}
       </div>
     )
   }
