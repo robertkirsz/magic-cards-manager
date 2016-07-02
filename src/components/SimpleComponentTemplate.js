@@ -1,4 +1,4 @@
-import { Component, PropTypes } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 class SimpleComponentTemplate extends Component {
   static propTypes = {

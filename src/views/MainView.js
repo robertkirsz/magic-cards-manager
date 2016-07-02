@@ -6,6 +6,7 @@ import { actions as modalActions } from 'redux/modules/modal'
 import { actions as saveAjaxActions } from 'redux/modules/saveCardsFromAjax'
 import { actions as decksActions } from 'redux/modules/decks'
 import { actions as applicationActions } from 'redux/modules/application'
+import CoolCardsDisplay from 'components/CoolCardsDisplay'
 import CardsList from 'components/CardsList'
 import CardNamesList from 'components/CardNamesList'
 import DecksPanel from 'components/DecksPanel'
@@ -48,7 +49,7 @@ class MainView extends React.Component {
       showSearchDatabasePanel: false, // Shows search database panel when true
       showSearchCollectionPanel: false, // Shows search collection panel when true
       showDecksPanel: false, // Shows search collection panel when true
-      sampledCardsCollecion: null
+      showCoolCards: true
     }
     this._addCardToCollection = this._addCardToCollection.bind(this)
     this._removeCardFromCollection = this._removeCardFromCollection.bind(this)
@@ -124,9 +125,9 @@ class MainView extends React.Component {
     if (
       this.props.cardsCollectionFromStore.length === 0 &&
       nextProps.cardsCollectionFromStore.length !== 0 &&
-      !this.state.sampledCardsCollecion
+      this.state.searchCollectionResults.length === 0
     ) {
-      this.setState({ sampledCardsCollecion: _.sampleSize(nextProps.cardsCollectionFromStore, 15) })
+      this.setState({ searchCollectionResults: _.sampleSize(nextProps.cardsCollectionFromStore, 26) })
     }
   }
 
@@ -187,8 +188,8 @@ class MainView extends React.Component {
   render () {
     const {
       searchResults, cardArtworks, cardsToDisplay,
-      searchCollectionResults, showDecksPanel,
-      showSearchDatabasePanel, showSearchCollectionPanel, sampledCardsCollecion
+      searchCollectionResults, showDecksPanel, showCoolCards,
+      showSearchDatabasePanel, showSearchCollectionPanel
     } = this.state
     const { database, cardsCollectionFromStore } = this.props
     const numberOfCardsInCollection = cardsCollectionFromStore.reduce((a, b) => a + b.cardsInCollection, 0)
@@ -196,14 +197,22 @@ class MainView extends React.Component {
     const cardsCollectionPanel = (
       <div className='cards-collection-panel'>
         <h3>Collection ({numberOfCardsInCollection})</h3>
-        <CollectionStats />
-        <CardsList
-          cards={searchCollectionResults.length ? searchCollectionResults : sampledCardsCollecion}
-          openModal={this._openModal}
-          addCard={this._addCardToCollection}
-          removeCard={this._removeCardFromCollection}
-          addCardToDeck={this._addCardToDeck}
-        />
+        {/* <CollectionStats /> */}
+        {
+          showCoolCards ?
+            <CoolCardsDisplay
+              cards={searchCollectionResults}
+              onClick={() => { this.setState({ showCoolCards: false }) }}
+            />
+            :
+            <CardsList
+              cards={searchCollectionResults}
+              openModal={this._openModal}
+              addCard={this._addCardToCollection}
+              removeCard={this._removeCardFromCollection}
+              addCardToDeck={this._addCardToDeck}
+            />
+        }
       </div>
     )
     const cardNamesList = (

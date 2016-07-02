@@ -1,58 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { ManaCost, bracketsToArray } from 'utils'
+import Card from 'components/Card'
 
 const mapStateToProps = (state) => ({
   application: state.application
 })
-
-const Card = ({
-  card, addCardToCollection, removeCardFromCollection,
-  showControls, openModal, addCardToDeck, showAddToDeckButton }) => {
-  // Jeśli karta ma 'manaCost', zbierz ją do tablicy
-  const manaCostArray = (card.manaCost !== undefined) ? bracketsToArray(card.manaCost) : card.manaCost
-  // Na podstawie tablicy wygeneruj ikony many
-  const manaCost = (card.manaCost !== undefined) ? <ManaCost manaArray={manaCostArray} /> : null
-  const rarity = card.rarity.toLowerCase()
-  const setIcon = card.setIcon ? <i className={'ss ss-' + card.setIcon + ' ss-' + rarity}></i> : null
-  const cardsInCollection = card.cardsInCollection > 1 ? <i className='cardsInCollection'>{card.cardsInCollection}</i> : null
-
-  return (
-    <div className='card'>
-      <div
-        className='card__image'
-        style={{ backgroundImage: 'url(http://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=' + card.multiverseid + ')' }}
-      />
-      <div className='card__buttons'>
-        <i className='fa fa-info-circle' onClick={function () { openModal(card) }} />
-        {showAddToDeckButton ? <i className='fa fa-clone' onClick={addCardToDeck} /> : null}
-        {
-          showControls ?
-            <div className='card__buttons__controls'>
-              <i className='fa fa-plus-circle' onClick={addCardToCollection} />
-              {
-                card.cardsInCollection ?
-                  <i className='fa fa-minus-circle' onClick={removeCardFromCollection} />
-                  : null
-              }
-            </div>
-            : null
-        }
-      </div>
-      <div className='card__info'>
-        {setIcon} {cardsInCollection}
-      </div>
-      {/* <div className='card__details'>
-        <p>{card.name}{manaCost}</p>
-        <p>{card.type} <i className={'mtg magic-origins ' + rarity}></i></p>
-        <p>{card.text}</p>
-        <p><em>{card.flavor}</em></p>
-        <p>{card.number} {card.artist}</p>
-        <p>{card.power}/{card.toughness}</p>
-      </div> */}
-    </div>
-  )
-}
 
 class CardsList extends React.Component {
   static propTypes = {
@@ -73,17 +25,20 @@ class CardsList extends React.Component {
 
     return (
       <div className='cardList'>
-        {this.props.cards.map((card, i) => (
-          <Card
-            key={card.id + '' + i}
-            card={card}
-            openModal={openModal}
-            showControls={!application.locked}
-            addCardToCollection={function () { addCard(card) }}
-            removeCardFromCollection={function () { removeCard(card) }}
-            addCardToDeck={function () { addCardToDeck(card.name) }}
-            showAddToDeckButton={application.activeDeck !== null}
-          />))}
+        {
+          this.props.cards.map((card, i) => (
+            <Card
+              key={card.id + '' + i}
+              card={card}
+              openModal={openModal}
+              showControls={!application.locked}
+              addCardToCollection={function () { addCard(card) }}
+              removeCardFromCollection={function () { removeCard(card) }}
+              addCardToDeck={function () { addCardToDeck(card.name) }}
+              showAddToDeckButton={application.activeDeck !== null}
+            />
+          ))
+        }
       </div>
     )
   }

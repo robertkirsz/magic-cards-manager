@@ -35,8 +35,9 @@ class CollectionStats extends React.Component {
       })
     })
     const cardsInTotal = greenCards + redCards + blackCards + blueCards + whiteCards
+
     return (
-      <ul>
+      <ul className='cards-collection-stats'>
         <li>Green: {greenCards} ({Math.round(greenCards / cardsInTotal * 100) + '%)'}</li>
         <li>Red: {redCards} ({Math.round(redCards / cardsInTotal * 100) + '%)'}</li>
         <li>Black: {blackCards} ({Math.round(blackCards / cardsInTotal * 100) + '%)'}</li>
