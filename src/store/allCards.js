@@ -17,15 +17,20 @@ export const responseSuccess = (allSets) => ({ type: ALL_CARDS_SUCCESS, allSets 
 export const responseError = (error) => ({ type: ALL_CARDS_ERROR, error })
 export const getCards = () => {
   return (dispatch, getState) => {
+    // Return if request is pending
     if (getState().allCards.fetching) return
+    // Dispatch action so we can show spinner
     dispatch(sendRequest())
+    //  Send and return API request
     return fetchAllSets()
       .then((response) => {
+        // Throw error if something's wrong
         if (!response.ok) throw new Error(`${response.status} ${response.statusText}`)
+        // Otherwise return response in JSON format
         return response.json()
       })
-      .then((allSets) => dispatch(responseSuccess(allSets)))
-      .catch((error) => dispatch(responseError(error)))
+      .then((allSets) => dispatch(responseSuccess(allSets))) // Get the response and return all Magic sets
+      .catch((error) => dispatch(responseError(error))) // Catch any errors
   }
 }
 
@@ -48,12 +53,11 @@ const ACTION_HANDLERS = {
 
     const allCards = [] // Will contain every single Magic card
     const uniqueCards = {} // Will contain unique cards
+    // Compares release dates and chooses the latest one
     const latestSet = _.reduce(allSets, (result, value, key) => {
       if (!result.releaseDate) return value
-      console.log(key, value.releaseDate, result.releaseDate)
       return moment(value.releaseDate).isAfter(result.releaseDate) ? value : result
     }, {})
-
     // Get every Magic card
     _.forEach(allSets, (set) => allCards.push(...set.cards))
     // Group them by name: { 'Naturalize': { (...), variants: [{...}, {...}] } }
