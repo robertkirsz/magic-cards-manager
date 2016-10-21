@@ -1,15 +1,13 @@
-import CoreLayout from 'layouts/CoreLayout'
-import Home from './Home'
-import CounterRoute from './Counter'
-import AllCardsView from './AllCardsView'
-import NotFound from './NotFound'
+import CoreLayout   from 'layouts/CoreLayout'
+import Home         from 'routes/Home'
+import AllCardsView from 'routes/AllCardsView'
+import NotFound     from 'routes/NotFound'
 
 export const createRoutes = (store) => ({
   path        : '/',
   component   : CoreLayout,
   indexRoute  : Home,
   childRoutes : [
-    CounterRoute(store),
     AllCardsView,
     NotFound
   ]
