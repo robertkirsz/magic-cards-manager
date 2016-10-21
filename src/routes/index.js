@@ -1,7 +1,8 @@
-import CoreLayout from '../layouts/CoreLayout/CoreLayout'
+import CoreLayout from 'layouts/CoreLayout'
 import Home from './Home'
 import CounterRoute from './Counter'
 import AllCardsView from './AllCardsView'
+import NotFound from './NotFound'
 
 export const createRoutes = (store) => ({
   path        : '/',
@@ -9,7 +10,8 @@ export const createRoutes = (store) => ({
   indexRoute  : Home,
   childRoutes : [
     CounterRoute(store),
-    AllCardsView
+    AllCardsView,
+    NotFound
   ]
 })
 
