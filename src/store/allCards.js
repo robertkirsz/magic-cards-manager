@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import moment from 'moment'
 import { fetchAllSets } from 'api'
+import { Card } from 'classes'
 
 // ------------------------------------
 // Constants
@@ -67,12 +68,14 @@ const ACTION_HANDLERS = {
         variants: uniqueCards[card.name] ? [...uniqueCards[card.name].variants, card] : []
       }
     })
+    // Convert object to an array
+    const arrayOfCards = _.map(uniqueCards, (card) => new Card(card))
 
     return {
       ...state,
       fetching: false,
       error: null,
-      cards: uniqueCards,
+      cards: arrayOfCards,
       cardsNumber: _.size(uniqueCards),
       latestSet,
       setsNumber: allSets.length
