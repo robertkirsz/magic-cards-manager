@@ -1,4 +1,6 @@
-.route--active {
-  font-weight: bold;
-  text-decoration: underline;
+.header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 1vh;
 }

@@ -4,17 +4,17 @@ import { LatestSet } from 'components'
 import './Header.scss'
 
 export const Header = () => (
-  <div>
-    <h1>React Redux Starter Kit</h1>
-    <IndexLink to="/" activeClassName="route--active">
-      Home
-    </IndexLink>
-    {' · '}
-    <Link to="/all-cards" activeClassName="route--active">
-      All Cards
-    </Link>
-  </div>
+  <header className="header">
+    <ul className="nav nav-pills">
+      <li className="nav-item">
+        <IndexLink to="/" className="nav-link" activeClassName="active">Home</IndexLink>
+      </li>
+      <li className="nav-item">
+        <Link to="/all-cards" className="nav-link" activeClassName="active">All cards</Link>
+      </li>
+    </ul>
     <LatestSet />
+  </header>
 )
 
 export default Header
