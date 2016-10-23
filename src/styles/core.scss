@@ -22,3 +22,32 @@ html, body {
 .alert {
   margin-top: 1vh;
 }
+
+.header {
+  @include flex();
+  align-items: center;
+  flex: none;
+  margin-top: 1vh;
+}
+
+.latest-set {
+  margin-left: auto;
+}
+
+.cards-search-list {
+  margin-top: 1vh;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.card {
+  width: 120px; height: 168px;
+  border-radius: 6px;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-size: cover;
+}
+
+.search-module {
+  margin-top: 1vh;
+}

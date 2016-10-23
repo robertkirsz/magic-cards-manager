@@ -34,7 +34,7 @@ export class AllCardsView extends Component {
           {fetching ? 'Loading...' : 'Get all cards'}
         </button>
         {error && errorBox}
-        <CardsSearchList cards={_.slice(_.map(allCards.cards), 0, 15)} />
+        <CardsSearchList cards={_.slice(_.map(allCards.cards), 0, 50)} />
       </div>
     )
   }

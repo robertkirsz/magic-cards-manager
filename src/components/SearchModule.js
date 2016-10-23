@@ -1,5 +1,4 @@
 import React from 'react'
-import './SearchModule.scss'
 
 const searchCards = (e) => {
   e.preventDefault()

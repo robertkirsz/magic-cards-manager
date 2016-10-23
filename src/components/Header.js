@@ -1,7 +1,6 @@
 import React from 'react'
 import { IndexLink, Link } from 'react-router'
 import { LatestSet } from 'components'
-import './Header.scss'
 
 export const Header = () => (
   <header className="header">

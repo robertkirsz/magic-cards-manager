@@ -1,13 +1,13 @@
-import Header          from './Header'
-import SearchModule    from './SearchModule'
-import LatestSet       from './LatestSet'
-import CardsSearchList from './CardsSearchList'
 import Card            from 'components/Card'
+import Header          from 'components/Header'
+import LatestSet       from 'components/LatestSet'
+import SearchModule    from 'components/SearchModule'
+import CardsSearchList from 'components/CardsSearchList'
 
 export {
   Card,
   Header,
-  SearchModule,
   LatestSet,
+  SearchModule,
   CardsSearchList
 }

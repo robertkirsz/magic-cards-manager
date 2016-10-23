@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
-import './LatestSet.scss'
 
 export const LatestSet = ({ allCards }) => (
   <div className="latest-set">
