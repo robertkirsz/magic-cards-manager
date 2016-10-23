@@ -13,8 +13,7 @@ export class AllCardsView extends Component {
 
   render () {
     const {
-      allCards,
-      allCards: { fetching, error },
+      allCards: { cards, filteredCards, fetching, error },
       getCards
     } = this.props
 
@@ -34,7 +33,7 @@ export class AllCardsView extends Component {
           {fetching ? 'Loading...' : 'Get all cards'}
         </button>
         {error && errorBox}
-        <CardsSearchList cards={_.slice(_.map(allCards.cards), 0, 50)} />
+        <CardsSearchList cards={_.slice(filteredCards || cards, 0, 30)} />
       </div>
     )
   }

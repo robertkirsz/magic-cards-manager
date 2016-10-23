@@ -9,6 +9,7 @@ import { Card } from 'classes'
 export const ALL_CARDS_REQUEST = 'ALL_CARDS_REQUEST'
 export const ALL_CARDS_SUCCESS = 'ALL_CARDS_SUCCESS'
 export const ALL_CARDS_ERROR   = 'ALL_CARDS_ERROR'
+export const FILTER_CARDS      = 'FILTER_CARDS'
 
 // ------------------------------------
 // Actions
@@ -34,12 +35,14 @@ export const getCards = () => {
       .catch((error) => dispatch(responseError(error))) // Catch any errors
   }
 }
+export const filterCards = (cards) => ({ type: FILTER_CARDS, cards })
 
 export const actions = {
   sendRequest,
   responseSuccess,
   responseError,
-  getCards
+  getCards,
+  filterCards
 }
 
 // ------------------------------------
@@ -86,6 +89,9 @@ const ACTION_HANDLERS = {
   },
   [ALL_CARDS_ERROR]: (state, action) => {
     return { ...state, fetching: false, error: action.error }
+  },
+  [FILTER_CARDS]: (state, action) => {
+    return { ...state, filteredCards: action.cards }
   }
 }
 
@@ -95,9 +101,10 @@ const ACTION_HANDLERS = {
 const initialState = {
   fetching: false,
   error: null,
-  cards: {},
+  cards: [],
   cardsNumber: 0,
-  latestSet: {}
+  latestSet: {},
+  filteredCards: null
 }
 
 export default function allCards (state = initialState, action) {
