@@ -1,5 +1,6 @@
 import React from 'react'
 import { IndexLink, Link } from 'react-router'
+import { LatestSet } from 'components'
 import './Header.scss'
 
 export const Header = () => (
@@ -13,6 +14,7 @@ export const Header = () => (
       All Cards
     </Link>
   </div>
+    <LatestSet />
 )
 
 export default Header
