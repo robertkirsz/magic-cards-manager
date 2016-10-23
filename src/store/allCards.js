@@ -69,16 +69,19 @@ const ACTION_HANDLERS = {
       }
     })
     // Convert object to an array
-    const arrayOfCards = _.map(uniqueCards, (card) => new Card(card))
+    let arrayOfCards = _.map(uniqueCards, (card) => new Card(card))
+    // Hide basic lands
+    arrayOfCards = _.reject(arrayOfCards, (card) => _.get(card, 'supertypes[0]') === 'Basic')
+    // Remove tokens
+    arrayOfCards = _.reject(arrayOfCards, { layout: 'token' })
 
     return {
       ...state,
       fetching: false,
       error: null,
       cards: arrayOfCards,
-      cardsNumber: _.size(uniqueCards),
-      latestSet,
-      setsNumber: allSets.length
+      cardsNumber: arrayOfCards.length,
+      latestSet
     }
   },
   [ALL_CARDS_ERROR]: (state, action) => {
