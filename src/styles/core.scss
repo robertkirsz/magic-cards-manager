@@ -51,3 +51,18 @@ html, body {
 .search-module {
   margin-top: 1vh;
 }
+
+// VIEW
+
+.card-view {
+  @include flex(column, nowrap, center, center);
+  position: fixed;
+  top: 0; right: 0; bottom: 0; left: 0;
+  background: rgba(black, 0.5);
+  z-index: 1;
+  .card-panel {
+    width: 70vw;
+    min-height: 50vh;
+    background: white;
+  }
+}

@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { getCards } from 'store/allCards'
 import { CardsSearchList } from 'components'
 import _ from 'lodash'
 import './AllCardsView.scss'
@@ -8,13 +7,12 @@ import './AllCardsView.scss'
 export class AllCardsView extends Component {
   static propTypes = {
     allCards: PropTypes.object,
-    getCards: PropTypes.func
+    children: PropTypes.element
   }
 
   render () {
     const {
-      allCards: { cards, filteredCards, fetching, error },
-      getCards
+      allCards: { cards, filteredCards, error }
     } = this.props
 
     const errorBox = (
@@ -26,12 +24,7 @@ export class AllCardsView extends Component {
 
     return (
       <div className="all-cards-view">
-        <button
-          className="btn"
-          onClick={getCards}
-        >
-          {fetching ? 'Loading...' : 'Get all cards'}
-        </button>
+        {this.props.children}
         {error && errorBox}
         <CardsSearchList cards={_.slice(filteredCards || cards, 0, 30)} />
       </div>
@@ -39,8 +32,6 @@ export class AllCardsView extends Component {
   }
 }
 
-const mapDispatchToProps = { getCards }
-
 const mapStateToProps = ({ allCards }) => ({ allCards })
 
-export default connect(mapStateToProps, mapDispatchToProps)(AllCardsView)
+export default connect(mapStateToProps)(AllCardsView)

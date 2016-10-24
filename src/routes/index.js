@@ -1,7 +1,7 @@
-import CoreLayout   from 'layouts/CoreLayout'
 import Home         from 'routes/Home'
-import AllCardsView from 'routes/AllCardsView'
 import NotFound     from 'routes/NotFound'
+import CoreLayout   from 'layouts/CoreLayout'
+import AllCardsView from 'routes/AllCardsView'
 
 export const createRoutes = (store) => ({
   path        : '/',

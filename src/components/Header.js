@@ -9,7 +9,7 @@ export const Header = () => (
         <IndexLink to="/" className="nav-link" activeClassName="active">Home</IndexLink>
       </li>
       <li className="nav-item">
-        <Link to="/all-cards" className="nav-link" activeClassName="active">All cards</Link>
+        <Link to="/cards" className="nav-link" activeClassName="active">All cards</Link>
       </li>
     </ul>
     <LatestSet />
