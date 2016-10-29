@@ -1,10 +1,3 @@
-import AllCardsView from './views/AllCardsView'
-import CardView     from 'routes/CardView'
+import AllCardsView from './AllCardsView'
 
-export default {
-  component   : AllCardsView,
-  path        : 'cards',
-  childRoutes : [
-    CardView
-  ]
-}
+export default AllCardsView

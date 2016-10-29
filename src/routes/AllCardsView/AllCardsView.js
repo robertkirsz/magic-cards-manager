@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { CardsSearchList } from 'components'
 import _ from 'lodash'
-import './AllCardsView.scss'
+import { CardsSearchList } from 'components'
 
 export class AllCardsView extends Component {
   static propTypes = {

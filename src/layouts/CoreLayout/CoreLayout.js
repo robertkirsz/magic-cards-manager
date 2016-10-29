@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react'
 import { Header, SearchModule } from 'components'
-import './CoreLayout.scss'
 import 'styles/core.scss'
 
 export const CoreLayout = ({ children }) => (

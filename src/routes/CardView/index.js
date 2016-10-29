@@ -1,6 +1,3 @@
-import CardView from './views/CardView'
+import CardView from './CardView'
 
-export default {
-  component : CardView,
-  path      : '/cards/:id'
-}
+export default CardView

@@ -11,12 +11,17 @@ html, body {
   height: 100%;
 }
 
-#root, #app { height: 100%; }
-
 *,
 *:before,
 *:after {
   box-sizing: inherit;
+}
+
+#root, #app { height: 100%; }
+
+#app {
+  display: flex;
+  flex-direction: column;
 }
 
 .alert {
@@ -53,6 +58,10 @@ html, body {
 }
 
 // VIEW
+
+.all-cards-view {
+  margin-top: 1vh;
+}
 
 .card-view {
   @include flex(column, nowrap, center, center);
