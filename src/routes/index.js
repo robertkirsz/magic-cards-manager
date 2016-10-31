@@ -13,7 +13,7 @@ export const createRoutes = (store) => ({
       path: 'cards',
       component: AllCardsView,
       childRoutes: [
-        { path: '/cards/:id', component : CardView }
+        { path: '/cards/:cardUrl', component : CardView }
       ]
     },
     { path: '*', component : NotFound }

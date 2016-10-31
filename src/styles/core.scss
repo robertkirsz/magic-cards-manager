@@ -72,6 +72,17 @@ html, body {
   .card-panel {
     width: 70vw;
     min-height: 50vh;
+    max-height: 95vh;
+    padding: 10px;
     background: white;
+    overflow-y: auto;
+  }
+  .card-variants-list {
+    @include flex(row, wrap, flex-start, flex-start);
+    padding: 5px;
+    border: 1px solid black;
+    .card {
+      &:not(:last-child) { margin-right: 10px; }
+    }
   }
 }

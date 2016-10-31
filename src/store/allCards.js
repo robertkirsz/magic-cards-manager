@@ -62,13 +62,13 @@ const ACTION_HANDLERS = {
       if (!result.releaseDate) return value
       return moment(value.releaseDate).isAfter(result.releaseDate) ? value : result
     }, {})
-    // Get every Magic card
-    _.forEach(allSets, (set) => allCards.push(...set.cards))
-    // Group them by name: { 'Naturalize': { (...), variants: [{...}, {...}] } }
+    // Get every Magic card that has Multiverse ID and put it into 'allCards' array
+    _.forEach(allSets, (set) => allCards.push(..._.filter(set.cards, 'multiverseid')))
+    // Group them by name and put reprints into an array: { 'Naturalize': { (...), variants: [{...}, {...}] } }
     _.forEach(allCards, (card) => {
       uniqueCards[card.name] = {
         ...card,
-        variants: uniqueCards[card.name] ? [...uniqueCards[card.name].variants, card] : []
+        variants: uniqueCards[card.name] ? [...uniqueCards[card.name].variants, new Card(card)] : []
       }
     })
     // Convert object to an array
