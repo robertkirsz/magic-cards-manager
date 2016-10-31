@@ -70,7 +70,7 @@ html, body {
   background: rgba(black, 0.5);
   z-index: 1;
   .card-panel {
-    width: 70vw;
+    max-width: 70vw;
     min-height: 50vh;
     max-height: 95vh;
     padding: 10px;
@@ -83,6 +83,20 @@ html, body {
     border: 1px solid black;
     .card {
       &:not(:last-child) { margin-right: 10px; }
+    }
+  }
+}
+
+.mana-checkboxes {
+  @include inline-flex(row, nowrap, flex-start, center);
+  label {
+    margin: 0;
+    cursor: pointer;
+    &:not(:last-child) { margin-right: 5px; }
+    input { display: none; }
+    i {
+      font-size: 1.5em;
+      transition: all 0.2s;
     }
   }
 }

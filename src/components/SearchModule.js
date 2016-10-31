@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { filterCards } from 'store/allCards'
+import ColorFilter from 'components/ColorFilter'
 import _ from 'lodash'
 
 export class SearchModule extends Component {
@@ -32,7 +33,7 @@ export class SearchModule extends Component {
   render () {
     return (
       <div className="search-module row">
-        <div className="col-sm-6">
+        <div className="col-sm-3">
           <input
             type="text"
             className="form-control"
@@ -40,6 +41,7 @@ export class SearchModule extends Component {
             placeholder="Card name"
             />
         </div>
+        <ColorFilter />
       </div>
     )
   }
