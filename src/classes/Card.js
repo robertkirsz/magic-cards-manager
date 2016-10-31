@@ -3,11 +3,19 @@ export default class Card {
     this.update(card)
     this.image = `http://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=${this.multiverseid}`
     if (!this.cardUrl) this.cardUrl = this.imageName.split(' ').join('-')
-    // this.variants = (this.variants || []).map(card => new Card(card))
+    if (!this.cardsInCollection) this.cardsInCollection = 1
   }
 
   update (raw) {
     for (const prop in raw) this[prop] = raw[prop]
+  }
+
+  increase () {
+    this.cardsInCollection++
+  }
+
+  decrease () {
+    this.cardsInCollection--
   }
 
   formatForLocalStorage () {

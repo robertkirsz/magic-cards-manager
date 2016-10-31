@@ -16,9 +16,9 @@ export default (initialState = {}) => {
   const enhancers = []
   if (__DEV__) {
     const devToolsExtension = window.devToolsExtension
-    if (typeof devToolsExtension === 'function') {
+
+    if (typeof devToolsExtension === 'function')
       enhancers.push(devToolsExtension())
-    }
   }
 
   // ======================================================
