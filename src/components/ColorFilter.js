@@ -1,99 +1,85 @@
-import React, { Component } from 'react'
+import React, { PropTypes } from 'react'
 
-class ColorFilter extends Component {
-  constructor () {
-    super()
+const ColorFilter = ({ colors, onChange }) => (
+  <div className="mana-checkboxes">
+    <label>
+      <input
+        type="checkbox"
+        value="White"
+        checked={colors.White}
+        onChange={onChange}
+      />
+      <i
+        className="ms ms-cost ms-w"
+        style={!colors.White ? { opacity: 0.4, backgroundColor: 'transparent' } : {}}
+      />
+    </label>
+    <label>
+      <input
+        type="checkbox"
+        value="Blue"
+        checked={colors.Blue}
+        onChange={onChange}
+      />
+      <i
+        className="ms ms-cost ms-u"
+        style={!colors.Blue ? { opacity: 0.4, backgroundColor: 'transparent' } : {}}
+      />
+    </label>
+    <label>
+      <input
+        type="checkbox"
+        value="Black"
+        checked={colors.Black}
+        onChange={onChange}
+      />
+      <i
+        className="ms ms-cost ms-b"
+        style={!colors.Black ? { opacity: 0.4, backgroundColor: 'transparent' } : {}}
+      />
+    </label>
+    <label>
+      <input
+        type="checkbox"
+        value="Red"
+        checked={colors.Red}
+        onChange={onChange}
+      />
+      <i
+        className="ms ms-cost ms-r"
+        style={!colors.Red ? { opacity: 0.4, backgroundColor: 'transparent' } : {}}
+      />
+    </label>
+    <label>
+      <input
+        type="checkbox"
+        value="Green"
+        checked={colors.Green}
+        onChange={onChange}
+      />
+      <i
+        className="ms ms-cost ms-g"
+        style={!colors.Green ? { opacity: 0.4, backgroundColor: 'transparent' } : {}}
+      />
+    </label>
+    <label>
+      <input
+        type="checkbox"
+        value="Colorless"
+        checked={colors.Colorless}
+        onChange={onChange}
+      />
+      <i
+        className="ms ms-cost ms-c"
+        style={!colors.Colorless ? { opacity: 0.4, backgroundColor: 'transparent' } : {}}
+      />
+    </label>
+  </div>
+)
 
-    this.state = {
-      mana: {
-        'White': true,
-        'Blue': true,
-        'Black': true,
-        'Red': true,
-        'Green': true,
-        'Colorless': true
-      }
-    }
-  }
-
-  render () {
-    return (
-      <div className="mana-checkboxes">
-        <label>
-          <input
-            type="checkbox"
-            value="White"
-            checked={this.state.mana.White}
-            onChange={this._handleChangeMana}
-          />
-          <i
-            className="ms ms-cost ms-w"
-            style={!this.state.mana.White ? { opacity: 0.4, backgroundColor: 'transparent' } : {}}
-          />
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            value="Blue"
-            checked={this.state.mana.Blue}
-            onChange={this._handleChangeMana}
-          />
-          <i
-            className="ms ms-cost ms-u"
-            style={!this.state.mana.Blue ? { opacity: 0.4, backgroundColor: 'transparent' } : {}}
-          />
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            value="Black"
-            checked={this.state.mana.Black}
-            onChange={this._handleChangeMana}
-          />
-          <i
-            className="ms ms-cost ms-b"
-            style={!this.state.mana.Black ? { opacity: 0.4, backgroundColor: 'transparent' } : {}}
-          />
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            value="Red"
-            checked={this.state.mana.Red}
-            onChange={this._handleChangeMana}
-          />
-          <i
-            className="ms ms-cost ms-r"
-            style={!this.state.mana.Red ? { opacity: 0.4, backgroundColor: 'transparent' } : {}}
-          />
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            value="Green"
-            checked={this.state.mana.Green}
-            onChange={this._handleChangeMana}
-          />
-          <i
-            className="ms ms-cost ms-g"
-            style={!this.state.mana.Green ? { opacity: 0.4, backgroundColor: 'transparent' } : {}}
-          />
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            value="Colorless"
-            checked={this.state.mana.Colorless}
-            onChange={this._handleChangeMana}
-          />
-          <i
-            className="ms ms-cost ms-c"
-            style={!this.state.mana.Colorless ? { opacity: 0.4, backgroundColor: 'transparent' } : {}}
-          />
-        </label>
-      </div>
-    )
-  }
+ColorFilter.propTypes = {
+  colors: PropTypes.object,
+  onChange: PropTypes.func
 }
 
 export default ColorFilter
