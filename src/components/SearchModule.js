@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
+import _ from 'lodash'
 import { filterCards } from 'store/allCards'
 import ColorFilter from 'components/ColorFilter'
 
@@ -54,7 +55,7 @@ export class SearchModule extends Component {
 
   handleChangeName (e) {
     this.setState({
-      queryName: e.target.value.trim()
+      queryName: e.target.value
     })
   }
 
@@ -126,29 +127,42 @@ export class SearchModule extends Component {
   }
 
   search (state) {
-    const queryName = state.queryName.toLowerCase()
-    const queryTypes = state.queryTypes.trim().toLowerCase()
+    const queryName = state.queryName.trim().toLowerCase()
+    const queryTypes = state.queryTypes.toLowerCase().split(' ')
     const queryText = state.queryText.trim().toLowerCase()
     let colorsArray = []
 
     for (let key in state.colors)
       if (state.colors[key]) colorsArray.push(key)
 
-    if (queryName.length > 0 || queryTypes.length > 0 || queryText.length > 0) {
+    if (queryName.length || queryTypes.length || queryText.length) {
       return this.props.cards.filter((card) => {
         // Hide cards with no text when text is specified
         if (queryText && !card.text) return false
-
+        // Checking card name
         const nameOk = card.name.toLowerCase().indexOf(queryName) > -1
-        const typeOk = card.type.toLowerCase().indexOf(queryTypes) > -1
-        const textOk = card.text ? card.text.toLowerCase().indexOf(queryText) > -1 : true
+        // Checking card types
+        const typeOk = queryTypes.length
+          ? _.every(queryTypes, qt => (
+              _.find(card.types, ct => ct.toLowerCase().indexOf(qt) > -1) ||
+              _.find(card.subtypes, cst => cst.toLowerCase().indexOf(qt) > -1)
+            ))
+          : true
+        // Checking card types
+        const textOk = card.text
+          ? card.text.toLowerCase().indexOf(queryText) > -1
+          : true
+        // Checking card colors
         const colorsOk = card.colors
           ? colorsArray.filter((val) => card.colors.indexOf(val) !== -1).length > 0
           : this.state.colors.Colorless
+        // Monocolored only test
         let monoOk = true
         if (this.state.monocoloredOnly && card.colors && card.colors.length !== 1) monoOk = false
+        // Multicolored only test
         let multiOk = true
         if (this.state.multicoloredOnly && (!card.colors || (card.colors && card.colors.length < 2))) multiOk = false
+        // Converted mana cost test
         let cmcOk = false
         if (this.state.cmcType === 'minimum' && (card.cmc || 0) >= this.state.convertedManaCost) cmcOk = true
         if (this.state.cmcType === 'exactly' && (card.cmc || 0) === this.state.convertedManaCost) cmcOk = true
@@ -166,8 +180,27 @@ export class SearchModule extends Component {
           <input
             type="text"
             className="form-control"
+            value={this.state.queryName}
             onChange={this.handleChangeName}
-            placeholder="Card name"
+            placeholder="Name"
+          />
+        </div>
+        <div className="col-sm-3">
+          <input
+            type="text"
+            className="form-control"
+            value={this.state.queryTypes}
+            onChange={this.handleChangeTypes}
+            placeholder="Type"
+          />
+        </div>
+        <div className="col-sm-3">
+          <input
+            type="text"
+            className="form-control"
+            value={this.state.queryText}
+            onChange={this.handleChangeText}
+            placeholder="Text"
           />
         </div>
         <ColorFilter colors={this.state.colors} onChange={this.handleChangeColor} />

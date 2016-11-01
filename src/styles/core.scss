@@ -79,8 +79,6 @@ html, body {
   }
   .card-variants-list {
     @include flex(row, wrap, flex-start, flex-start);
-    padding: 5px;
-    border: 1px solid black;
     .card {
       &:not(:last-child) { margin-right: 10px; }
     }

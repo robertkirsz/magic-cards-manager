@@ -23,7 +23,6 @@ export class CardView extends Component {
       <div className="card-view" onClick={this.backgroundClick}>
         <div className="card-panel" onClick={e => e.stopPropagation()}>
           <h1>{card.name}</h1>
-          <Card card={card} />
           <div className="card-variants-list">
             {(card.variants || []).map(card => (
               <Card
@@ -32,6 +31,11 @@ export class CardView extends Component {
                 onClick={() => { this.props.addCard(card) }}
               />
             ))}
+            <Card
+              key={card.id}
+              card={card}
+              onClick={() => { this.props.addCard(card) }}
+            />
           </div>
         </div>
       </div>
