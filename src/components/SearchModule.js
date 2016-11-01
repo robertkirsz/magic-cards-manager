@@ -203,7 +203,9 @@ export class SearchModule extends Component {
             placeholder="Text"
           />
         </div>
-        <ColorFilter colors={this.state.colors} onChange={this.handleChangeColor} />
+        <div className="col-md-3 col-sm-12">
+          <ColorFilter colors={this.state.colors} onChange={this.handleChangeColor} />
+        </div>
       </div>
     )
   }

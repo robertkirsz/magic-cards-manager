@@ -3,7 +3,7 @@ import CardBack from 'components/assets/card_back.jpg'
 
 export const Card = (props) => (
   <div
-    className="card"
+    className="xxx-card"
     onClick={props.onClick}
     style={{ backgroundImage: `url(${props.card.image}), url(${CardBack})` }}
   />

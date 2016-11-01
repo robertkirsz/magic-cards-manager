@@ -39,18 +39,41 @@ html, body {
   margin-left: auto;
 }
 
+$cardWidth: 223;
+$cardHeight: 311;
+$cardRatio: $cardHeight / $cardWidth;
+$cardMargin: 5px;
+$mainMargin: 15px;
+
 .cards-search-list {
-  margin-top: 1vh;
-  display: flex;
-  flex-wrap: wrap;
+  @include flex(row, wrap, flex-start, flex-start);
+  margin: 1vh #{-$cardMargin} 0 #{-$cardMargin};
 }
 
-.card {
-  width: 120px; height: 168px;
-  border-radius: 6px;
+.xxx-card {
+  $width: calc(50vw - #{$mainMargin} - #{$cardMargin});
+  width: $width; height: calc(#{$width} * #{$cardRatio});
+  // max-width: $cardWidth + 0px; max-height: $cardHeight + 0px;
+  margin: $cardMargin;
   background-repeat: no-repeat;
   background-position: 0 0;
   background-size: cover;
+  border-radius: 3%;
+  @include MQ(S) {
+    $width: calc(33.33vw - #{$mainMargin} - #{$cardMargin});
+    width: $width; height: calc(#{$width} * #{$cardRatio});
+  };
+  @include MQ(M) {
+    $width: calc(25vw - #{$mainMargin} - #{$cardMargin});
+    width: $width; height: calc(#{$width} * #{$cardRatio});
+  };
+  @include MQ(L) {
+    $width: calc(20vw - #{$mainMargin} - #{$cardMargin});
+    width: $width; height: calc(#{$width} * #{$cardRatio});
+  };
+  @include MQ(XL) {
+    $width: calc(15vw - #{$mainMargin} - #{$cardMargin});
+    width: $width; height: calc(#{$width} * #{$cardRatio});};
 }
 
 .search-module {
@@ -59,9 +82,7 @@ html, body {
 
 // VIEW
 
-.all-cards-view {
-  margin-top: 1vh;
-}
+.all-cards-view {}
 
 .card-view {
   @include flex(column, nowrap, center, center);
@@ -87,6 +108,7 @@ html, body {
 
 .mana-checkboxes {
   @include inline-flex(row, nowrap, flex-start, center);
+  height: 38px;
   label {
     margin: 0;
     cursor: pointer;

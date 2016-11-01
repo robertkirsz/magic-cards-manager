@@ -3,7 +3,7 @@ import { Header, SearchModule } from 'components'
 import 'styles/core.scss'
 
 export const CoreLayout = ({ children }) => (
-  <div id="app" className="container">
+  <div id="app" className="container-fluid">
     <Header />
     <SearchModule />
     {children}
