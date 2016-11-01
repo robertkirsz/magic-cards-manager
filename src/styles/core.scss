@@ -43,36 +43,40 @@ $cardWidth: 223;
 $cardHeight: 311;
 $cardRatio: $cardHeight / $cardWidth;
 $cardMargin: 5px;
-$mainMargin: 15px;
+$mainMargin: 30px;
 
 .cards-search-list {
   @include flex(row, wrap, flex-start, flex-start);
-  margin: 1vh #{-$cardMargin} 0 #{-$cardMargin};
+  margin: 1vh -5px 0 0;
 }
 
 .xxx-card {
-  $width: calc(50vw - #{$mainMargin} - #{$cardMargin});
+  $cardsInRow: 2;
+  $width: calc((100vw - #{$mainMargin}) / #{$cardsInRow} - 5px);
   width: $width; height: calc(#{$width} * #{$cardRatio});
-  // max-width: $cardWidth + 0px; max-height: $cardHeight + 0px;
-  margin: $cardMargin;
+  margin: 0 5px 1vw 0;
   background-repeat: no-repeat;
   background-position: 0 0;
   background-size: cover;
   border-radius: 3%;
   @include MQ(S) {
-    $width: calc(33.33vw - #{$mainMargin} - #{$cardMargin});
+    $cardsInRow: 4;
+    $width: calc((100vw - #{$mainMargin}) / #{$cardsInRow} - 5px);
     width: $width; height: calc(#{$width} * #{$cardRatio});
   };
   @include MQ(M) {
-    $width: calc(25vw - #{$mainMargin} - #{$cardMargin});
+    $cardsInRow: 5;
+    $width: calc((100vw - #{$mainMargin}) / #{$cardsInRow} - 5px);
     width: $width; height: calc(#{$width} * #{$cardRatio});
   };
   @include MQ(L) {
-    $width: calc(20vw - #{$mainMargin} - #{$cardMargin});
+    $cardsInRow: 6;
+    $width: calc((100vw - #{$mainMargin}) / #{$cardsInRow} - 5px);
     width: $width; height: calc(#{$width} * #{$cardRatio});
   };
   @include MQ(XL) {
-    $width: calc(15vw - #{$mainMargin} - #{$cardMargin});
+    $cardsInRow: 7;
+    $width: calc((100vw - #{$mainMargin}) / #{$cardsInRow} - 5px);
     width: $width; height: calc(#{$width} * #{$cardRatio});};
 }
 
