@@ -4,6 +4,8 @@ import AllCardsView from 'routes/AllCardsView'
 import CardView     from 'routes/CardView'
 import NotFound     from 'routes/NotFound/NotFound'
 
+// TODO: add route names
+
 export const createRoutes = (store) => ({
   path: '/',
   component: CoreLayout,
