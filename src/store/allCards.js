@@ -23,8 +23,8 @@ export const getCards = () => {
     if (getState().allCards.fetching) return
     // Dispatch action so we can show spinner
     dispatch(sendRequest())
-    //  Send and return API request
-    return fetchAllSets()
+    // Send and return API request
+    fetchAllSets()
       .then((response) => {
         // Throw error if something's wrong
         if (!response.ok) throw new Error(`${response.status} ${response.statusText}`)
@@ -62,8 +62,16 @@ const ACTION_HANDLERS = {
       if (!result.releaseDate) return value
       return moment(value.releaseDate).isAfter(result.releaseDate) ? value : result
     }, {})
-    // Get every Magic card that has Multiverse ID and put it into 'allCards' array
-    _.forEach(allSets, (set) => allCards.push(..._.filter(set.cards, 'multiverseid')))
+    // For severy set...
+    _.forEach(allSets, (set) => {
+      // Save its code inside its cards objects
+      const cardsFromThisSet = set.cards.map(card => {
+        card.setCode = set.code.toLowerCase()
+        return card
+      })
+      // Remove card that don't have Multiverse ID
+      allCards.push(..._.filter(cardsFromThisSet, 'multiverseid'))
+    })
     // Group them by name and put reprints into an array: { 'Naturalize': { (...), variants: [{...}, {...}] } }
     _.forEach(allCards, (card) => {
       uniqueCards[card.name] = {
