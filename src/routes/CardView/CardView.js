@@ -29,12 +29,14 @@ export class CardView extends Component {
                 key={card.id}
                 card={card}
                 onClick={() => { this.props.addCard(card) }}
+                setIcon
               />
             ))}
             <Card
               key={card.id}
               card={card}
               onClick={() => { this.props.addCard(card) }}
+              setIcon
             />
           </div>
         </div>

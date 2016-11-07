@@ -1,17 +1,22 @@
 import React, { PropTypes } from 'react'
 import CardBack from 'components/assets/card_back.jpg'
 
-export const Card = (props) => (
-  <div
-    className="xxx-card"
-    onClick={props.onClick}
-    style={{ backgroundImage: `url(${props.card.image}), url(${CardBack})` }}
-  />
-)
+export const Card = ({ card, onClick, setIcon }) => {
+  return (
+    <div
+      className="xxx-card"
+      onClick={onClick}
+      style={{ backgroundImage: `url(${card.image}), url(${CardBack})` }}
+    >
+      {setIcon && <i className={card.setIcon} />}
+    </div>
+  )
+}
 
 Card.propTypes = {
   card: PropTypes.object,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
+  setIcon: PropTypes.bool
 }
 
 export default Card
