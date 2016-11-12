@@ -12,10 +12,10 @@ export const createRoutes = (store) => ({
   indexRoute: { component: HomeView },
   childRoutes: [
     {
-      path: 'cards',
+      path: 'all-cards',
       component: AllCardsView,
       childRoutes: [
-        { path: '/cards/:cardUrl', component : CardView }
+        { path: '/all-cards/:cardUrl', component : CardView }
       ]
     },
     { path: '*', component : NotFound }
