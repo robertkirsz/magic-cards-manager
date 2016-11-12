@@ -1,39 +1,5 @@
 @import 'base';
 
-$text-color: #373a3c;
-
-html {
-  box-sizing: border-box;
-}
-
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-}
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  font-size: 1rem;
-  line-height: 1.5;
-  color: $text-color;
-  background-color: white;
-  padding: 0 1vw;
-}
-
-*,
-*:before,
-*:after {
-  box-sizing: inherit;
-}
-
-#root, #app { height: 100%; }
-
-#app {
-  display: flex;
-  flex-direction: column;
-}
-
 .alert {
   margin-top: 1vh;
 }
