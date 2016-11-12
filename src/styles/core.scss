@@ -6,10 +6,19 @@
 
 // MAIN LAYOUT COMPONENTS
 
+.fixed-wrapper {
+  position: fixed;
+  top: 0; right: 0; left: 0;
+  background-color: white;
+  padding-bottom: 10px;
+  z-index: 10;
+}
+
 .main-header {
   @include flex(row, wrap, flex-start, center);
   flex: none;
   margin-top: 1vh;
+  padding: 0 $horizontal-padding;
   .route-navigation {
     a {
       color: inherit;
@@ -22,11 +31,16 @@
 }
 
 .search-module {
-  background-color: rgba(yellow, 0.2);
+  @include flex(row, wrap, flex-start, center);
+  flex: none;
   margin-top: 1vh;
+  padding: 0 $horizontal-padding;
+  &__input-field {
+    height: 2em;
+    &:not(:last-child) { margin-right: 5px; }
+  }
   .color-filter {
     display: inline-flex;
-    background-color: rgba(red, 0.2);
     label {
       display: inline-flex;
       cursor: pointer;
@@ -48,8 +62,10 @@ $mainMargin: 30px;
 
 .cards-search-list {
   @include flex(row, wrap, flex-start, flex-start);
-  margin: 1vh -5px 0 0;
+  margin: 90px 0 0;
 }
+
+// TODO: fix margin issue with edge elements
 
 .xxx-card {
   $cardsInRow: 2;

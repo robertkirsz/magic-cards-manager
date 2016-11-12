@@ -3,9 +3,11 @@ import { Header, SearchModule } from 'components'
 import 'styles/core.scss'
 
 export const CoreLayout = ({ children }) => (
-  <div id="app" className="container-fluid">
-    <Header />
-    <SearchModule />
+  <div id="app">
+    <div className="fixed-wrapper">
+      <Header />
+      <SearchModule />
+    </div>
     {children}
   </div>
 )
