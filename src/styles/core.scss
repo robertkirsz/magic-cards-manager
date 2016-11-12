@@ -31,8 +31,21 @@ html, body {
 .header {
   @include flex();
   align-items: center;
+// MAIN LAYOUT COMPONENTS
+
+.main-header {
+  @include flex(row, wrap, flex-start, center);
   flex: none;
   margin-top: 1vh;
+  .route-navigation {
+    a {
+      color: inherit;
+      text-decoration: none;
+      &:not(:last-child) { margin-right: 1em; }
+      &.active { text-decoration: underline; }
+    }
+  }
+  .latest-set { margin-left: auto; }
 }
 
 .latest-set {
