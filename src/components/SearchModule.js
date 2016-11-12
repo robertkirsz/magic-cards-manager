@@ -175,37 +175,29 @@ export class SearchModule extends Component {
 
   render () {
     return (
-      <div className="search-module row">
-        <div className="col-sm-3">
-          <input
-            type="text"
-            className="form-control"
-            value={this.state.queryName}
-            onChange={this.handleChangeName}
-            placeholder="Name"
+      <div className="search-module">
+        <input
+          type="text"
+          className="search-module__input-field"
+          value={this.state.queryName}
+          onChange={this.handleChangeName}
+          placeholder="Name"
           />
-        </div>
-        <div className="col-sm-3">
-          <input
-            type="text"
-            className="form-control"
-            value={this.state.queryTypes}
-            onChange={this.handleChangeTypes}
-            placeholder="Type"
+        <input
+          type="text"
+          className="search-module__input-field"
+          value={this.state.queryTypes}
+          onChange={this.handleChangeTypes}
+          placeholder="Type"
           />
-        </div>
-        <div className="col-sm-3">
-          <input
-            type="text"
-            className="form-control"
-            value={this.state.queryText}
-            onChange={this.handleChangeText}
-            placeholder="Text"
+        <input
+          type="text"
+          className="search-module__input-field"
+          value={this.state.queryText}
+          onChange={this.handleChangeText}
+          placeholder="Text"
           />
-        </div>
-        <div className="col-md-3 col-sm-12">
-          <ColorFilter colors={this.state.colors} onChange={this.handleChangeColor} />
-        </div>
+        <ColorFilter colors={this.state.colors} onChange={this.handleChangeColor} />
       </div>
     )
   }
