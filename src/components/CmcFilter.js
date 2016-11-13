@@ -29,7 +29,7 @@ const CmcFilter = ({ cmcValue, cmcType, changeCmcValue, changeCmcType }) => (
       step="1"
       max="20"
       value={cmcValue}
-      onChange={e => { changeCmcValue(parseInt(e.target.value, 10)) }}
+      onChange={e => { changeCmcValue(parseInt(e.target.value || 0, 10)) }}
     />
     <CmcTypeInput thisType="minimum" activeType={cmcType} onChange={changeCmcType} />
     <CmcTypeInput thisType="exactly" activeType={cmcType} onChange={changeCmcType} />
