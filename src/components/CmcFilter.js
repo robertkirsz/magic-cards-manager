@@ -22,15 +22,18 @@ CmcTypeInput.propTypes = {
 
 const CmcFilter = ({ cmcValue, cmcType, changeCmcValue, changeCmcType }) => (
   <div className="cmc-filter">
-    <input
-      className="cmc-filter__value-input"
-      type="number"
-      min="0"
-      step="1"
-      max="20"
-      value={cmcValue}
-      onChange={e => { changeCmcValue(parseInt(e.target.value || 0, 10)) }}
-    />
+    <label>
+      CMC:
+      <input
+        className="cmc-filter__value-input"
+        type="number"
+        min="0"
+        max="30"
+        step="1"
+        value={cmcValue}
+        onChange={e => { changeCmcValue(parseInt(e.target.value || 0, 10)) }}
+      />
+    </label>
     <CmcTypeInput thisType="minimum" activeType={cmcType} onChange={changeCmcType} />
     <CmcTypeInput thisType="exactly" activeType={cmcType} onChange={changeCmcType} />
     <CmcTypeInput thisType="maximum" activeType={cmcType} onChange={changeCmcType} />
