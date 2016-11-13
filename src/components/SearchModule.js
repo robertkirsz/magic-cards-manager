@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 import { filterCards } from 'store/allCards'
-import ColorFilter from 'components/ColorFilter'
+import { ColorFilter, CmcFilter } from 'components'
 
 export class SearchModule extends Component {
   static propTypes = {
@@ -17,7 +17,8 @@ export class SearchModule extends Component {
     this.handleChangeTypes = this.handleChangeTypes.bind(this)
     this.handleChangeText = this.handleChangeText.bind(this)
     this.handleChangeColor = this.handleChangeColor.bind(this)
-    this.handleChangeConvertedManaCost = this.handleChangeConvertedManaCost.bind(this)
+    this.handleChangeCmcValue = this.handleChangeCmcValue.bind(this)
+    this.handleChangeCmcType = this.handleChangeCmcType.bind(this)
     this.handleChangeMonocolored = this.handleChangeMonocolored.bind(this)
     this.handleChangeMulticolored = this.handleChangeMulticolored.bind(this)
     this.toggleAll = this.toggleAll.bind(this)
@@ -28,7 +29,7 @@ export class SearchModule extends Component {
       queryName: '',
       queryTypes: '',
       queryText: '',
-      convertedManaCost: 0,
+      cmcValue: 0,
       cmcType: 'minimum',
       monocoloredOnly: false,
       multicoloredOnly: false,
@@ -80,10 +81,12 @@ export class SearchModule extends Component {
     })
   }
 
-  handleChangeConvertedManaCost (e) {
-    this.setState({
-      convertedManaCost: parseInt(e.target.value, 10)
-    })
+  handleChangeCmcValue (cmcValue) {
+    this.setState({ cmcValue })
+  }
+
+  handleChangeCmcType (cmcType) {
+    this.setState({ cmcType })
   }
 
   handleChangeMonocolored () {
@@ -155,18 +158,18 @@ export class SearchModule extends Component {
         // Checking card colors
         const colorsOk = card.colors
           ? colorsArray.filter((val) => card.colors.indexOf(val) !== -1).length > 0
-          : this.state.colors.Colorless
+          : state.colors.Colorless
         // Monocolored only test
         let monoOk = true
-        if (this.state.monocoloredOnly && card.colors && card.colors.length !== 1) monoOk = false
+        if (state.monocoloredOnly && card.colors && card.colors.length !== 1) monoOk = false
         // Multicolored only test
         let multiOk = true
-        if (this.state.multicoloredOnly && (!card.colors || (card.colors && card.colors.length < 2))) multiOk = false
+        if (state.multicoloredOnly && (!card.colors || (card.colors && card.colors.length < 2))) multiOk = false
         // Converted mana cost test
         let cmcOk = false
-        if (this.state.cmcType === 'minimum' && (card.cmc || 0) >= this.state.convertedManaCost) cmcOk = true
-        if (this.state.cmcType === 'exactly' && (card.cmc || 0) === this.state.convertedManaCost) cmcOk = true
-        if (this.state.cmcType === 'maximum' && (card.cmc || 0) <= this.state.convertedManaCost) cmcOk = true
+        if (state.cmcType === 'minimum' && (card.cmc || 0) >= state.cmcValue) cmcOk = true
+        if (state.cmcType === 'exactly' && (card.cmc || 0) === state.cmcValue) cmcOk = true
+        if (state.cmcType === 'maximum' && (card.cmc || 0) <= state.cmcValue) cmcOk = true
 
         return nameOk && typeOk && textOk && colorsOk && cmcOk && monoOk && multiOk
       })
@@ -182,22 +185,31 @@ export class SearchModule extends Component {
           value={this.state.queryName}
           onChange={this.handleChangeName}
           placeholder="Name"
-          />
+        />
         <input
           type="text"
           className="search-module__input-field"
           value={this.state.queryTypes}
           onChange={this.handleChangeTypes}
           placeholder="Type"
-          />
+        />
         <input
           type="text"
           className="search-module__input-field"
           value={this.state.queryText}
           onChange={this.handleChangeText}
           placeholder="Text"
-          />
-        <ColorFilter colors={this.state.colors} onColorChange={this.handleChangeColor} />
+        />
+        <ColorFilter
+          colors={this.state.colors}
+          onColorChange={this.handleChangeColor}
+        />
+        <CmcFilter
+          cmcValue={this.state.cmcValue}
+          cmcType={this.state.cmcType}
+          changeCmcValue={this.handleChangeCmcValue}
+          changeCmcType={this.handleChangeCmcType}
+        />
       </div>
     )
   }
