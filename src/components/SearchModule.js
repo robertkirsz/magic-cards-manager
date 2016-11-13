@@ -188,27 +188,26 @@ export class SearchModule extends Component {
   render () {
     return (
       <div className="search-module">
-        <input
-          type="text"
-          className="search-module__input-field"
-          value={this.state.queryName}
-          onChange={this.handleChangeName}
-          placeholder="Name"
-        />
-        <input
-          type="text"
-          className="search-module__input-field"
-          value={this.state.queryTypes}
-          onChange={this.handleChangeTypes}
-          placeholder="Type"
-        />
-        <input
-          type="text"
-          className="search-module__input-field"
-          value={this.state.queryText}
-          onChange={this.handleChangeText}
-          placeholder="Text"
-        />
+        <div className="text-inputs">
+          <input
+            type="text"
+            value={this.state.queryName}
+            onChange={this.handleChangeName}
+            placeholder="Name"
+          />
+          <input
+            type="text"
+            value={this.state.queryTypes}
+            onChange={this.handleChangeTypes}
+            placeholder="Type"
+          />
+          <input
+            type="text"
+            value={this.state.queryText}
+            onChange={this.handleChangeText}
+            placeholder="Text"
+          />
+        </div>
         <ColorFilter
           colors={this.state.colors}
           onColorChange={this.handleChangeColor}
@@ -230,14 +229,15 @@ export class SearchModule extends Component {
           handleChangeMonocolored={this.handleChangeMonocolored}
           handleChangeMulticolored={this.handleChangeMulticolored}
         />
-        <button onClick={this.clearState}>Reset</button>
+        <div>
+          <button onClick={this.clearState}>Reset</button>
+        </div>
       </div>
     )
   }
 }
 
 const mapDispatchToProps = { filterCards }
-
 const mapStateToProps = ({ allCards }) => ({ cards: allCards.cards })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchModule)
