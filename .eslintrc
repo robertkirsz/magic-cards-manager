@@ -24,6 +24,6 @@
     "max-len"              : [2, 120, 2],
     "object-curly-spacing" : [2, "always"],
     "no-multi-spaces"      : [1, { exceptions: { "ImportDeclaration": true, "VariableDeclarator": true } }],
-    curly: [1, "multi-or-nest"]
+    curly: [1, "multi", "consistent"]
   }
 }
