@@ -32,12 +32,6 @@ export class CardView extends Component {
                 setIcon
               />
             ))}
-            <Card
-              key={card.id}
-              card={card}
-              onClick={() => { this.props.addCard(card) }}
-              setIcon
-            />
           </div>
         </div>
       </div>

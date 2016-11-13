@@ -69,14 +69,14 @@ const ACTION_HANDLERS = {
         card.setCode = set.code.toLowerCase()
         return card
       })
-      // Remove card that don't have Multiverse ID
+      // Remove cards that don't have Multiverse ID
       allCards.push(..._.filter(cardsFromThisSet, 'multiverseid'))
     })
     // Group them by name and put reprints into an array: { 'Naturalize': { (...), variants: [{...}, {...}] } }
     _.forEach(allCards, (card) => {
       uniqueCards[card.name] = {
         ...card,
-        variants: uniqueCards[card.name] ? [...uniqueCards[card.name].variants, new Card(card)] : []
+        variants: uniqueCards[card.name] ? [...uniqueCards[card.name].variants, new Card(card)] : [new Card(card)]
       }
     })
     // Convert object to an array
