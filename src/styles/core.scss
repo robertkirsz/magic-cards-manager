@@ -41,14 +41,15 @@
   }
   .color-filter {
     display: inline-flex;
-    label {
-      display: inline-flex;
+    .icon {
+      @include inline-flex(column, nowrap, center, center);
       cursor: pointer;
+      font-size: 1.5em;
+      transition: all 0.2s;
       &:not(:last-child) { margin-right: 5px; }
-      input { display: none; }
-      .icon {
-        font-size: 1.5em;
-        transition: all 0.2s;
+      &.unchecked {
+        background-color: transparent;
+        opacity: 0.4;
       }
     }
   }

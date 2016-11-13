@@ -71,11 +71,11 @@ export class SearchModule extends Component {
     })
   }
 
-  handleChangeColor (e) {
+  handleChangeColor (color, state) {
     this.setState({
       colors: {
         ...this.state.colors,
-        [e.target.value]: e.target.checked
+        [color]: state
       }
     })
   }
@@ -197,7 +197,7 @@ export class SearchModule extends Component {
           onChange={this.handleChangeText}
           placeholder="Text"
           />
-        <ColorFilter colors={this.state.colors} onChange={this.handleChangeColor} />
+        <ColorFilter colors={this.state.colors} onColorChange={this.handleChangeColor} />
       </div>
     )
   }
