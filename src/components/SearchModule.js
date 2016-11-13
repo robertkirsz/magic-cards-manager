@@ -54,6 +54,8 @@ export class SearchModule extends Component {
     return nextState !== this.state
   }
 
+  // TODO: Refactor this since a lot if them do the same thing
+
   handleChangeName (e) {
     this.setState({
       queryName: e.target.value

@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 
+// TODO: Make it use props to determine whether it should be visible or not
+
 const Spinner = () => (
   <div className="loading-screen">
     <span className="fa fa-circle-o-notch fa-spin fa-4x" />
