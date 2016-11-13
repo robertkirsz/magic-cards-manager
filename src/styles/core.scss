@@ -87,7 +87,6 @@ $mainMargin: 30px;
 
 .cards-search-list {
   @include flex(row, wrap, flex-start, flex-start);
-  margin: 90px 0 0;
 }
 
 // TODO: fix margin issue with edge elements

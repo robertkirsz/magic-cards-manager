@@ -1,11 +1,13 @@
 import React, { PropTypes } from 'react'
+import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { Card } from 'components'
 import _ from 'lodash'
 
 export const CardsSearchList = (props) => {
+  console.warn(props.headerHeight)
   return (
-    <div className="cards-search-list">
+    <div className="cards-search-list" style={{ marginTop: props.headerHeight + 10 }}>
       {_.map(props.cards, (card) => (
         <Card
           key={card.id}
@@ -19,7 +21,10 @@ export const CardsSearchList = (props) => {
 
 CardsSearchList.propTypes = {
   cards: PropTypes.array,
-  addCard: PropTypes.func
+  addCard: PropTypes.func,
+  headerHeight: PropTypes.number
 }
 
-export default CardsSearchList
+const mapStateToProps = ({ layout }) => ({ headerHeight: layout.headerHeight })
+
+export default connect(mapStateToProps)(CardsSearchList)
