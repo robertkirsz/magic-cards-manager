@@ -11,7 +11,7 @@ export const CardsSearchList = (props) => {
         <Card
           key={card.id}
           card={card}
-          onClick={() => { browserHistory.push(`/cards/${card.cardUrl}`) }}
+          onClick={() => { browserHistory.push(`/all-cards/${card.cardUrl}`) }}
         />
       ))}
     </div>

@@ -13,7 +13,7 @@ export class CardView extends Component {
   }
 
   backgroundClick () {
-    browserHistory.push(`/cards`)
+    browserHistory.push(`/all-cards`)
   }
 
   render () {
