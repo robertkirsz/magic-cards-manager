@@ -1,9 +1,10 @@
 import React, { PropTypes } from 'react'
-import { Header, SearchModule } from 'components'
+import { Header, SearchModule, LoadingScreen } from 'components'
 import 'styles/core.scss'
 
 export const CoreLayout = ({ children }) => (
   <div id="app">
+    <LoadingScreen />
     <div className="fixed-wrapper">
       <Header />
       <SearchModule />
