@@ -61,11 +61,20 @@
       }
     }
   }
+  .all-none-checkboxes {
+    margin-left: 5px;
+    label:not(:last-child) { margin-right: 5px; }
+    input { margin-right: 5px; }
+  }
   .cmc-filter {
+    margin-left: 5px;
     &__value-input {}
     &__type {
-      &__label { text-transform: capitalize; }
-      &__input {}
+      &__label {
+        text-transform: capitalize;
+        &:not(:last-child) { margin-right: 5px; }
+      }
+      &__input { margin-right: 5px; }
     }
   }
 }

@@ -2,7 +2,25 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 import { filterCards } from 'store/allCards'
-import { ColorFilter, CmcFilter } from 'components'
+import { ColorFilter, CmcFilter, AllNoneToggle, MonoMultiToggle } from 'components'
+
+const clearState = {
+  queryName: '',
+  queryTypes: '',
+  queryText: '',
+  cmcValue: 0,
+  cmcType: 'minimum',
+  monocoloredOnly: false,
+  multicoloredOnly: false,
+  colors: {
+    'White': true,
+    'Blue': true,
+    'Black': true,
+    'Red': true,
+    'Green': true,
+    'Colorless': true
+  }
+}
 
 export class SearchModule extends Component {
   static propTypes = {
@@ -13,6 +31,7 @@ export class SearchModule extends Component {
   constructor (props) {
     super(props)
 
+    this.clearState = this.clearState.bind(this)
     this.handleChangeName = this.handleChangeName.bind(this)
     this.handleChangeTypes = this.handleChangeTypes.bind(this)
     this.handleChangeText = this.handleChangeText.bind(this)
@@ -25,23 +44,7 @@ export class SearchModule extends Component {
     this.toggleNone = this.toggleNone.bind(this)
     this.search = this.search.bind(this)
 
-    this.state = {
-      queryName: '',
-      queryTypes: '',
-      queryText: '',
-      cmcValue: 0,
-      cmcType: 'minimum',
-      monocoloredOnly: false,
-      multicoloredOnly: false,
-      colors: {
-        'White': true,
-        'Blue': true,
-        'Black': true,
-        'Red': true,
-        'Green': true,
-        'Colorless': true
-      }
-    }
+    this.state = clearState
   }
 
   componentDidUpdate (prevProps, prevState) {
@@ -55,6 +58,10 @@ export class SearchModule extends Component {
   }
 
   // TODO: Refactor this since a lot if them do the same thing
+
+  clearState () {
+    this.setState(clearState)
+  }
 
   handleChangeName (e) {
     this.setState({
@@ -206,12 +213,24 @@ export class SearchModule extends Component {
           colors={this.state.colors}
           onColorChange={this.handleChangeColor}
         />
+        <AllNoneToggle
+          colors={this.state.colors}
+          toggleAll={this.toggleAll}
+          toggleNone={this.toggleNone}
+        />
         <CmcFilter
           cmcValue={this.state.cmcValue}
           cmcType={this.state.cmcType}
           changeCmcValue={this.handleChangeCmcValue}
           changeCmcType={this.handleChangeCmcType}
         />
+        <MonoMultiToggle
+          monocoloredOnly={this.state.monocoloredOnly}
+          multicoloredOnly={this.state.multicoloredOnly}
+          handleChangeMonocolored={this.handleChangeMonocolored}
+          handleChangeMulticolored={this.handleChangeMulticolored}
+        />
+        <button onClick={this.clearState}>Reset</button>
       </div>
     )
   }
