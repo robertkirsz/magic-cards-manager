@@ -52,6 +52,9 @@
   }
   .text-inputs {
     align-items: stretch;
+    input {
+      &:not(:last-child) { margin-right: 5px; }
+    }
   }
   .color-filter {
     .icon {
@@ -93,7 +96,7 @@ $cardMargin: 5px;
 $mainMargin: 30px;
 
 .cards-search-list {
-  @include flex(row, wrap, flex-start, flex-start);
+  @include flex(row, wrap, center, flex-start);
 }
 
 // TODO: fix margin issue with edge elements
@@ -103,6 +106,7 @@ $mainMargin: 30px;
   $width: calc((100vw - #{$mainMargin}) / #{$cardsInRow} - 5px);
   position: relative;
   width: $width; height: calc(#{$width} * #{$cardRatio});
+  max-width: $cardWidth + 0px; max-height: $cardHeight + 0px;
   margin: 0 5px 1vw 0;
   background-repeat: no-repeat;
   background-position: 0 0;
@@ -148,7 +152,7 @@ $mainMargin: 30px;
   position: fixed;
   top: 0; right: 0; bottom: 0; left: 0;
   background: rgba(black, 0.5);
-  z-index: 1;
+  z-index: 10;
   .card-panel {
     max-width: 70vw;
     min-height: 50vh;
