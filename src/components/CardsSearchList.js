@@ -5,7 +5,6 @@ import { Card } from 'components'
 import _ from 'lodash'
 
 export const CardsSearchList = (props) => {
-  console.warn(props.headerHeight)
   return (
     <div className="cards-search-list" style={{ marginTop: props.headerHeight + 10 }}>
       {_.map(props.cards, (card) => (
