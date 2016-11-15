@@ -11,7 +11,8 @@ export class AllCardsView extends Component {
 
   render () {
     const {
-      allCards: { cards, filteredCards, error }
+      allCards: { cards, filteredCards, error },
+      children
     } = this.props
 
     const errorBox = (
@@ -23,9 +24,12 @@ export class AllCardsView extends Component {
 
     return (
       <div className="all-cards-view">
-        {this.props.children}
+        {children}
         {error && errorBox}
-        <CardsSearchList cards={_.slice(filteredCards || cards, 0, 30)} />
+        <CardsSearchList
+          path="all-cards"
+          cards={_.slice(filteredCards || cards, 0, 30)}
+        />
       </div>
     )
   }
