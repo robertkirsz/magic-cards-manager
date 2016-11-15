@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react'
 import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import _ from 'lodash'
-import { addCard } from 'store/myCards'
 import { Card } from 'components'
 
 export class CardView extends Component {
@@ -26,7 +25,7 @@ export class CardView extends Component {
   }
 
   render () {
-    const { card, addCard } = this.props
+    const { card } = this.props
 
     if (!card) return null
 
@@ -38,13 +37,14 @@ export class CardView extends Component {
             {this.isCollectionPage && <span>&nbsp;(Total: {card.cardsInCollection})</span>}
           </h1>
           <div className="card-variants-list">
-            {card.variants.map((variant) => (
+            {card.variants.map((variantCard) => (
               <Card
-                key={variant.id}
-                card={variant}
-                onClick={() => { addCard(card, variant) }}
+                key={variantCard.id}
+                mainCard={card}
+                variantCard={variantCard}
                 setIcon
                 showCount={this.isCollectionPage}
+                showAddRemove
               />
             ))}
           </div>
@@ -65,6 +65,4 @@ const mapStateToProps = ({ allCards, myCards }, ownProps) => ({
   )
 })
 
-const mapDispatchToProps = { addCard }
-
-export default connect(mapStateToProps, mapDispatchToProps)(CardView)
+export default connect(mapStateToProps)(CardView)

@@ -10,7 +10,7 @@ export const CardsSearchList = (props) => {
       {_.map(props.cards, (card) => (
         <Card
           key={card.id}
-          card={card}
+          mainCard={card}
           onClick={() => { browserHistory.push(`/${props.path}/${card.cardUrl}`) }}
         />
       ))}
