@@ -141,6 +141,13 @@ $mainMargin: 30px;
     font-size: 2em;
     transform: translateX(-50%);
   }
+  &__count {
+    position: absolute;
+    bottom: 3px; left: 3px;
+    font-size: 2em;
+    font-weight: bold;
+    color: lime;
+  }
 }
 
 // VIEW

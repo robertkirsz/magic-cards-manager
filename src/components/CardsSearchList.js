@@ -11,7 +11,7 @@ export const CardsSearchList = (props) => {
         <Card
           key={card.id}
           card={card}
-          onClick={() => { browserHistory.push(`/all-cards/${card.cardUrl}`) }}
+          onClick={() => { browserHistory.push(`/${props.path}/${card.cardUrl}`) }}
         />
       ))}
     </div>
@@ -20,6 +20,7 @@ export const CardsSearchList = (props) => {
 
 CardsSearchList.propTypes = {
   cards: PropTypes.array,
+  path: PropTypes.string,
   addCard: PropTypes.func,
   headerHeight: PropTypes.number
 }
