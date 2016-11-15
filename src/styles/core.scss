@@ -101,7 +101,7 @@ $mainMargin: 30px;
 
 // TODO: fix margin issue with edge elements
 
-.xxx-card {
+.card {
   $cardsInRow: 2;
   $width: calc((100vw - #{$mainMargin}) / #{$cardsInRow} - 5px);
   position: relative;
