@@ -11,7 +11,8 @@ export class Card extends Component {
     variantCard: PropTypes.object,
     setIcon: PropTypes.bool,
     showCount: PropTypes.bool,
-    showAddRemove: PropTypes.bool,
+    showAdd: PropTypes.bool,
+    showRemove: PropTypes.bool,
     addCard: PropTypes.func,
     removeCard: PropTypes.func,
     onClick: PropTypes.func,
@@ -62,15 +63,23 @@ export class Card extends Component {
   }
 
   render () {
-    const { mainCard, variantCard, setIcon, showCount, showAddRemove, onClick } = this.props
+    const { mainCard, variantCard, setIcon, showCount, showAdd, showRemove, onClick } = this.props
     const { animations } = this.state
 
     const cardData = variantCard || mainCard
     const numberOfCards = <span className="card__count">{cardData.cardsInCollection}</span>
     const addRemoveControls = (
-      <div>
-        <button onClick={this.addCard}>+</button>
-        <button onClick={this.removeCard}>-</button>
+      <div className="add-remove-buttons">
+        {showAdd &&
+          <button onClick={this.addCard}>
+            <span className="fa fa-plus-circle" />
+          </button>
+        }
+        {showRemove &&
+          <button onClick={this.removeCard}>
+            <span className="fa fa-minus-circle" />
+          </button>
+        }
       </div>
     )
 
@@ -82,7 +91,7 @@ export class Card extends Component {
       >
         {setIcon && <span className={cardData.setIcon} />}
         {showCount && numberOfCards}
-        {showAddRemove && addRemoveControls}
+        {(showAdd || showRemove) && addRemoveControls}
         {
           animations.map((o) => (
             o.animationType === 'add'

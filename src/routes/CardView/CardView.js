@@ -33,9 +33,12 @@ export class CardView extends Component {
   }
 
   render () {
-    const { card } = this.props
+    const { card, routes } = this.props
 
     if (!card) return null
+
+    const isAllCardsPage = routes[1].path === 'all-cards'
+    const isMyCardsPage = routes[1].path === 'my-cards'
 
     return (
       <div className="card-view" onClick={this.backgroundClick}>
@@ -52,7 +55,8 @@ export class CardView extends Component {
                 variantCard={variantCard}
                 setIcon
                 showCount={this.isCollectionPage}
-                showAddRemove
+                showAdd
+                showRemove={isMyCardsPage}
               />
             ))}
           </div>
