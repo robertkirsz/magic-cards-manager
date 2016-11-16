@@ -20,6 +20,14 @@ export class CardView extends Component {
     this.backgroundClick = this.backgroundClick.bind(this)
   }
 
+  componentDidMount () {
+    document.body.classList.add('no-scroll')
+  }
+
+  componentWillUnmount () {
+    document.body.classList.remove('no-scroll')
+  }
+
   backgroundClick () {
     browserHistory.push(`/${this.props.routes[1].path}`)
   }
