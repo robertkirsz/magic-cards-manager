@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
+import ReactTimeout from 'react-timeout' // Prevents errors when updating unmounted component
+import _ from 'lodash'
 import { addCard, removeCard } from 'store/myCards'
 import CardBack from 'components/assets/card_back.jpg'
 
@@ -12,7 +14,8 @@ export class Card extends Component {
     showAddRemove: PropTypes.bool,
     addCard: PropTypes.func,
     removeCard: PropTypes.func,
-    onClick: PropTypes.func
+    onClick: PropTypes.func,
+    setTimeout: PropTypes.func
   }
 
   constructor () {
@@ -20,18 +23,47 @@ export class Card extends Component {
 
     this.addCard = this.addCard.bind(this)
     this.removeCard = this.removeCard.bind(this)
+    this.animate = this.animate.bind(this)
+
+    this.state = {
+      animations: []
+    }
   }
 
   addCard () {
     this.props.addCard(this.props.mainCard, this.props.variantCard)
+    this.animate('add')
   }
 
   removeCard () {
     this.props.removeCard(this.props.mainCard, this.props.variantCard)
+    this.animate('remove')
+  }
+
+  animate (animationType) {
+    const id = Date.now()
+    let animations = [...this.state.animations]
+
+    animations.push({ id, animationType })
+
+    this.setState({ animations })
+
+    this.props.setTimeout(() => {
+      let animations = [...this.state.animations]
+      const index = _.findIndex(animations, { id })
+
+      animations = [
+        ...animations.slice(0, index),
+        ...animations.slice(index + 1)
+      ]
+
+      this.setState({ animations })
+    }, 1000)
   }
 
   render () {
     const { mainCard, variantCard, setIcon, showCount, showAddRemove, onClick } = this.props
+    const { animations } = this.state
 
     const cardData = variantCard || mainCard
     const numberOfCards = <span className="card__count">{cardData.cardsInCollection}</span>
@@ -51,6 +83,13 @@ export class Card extends Component {
         {setIcon && <span className={cardData.setIcon} />}
         {showCount && numberOfCards}
         {showAddRemove && addRemoveControls}
+        {
+          animations.map((o) => (
+            o.animationType === 'add'
+              ? <span key={o.id} className="card__animation card__animation--add">+1</span>
+              : <span key={o.id} className="card__animation card__animation--remove">-1</span>
+          ))
+        }
       </div>
     )
   }
@@ -59,4 +98,4 @@ export class Card extends Component {
 const mapStateToProps = () => ({})
 const mapDispatchToProps = { addCard, removeCard }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Card)
+export default ReactTimeout(connect(mapStateToProps, mapDispatchToProps)(Card))

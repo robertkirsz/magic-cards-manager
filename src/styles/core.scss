@@ -148,6 +148,17 @@ $mainMargin: 30px;
     font-weight: bold;
     color: lime;
   }
+  &__animation {
+    @include flex(column, nowrap, center, center);
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    font-size: 2em;
+    font-weight: bold;
+    animation: fly 1s ease-out 1 forwards;
+    pointer-events: none;
+    &.card__animation--add { color: green; }
+    &.card__animation--remove { color: red; }
+  }
 }
 
 // VIEW

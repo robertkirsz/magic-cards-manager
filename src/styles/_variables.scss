@@ -1,2 +1,12 @@
 $text-color: #373a3c;
 $horizontal-padding: 15px;
+
+@keyframes fly {
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-150px);
+    opacity: 0;
+  }
+}
