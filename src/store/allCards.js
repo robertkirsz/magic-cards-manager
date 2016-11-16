@@ -3,6 +3,8 @@ import moment from 'moment'
 import { fetchAllSets } from 'api'
 import { Card } from 'classes'
 
+// TODO: Sort all cards by name perhaps?
+
 // ------------------------------------
 // Constants
 // ------------------------------------
