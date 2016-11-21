@@ -24,12 +24,12 @@ export default class Card {
   }
 
   formatForLocalStorage () {
-    const forLocalStorage = {}
-
-    if (this.id) forLocalStorage.id = this.id
-    if (this.cardsInCollection) forLocalStorage.cardsInCollection = this.cardsInCollection
-    if (this.setIcon) forLocalStorage.setIcon = this.setIcon
-
-    return forLocalStorage
+    return {
+      id: this.id,
+      cardsInCollection: this.cardsInCollection,
+      variants: this.variants
+        ? this.variants.map(variant => variant.formatForLocalStorage())
+        : undefined
+    }
   }
 }

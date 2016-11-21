@@ -56,7 +56,6 @@ const ACTION_HANDLERS = {
   },
   [ALL_CARDS_SUCCESS]: (state, action) => {
     const { allSets } = action
-
     const allCards = [] // Will contain every single Magic card
     const uniqueCards = {} // Will contain unique cards
     // Compares release dates and chooses the latest one
@@ -64,7 +63,7 @@ const ACTION_HANDLERS = {
       if (!result.releaseDate) return value
       return moment(value.releaseDate).isAfter(result.releaseDate) ? value : result
     }, {})
-    // For severy set...
+    // For each set...
     _.forEach(allSets, (set) => {
       // Save its code inside its cards objects
       const cardsFromThisSet = set.cards.map(card => {

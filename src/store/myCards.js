@@ -1,9 +1,5 @@
 import _ from 'lodash'
-
-const updateLocalStorage = (cardMyCards) => {
-  // const reducedMyCards = _.map(cardMyCards, (singleCard) => singleCard.formatForLocalStorage())
-  // localStorage.setItem('mtgdbReducedMyCardsRK', JSON.stringify(reducedMyCards))
-}
+import { saveLocalStorage } from 'utils'
 
 // ------------------------------------
 // Constants
@@ -19,20 +15,15 @@ export const RESTORE_MY_CARDS = 'RESTORE_MY_CARDS'
 export const addCard = (card, variant) => ({
   type: ADD_CARD, card, variant
 })
-
 export const removeCard = (card, variant) => ({
   type: REMOVE_CARD, card, variant
 })
-
 export const clearMyCards = () => ({
   type: CLEAR_MY_CARDS
 })
-
-export const restoreMyCards = (cards) => ({
-  type: RESTORE_MY_CARDS,
-  payload: cards
+export const restoreMyCards = (collection) => ({
+  type: RESTORE_MY_CARDS, collection
 })
-
 export const actions = {
   addCard,
   removeCard,
@@ -83,7 +74,7 @@ const ACTION_HANDLERS = {
         ...cardsCollection.slice(cardIndex + 1)
       ]
       // Save changes to Local Storage
-      updateLocalStorage(cardsCollection)
+      saveLocalStorage(cardsCollection)
       // Update the store
       return {
         ...state,
@@ -101,7 +92,7 @@ const ACTION_HANDLERS = {
     // Add the main card to the collection
     cardsCollection.push(cardCopy)
     // Save changes to Local Storage
-    updateLocalStorage(cardsCollection)
+    saveLocalStorage(cardsCollection)
     // Update the store
     return {
       ...state,
@@ -165,7 +156,7 @@ const ACTION_HANDLERS = {
     }
 
     // Save changes to Local Storage
-    updateLocalStorage(cardsCollection)
+    saveLocalStorage(cardsCollection)
     // Update the store
     return {
       ...state,
@@ -173,7 +164,10 @@ const ACTION_HANDLERS = {
     }
   },
   [CLEAR_MY_CARDS]: (state) => initialState,
-  [RESTORE_MY_CARDS]: (state, { payload }) => payload
+  [RESTORE_MY_CARDS]: (state, { collection }) => {
+    console.warn('coll', collection)
+    return { cards: collection }
+  }
 }
 
 // ------------------------------------
