@@ -11,14 +11,14 @@ import { Card } from 'classes'
 export const ALL_CARDS_REQUEST = 'ALL_CARDS_REQUEST'
 export const ALL_CARDS_SUCCESS = 'ALL_CARDS_SUCCESS'
 export const ALL_CARDS_ERROR   = 'ALL_CARDS_ERROR'
-export const FILTER_CARDS      = 'FILTER_CARDS'
+export const FILTER_ALL_CARDS      = 'FILTER_ALL_CARDS'
 
 // ------------------------------------
 // Actions
 // ------------------------------------
 export const sendRequest = () => ({ type: ALL_CARDS_REQUEST })
-export const responseSuccess = (allSets) => ({ type: ALL_CARDS_SUCCESS, allSets })
-export const responseError = (error) => ({ type: ALL_CARDS_ERROR, error })
+export const responseSuccess = allSets => ({ type: ALL_CARDS_SUCCESS, allSets })
+export const responseError = error => ({ type: ALL_CARDS_ERROR, error })
 export const getCards = () => {
   return (dispatch, getState) => {
     // Return if request is pending
@@ -37,14 +37,14 @@ export const getCards = () => {
       .catch((error) => dispatch(responseError(error))) // Catch any errors
   }
 }
-export const filterCards = (cards) => ({ type: FILTER_CARDS, cards })
+export const filterAllCards = cards => ({ type: FILTER_ALL_CARDS, cards })
 
 export const actions = {
   sendRequest,
   responseSuccess,
   responseError,
   getCards,
-  filterCards
+  filterAllCards
 }
 
 // ------------------------------------
@@ -99,9 +99,7 @@ const ACTION_HANDLERS = {
   [ALL_CARDS_ERROR]: (state, action) => {
     return { ...state, fetching: false, error: action.error }
   },
-  [FILTER_CARDS]: (state, action) => {
-    return { ...state, filteredCards: action.cards }
-  }
+  [FILTER_ALL_CARDS]: (state, action) => ({ ...state, filteredCards: action.cards })
 }
 
 // ------------------------------------

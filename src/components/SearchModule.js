@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
-import { filterCards } from 'store/allCards'
+import { filterAllCards } from 'store/allCards'
+import { filterMyCards } from 'store/myCards'
 import { ColorFilter, CmcFilter, AllNoneToggle, MonoMultiToggle } from 'components'
 
 const clearState = {
@@ -24,8 +25,11 @@ const clearState = {
 
 export class SearchModule extends Component {
   static propTypes = {
-    cards: PropTypes.array,
-    filterCards: PropTypes.func
+    allCards: PropTypes.array,
+    myCards: PropTypes.array,
+    pathname: PropTypes.string,
+    filterAllCards: PropTypes.func,
+    filterMyCards: PropTypes.func
   }
 
   constructor (props) {
@@ -44,18 +48,37 @@ export class SearchModule extends Component {
     this.toggleNone = this.toggleNone.bind(this)
     this.search = this.search.bind(this)
 
-    this.state = clearState
+    this.state = {
+      ...clearState,
+      whereToSearch: props.pathname === '/all-cards'
+        ? 'allCards'
+        : 'myCards'
+    }
   }
 
-  componentDidUpdate (prevProps, prevState) {
-    console.log('   %cSearchModule componentDidUpdate()', 'color: #79BDA8;')
-    this.props.filterCards(this.search(this.state))
+  componentDidUpdate () {
+    // TODO: check if it's truely the best way to handle this (in a 'didUpdate' - I don't like it >:/)
+    if (this.state.whereToSearch === 'allCards') {
+      this.props.filterAllCards(this.search(this.state))
+    } else {
+      this.props.filterMyCards(this.search(this.state))
+    }
   }
 
-  shouldComponentUpdate (nextProps, nextState) {
-    console.log('   %cSearchModule shouldComponentUpdate()', 'color: #79BDA8;', nextState !== this.state)
-    return nextState !== this.state
+  componentWillReceiveProps (nextProps) {
+    if (this.props.pathname !== nextProps.pathname) {
+      console.log('dzijea')
+      const whereToSearch = nextProps.pathname === '/all-cards'
+        ? 'allCards'
+        : 'myCards'
+      this.setState({ whereToSearch })
+    }
   }
+
+  // shouldComponentUpdate (nextProps, nextState) {
+  //   console.log('   %cSearchModule shouldComponentUpdate()', 'color: #79BDA8;', nextState !== this.state)
+  //   return nextState !== this.state
+  // }
 
   // TODO: Refactor this since a lot if them do the same thing
 
@@ -139,16 +162,16 @@ export class SearchModule extends Component {
   }
 
   search (state) {
+    console.warn('state.whereToSearch', state.whereToSearch)
     const queryName = state.queryName.trim().toLowerCase()
     const queryTypes = state.queryTypes.toLowerCase().split(' ')
     const queryText = state.queryText.trim().toLowerCase()
     let colorsArray = []
 
-    for (let key in state.colors)
-      if (state.colors[key]) colorsArray.push(key)
+    for (let key in state.colors) { if (state.colors[key]) colorsArray.push(key) }
 
     if (queryName.length || queryTypes.length || queryText.length) {
-      return this.props.cards.filter((card) => {
+      return this.props[state.whereToSearch].filter((card) => {
         // Hide cards with no text when text is specified
         if (queryText && !card.text) return false
         // Checking card name
@@ -186,6 +209,7 @@ export class SearchModule extends Component {
   }
 
   render () {
+    console.warn('this.props.pathname', this.props.pathname)
     return (
       <div className="search-module">
         <div className="text-inputs">
@@ -237,7 +261,11 @@ export class SearchModule extends Component {
   }
 }
 
-const mapDispatchToProps = { filterCards }
-const mapStateToProps = ({ allCards }) => ({ cards: allCards.cards })
+const mapDispatchToProps = { filterAllCards, filterMyCards }
+const mapStateToProps = ({ allCards, myCards, location }) => ({
+  allCards: allCards.cards,
+  myCards: myCards.cards,
+  pathname: location.pathname
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchModule)

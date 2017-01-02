@@ -4,10 +4,11 @@ import { saveLocalStorage } from 'utils'
 // ------------------------------------
 // Constants
 // ------------------------------------
-export const ADD_CARD = 'ADD_CARD'
-export const REMOVE_CARD = 'REMOVE_CARD'
-export const CLEAR_MY_CARDS = 'CLEAR_MY_CARDS'
+export const ADD_CARD         = 'ADD_CARD'
+export const REMOVE_CARD      = 'REMOVE_CARD'
+export const CLEAR_MY_CARDS   = 'CLEAR_MY_CARDS'
 export const RESTORE_MY_CARDS = 'RESTORE_MY_CARDS'
+export const FILTER_MY_CARDS  = 'FILTER_MY_CARDS'
 
 // ------------------------------------
 // Actions
@@ -21,14 +22,15 @@ export const removeCard = (card, variant) => ({
 export const clearMyCards = () => ({
   type: CLEAR_MY_CARDS
 })
-export const restoreMyCards = (collection) => ({
-  type: RESTORE_MY_CARDS, collection
-})
+export const restoreMyCards = collection => ({ type: RESTORE_MY_CARDS, collection })
+export const filterMyCards = cards => ({ type: FILTER_MY_CARDS, cards })
+
 export const actions = {
   addCard,
   removeCard,
   clearMyCards,
-  restoreMyCards
+  restoreMyCards,
+  filterMyCards
 }
 
 // ------------------------------------
@@ -164,10 +166,8 @@ const ACTION_HANDLERS = {
     }
   },
   [CLEAR_MY_CARDS]: (state) => initialState,
-  [RESTORE_MY_CARDS]: (state, { collection }) => {
-    console.warn('coll', collection)
-    return { cards: collection }
-  }
+  [RESTORE_MY_CARDS]: (state, { collection }) => ({ cards: collection }),
+  [FILTER_MY_CARDS]: (state, action) => ({ ...state, filteredCards: action.cards })
 }
 
 // ------------------------------------

@@ -18,9 +18,8 @@ export class CoreLayout extends Component {
 
   componentWillReceiveProps (nextProps) {
     if (nextProps.allCards.cards.length && !this.props.allCards.cards.length) {
-      const foo = loadLocalStorage(nextProps.allCards.cards)
-      console.log('foo', foo)
-      this.props.restoreMyCards(foo)
+      const restoredCollection = loadLocalStorage(nextProps.allCards.cards)
+      this.props.restoreMyCards(restoredCollection)
     }
   }
 
