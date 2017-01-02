@@ -24,14 +24,11 @@ export class CoreLayout extends Component {
   }
 
   render () {
-    return (
+    const app = (
       <div id="app">
-        <LoadingScreen />
-        <Measure
-          onMeasure={({ height }) => {
-            if (height !== this.props.headerHeight) this.props.saveHeaderHeight(height)
-          }}
-        >
+        <Measure onMeasure={({ height }) => {
+          if (height !== this.props.headerHeight) this.props.saveHeaderHeight(height)
+        }}>
           <div className="fixed-wrapper">
             <Header />
             <SearchModule />
@@ -40,6 +37,10 @@ export class CoreLayout extends Component {
         {this.props.children}
       </div>
     )
+
+    return this.props.allCards.fetching
+      ? <LoadingScreen />
+      : app
   }
 }
 

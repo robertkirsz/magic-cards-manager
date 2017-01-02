@@ -67,18 +67,12 @@ export class SearchModule extends Component {
 
   componentWillReceiveProps (nextProps) {
     if (this.props.pathname !== nextProps.pathname) {
-      console.log('dzijea')
       const whereToSearch = nextProps.pathname === '/all-cards'
         ? 'allCards'
         : 'myCards'
       this.setState({ whereToSearch })
     }
   }
-
-  // shouldComponentUpdate (nextProps, nextState) {
-  //   console.log('   %cSearchModule shouldComponentUpdate()', 'color: #79BDA8;', nextState !== this.state)
-  //   return nextState !== this.state
-  // }
 
   // TODO: Refactor this since a lot if them do the same thing
 
@@ -162,7 +156,6 @@ export class SearchModule extends Component {
   }
 
   search (state) {
-    console.warn('state.whereToSearch', state.whereToSearch)
     const queryName = state.queryName.trim().toLowerCase()
     const queryTypes = state.queryTypes.toLowerCase().split(' ')
     const queryText = state.queryText.trim().toLowerCase()
@@ -209,7 +202,6 @@ export class SearchModule extends Component {
   }
 
   render () {
-    console.warn('this.props.pathname', this.props.pathname)
     return (
       <div className="search-module">
         <div className="text-inputs">
