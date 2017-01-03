@@ -1,25 +1,20 @@
 const cardHoverEffect = () => {
-  var d = document,
-    de = d.documentElement,
-    bd = d.getElementsByTagName('body')[0],
-    htm = d.getElementsByTagName('html')[0],
-    win = window,
-    imgs = d.querySelectorAll('.atvImg'),
-    totalImgs = imgs.length,
-    supportsTouch = 'ontouchstart' in win || navigator.msMaxTouchPoints
+  var d = document
+  var bd = d.getElementsByTagName('body')[0]
+  var htm = d.getElementsByTagName('html')[0]
+  var win = window
+  var imgs = d.querySelectorAll('.atvImg')
+  var totalImgs = imgs.length
+  var supportsTouch = 'ontouchstart' in win || navigator.msMaxTouchPoints
 
-  if (totalImgs <= 0) {
-    return
-  }
+  if (totalImgs <= 0) return
 
   for (var l = 0; l < totalImgs; l++) {
-    var thisImg = imgs[l],
-      layerElems = thisImg.querySelectorAll('.atvImg-layer'),
-      totalLayerElems = layerElems.length
+    var thisImg = imgs[l]
+    var layerElems = thisImg.querySelectorAll('.atvImg-layer')
+    var totalLayerElems = layerElems.length
 
-    if (totalLayerElems <= 0) {
-      continue
-    }
+    if (totalLayerElems <= 0) continue
 
     while (thisImg.firstChild) {
       thisImg.removeChild(thisImg.firstChild)
@@ -92,7 +87,6 @@ const cardHoverEffect = () => {
   }
 
   function processMovement (e, touchEnabled, elem, layers, totalLayers, shine) {
-    console.warn('move')
     var bdst = bd.scrollTop || htm.scrollTop,
       bdsl = bd.scrollLeft,
       pageX = (touchEnabled) ? e.touches[0].pageX : e.pageX,

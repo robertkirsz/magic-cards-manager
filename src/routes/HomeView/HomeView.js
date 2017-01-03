@@ -1,9 +1,20 @@
-import React from 'react'
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
 
-export const HomeView = () => (
-  <div>
-    <h4>Welcome!</h4>
-  </div>
-)
+export class HomeView extends Component {
+  static propTypes = {
+    headerHeight: PropTypes.number
+  }
 
-export default HomeView
+  render () {
+    return (
+      <div style={{ fontSize: '0.75em', marginTop: this.props.headerHeight + 20 }}>
+        <h1>Home</h1>
+      </div>
+    )
+  }
+}
+
+const mapStateToProps = ({ layout }) => ({ headerHeight: layout.headerHeight })
+
+export default connect(mapStateToProps)(HomeView)

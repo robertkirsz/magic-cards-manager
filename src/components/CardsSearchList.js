@@ -12,7 +12,7 @@ class CardsSearchList extends React.Component {
 
   render () {
     return (
-      <div className="cards-search-list" style={{ marginTop: this.props.headerHeight + 10 }}>
+      <div className="cards-search-list" style={{ marginTop: this.props.headerHeight + 20 }}>
         {
           _.map(this.props.cards, (card) => (
             <Card
