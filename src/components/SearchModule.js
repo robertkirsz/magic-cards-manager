@@ -233,17 +233,17 @@ export class SearchModule extends Component {
           toggleAll={this.toggleAll}
           toggleNone={this.toggleNone}
         />
-        <CmcFilter
-          cmcValue={this.state.cmcValue}
-          cmcType={this.state.cmcType}
-          changeCmcValue={this.handleChangeCmcValue}
-          changeCmcType={this.handleChangeCmcType}
-        />
         <MonoMultiToggle
           monocoloredOnly={this.state.monocoloredOnly}
           multicoloredOnly={this.state.multicoloredOnly}
           handleChangeMonocolored={this.handleChangeMonocolored}
           handleChangeMulticolored={this.handleChangeMulticolored}
+        />
+        <CmcFilter
+          cmcValue={this.state.cmcValue}
+          cmcType={this.state.cmcType}
+          changeCmcValue={this.handleChangeCmcValue}
+          changeCmcType={this.handleChangeCmcType}
         />
         <div>
           <button onClick={this.clearState}>Reset</button>

@@ -2,20 +2,29 @@ import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { Card } from 'components'
+import cardHoverEffect from 'utils/cardHoverEffect'
 import _ from 'lodash'
 
-export const CardsSearchList = (props) => {
-  return (
-    <div className="cards-search-list" style={{ marginTop: props.headerHeight + 10 }}>
-      {_.map(props.cards, (card) => (
-        <Card
-          key={card.id}
-          mainCard={card}
-          onClick={() => { browserHistory.push(`/${props.path}/${card.cardUrl}`) }}
-        />
-      ))}
-    </div>
-  )
+class CardsSearchList extends React.Component {
+  componentDidMount () {
+    cardHoverEffect()
+  }
+
+  render () {
+    return (
+      <div className="cards-search-list" style={{ marginTop: this.props.headerHeight + 10 }}>
+        {
+          _.map(this.props.cards, (card) => (
+            <Card
+              key={card.id}
+              mainCard={card}
+              onClick={() => { browserHistory.push(`/${this.props.path}/${card.cardUrl}`) }}
+            />
+          ))
+        }
+      </div>
+    )
+  }
 }
 
 CardsSearchList.propTypes = {

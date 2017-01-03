@@ -84,21 +84,25 @@ export class Card extends Component {
     )
 
     return (
-      <div
-        className="card"
-        onClick={onClick}
-        style={{ backgroundImage: `url(${cardData.image}), url(${CardBack})` }}
+      <div className="card-wrapper atvImg">
+        <div className="atvImg-layer" data-img={cardData.image}>
+          <div
+            className="card"
+            onClick={onClick}
+            style={{ backgroundImage: `url(${cardData.image}), url(${CardBack})` }}
       >
-        {setIcon && <span className={cardData.setIcon} />}
-        {showCount && numberOfCards}
-        {(showAdd || showRemove) && addRemoveControls}
-        {
+            {setIcon && <span className={cardData.setIcon} />}
+            {showCount && numberOfCards}
+            {(showAdd || showRemove) && addRemoveControls}
+            {
           animations.map((o) => (
             o.animationType === 'add'
               ? <span key={o.id} className="card__animation card__animation--add">+1</span>
               : <span key={o.id} className="card__animation card__animation--remove">-1</span>
           ))
         }
+          </div>
+        </div>
       </div>
     )
   }

@@ -17,8 +17,11 @@ export class CoreLayout extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
+    // If we've received cards database...
     if (nextProps.allCards.cards.length && !this.props.allCards.cards.length) {
+      // Get collection from Local Storage
       const restoredCollection = loadLocalStorage(nextProps.allCards.cards)
+      // Save it to the store
       this.props.restoreMyCards(restoredCollection)
     }
   }
