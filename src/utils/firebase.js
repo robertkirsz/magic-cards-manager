@@ -8,7 +8,13 @@ const config = {
   messagingSenderId: '378575387948'
 }
 
-export const app      = firebase.initializeApp(config)
-export const auth     = firebase.auth()
-export const database = firebase.database()
-export const googleProvider = new firebase.auth.GoogleAuthProvider()
+export const app              = firebase.initializeApp(config)
+export const auth             = firebase.auth()
+export const database         = firebase.database()
+export const googleProvider   = new firebase.auth.GoogleAuthProvider()
+export const facebookProvider = new firebase.auth.FacebookAuthProvider()
+
+// LOGIN
+// Code that check if user is logged in on launch is in CoreLayout
+// Code for signing in/up is in LoginView
+// Code for signing out is in (... Header?)

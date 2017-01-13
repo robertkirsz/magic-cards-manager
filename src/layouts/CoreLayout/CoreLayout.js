@@ -3,7 +3,9 @@ import { connect } from 'react-redux'
 import Measure from 'react-measure'
 import { saveHeaderHeight } from 'store/layout'
 import { restoreMyCards } from 'store/myCards'
+import { loginSuccess } from 'store/user'
 import { loadLocalStorage } from 'utils'
+import { auth } from 'utils/firebase'
 import { Header, SearchModule, LoadingScreen } from 'components'
 import 'styles/core.scss'
 
@@ -13,7 +15,25 @@ export class CoreLayout extends Component {
     headerHeight: PropTypes.number,
     saveHeaderHeight: PropTypes.func,
     restoreMyCards: PropTypes.func,
-    allCards: PropTypes.object
+    allCards: PropTypes.object,
+    loginSuccess: PropTypes.func
+  }
+
+  componentWillMount () {
+    auth.onAuthStateChanged(firebaseUser => {
+      console.warn('onAuthStateChanged', firebaseUser)
+      if (firebaseUser) {
+        console.warn('   we have user')
+        this.props.loginSuccess({
+          name: firebaseUser.displayName,
+          email: firebaseUser.email,
+          picture: firebaseUser.photoURL
+        })
+      } else {
+        console.warn('   we DON\'T have user')
+        // this.setState({ showLogOutButton: false })
+      }
+    })
   }
 
   componentWillReceiveProps (nextProps) {
@@ -51,6 +71,6 @@ const mapStateToProps = ({ layout, allCards }) => ({
   headerHeight: layout.headerHeight,
   allCards
 })
-const mapDispatchToProps = { saveHeaderHeight, restoreMyCards }
+const mapDispatchToProps = { saveHeaderHeight, restoreMyCards, loginSuccess }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CoreLayout)

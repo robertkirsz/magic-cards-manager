@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import { browserHistory } from 'react-router'
-import { auth, googleProvider } from 'utils/firebase'
+import { auth, googleProvider, facebookProvider } from 'utils/firebase'
 
-// TODO: check if we need "export class (...)" here and in other components
-export class LoginView extends Component {
+class LoginView extends Component {
   static propTypes = {
     routes: PropTypes.array
   }
@@ -20,25 +19,16 @@ export class LoginView extends Component {
     this.state = {
       email: '',
       password: '',
-      authError: '',
-      showLogOutButton: false
+      authError: ''
     }
   }
 
   backgroundClick () {
+    // TODO: When you start on login page, there is nowhere to go back
     browserHistory.push(`/${this.props.routes[1].path}`)
   }
 
   componentDidMount () {
-    auth.onAuthStateChanged(firebaseUser => {
-      console.warn('onAuthStateChanged', firebaseUser)
-      if (firebaseUser) {
-        this.setState({ showLogOutButton: true })
-      } else {
-        this.setState({ showLogOutButton: false })
-      }
-    })
-
     auth.getRedirectResult().then((result) => {
       console.warn('getRedirectResult', result)
       if (result.credential) {
@@ -103,6 +93,28 @@ export class LoginView extends Component {
     })
   }
 
+  signInFacebook () {
+    auth.signInWithPopup(facebookProvider).then((result) => {
+      // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+      const token = result.credential.accessToken
+      // The signed-in user info.
+      const user = result.user
+      // ...
+      console.warn('token', token, 'user', user)
+    }).catch((error) => {
+      // Handle Errors here.
+      const errorCode = error.code
+      const errorMessage = error.message
+      // The email of the user's account used.
+      const email = error.email
+      // The firebase.auth.AuthCredential type that was used.
+      const credential = error.credential
+      // ...
+      console.warn('ERROR', 'errorCode', errorCode, 'errorMessage', errorMessage, 'email', email, 'credential', credential) // eslint-disable-line
+    })
+  }
+
+  // TODO: move to a different component (Header?)
   signOut () {
     auth.signOut().then(() => {
       // Sign-out successful.
@@ -135,7 +147,8 @@ export class LoginView extends Component {
             <button onClick={this.signIn}>Log in</button>
             <button onClick={this.signUp}>Sign up</button>
             <button onClick={this.signInGoogle}>Log in with Google</button>
-            {this.state.showLogOutButton && <button onClick={this.signOut}>Log out</button>}
+            <button onClick={this.signInFacebook}>Log in with Facebook</button>
+            <button onClick={this.signOut}>Sign out</button>
           </div>
           {this.state.authError && <p style={{ color: 'red' }}>{this.state.authError}</p>}
         </div>
