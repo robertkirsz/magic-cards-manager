@@ -28,7 +28,7 @@ const initialState = {
   headerHeight: 42
 }
 
-export default function layout (state = initialState, action) {
+export default function layoutReducer (state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type]
 
   return handler ? handler(state, action) : state

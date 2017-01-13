@@ -43,7 +43,7 @@ export class Card extends Component {
 
   animate (animationType) {
     const id = Date.now()
-    let animations = [...this.state.animations]
+    const animations = [...this.state.animations]
 
     animations.push({ id, animationType })
 

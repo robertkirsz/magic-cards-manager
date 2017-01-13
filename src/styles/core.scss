@@ -24,7 +24,7 @@
 }
 
 .main-header {
-  @include flex(row, wrap, flex-start, center);
+  @include flex(row, wrap, space-between, center);
   flex: none;
   margin-top: 5px;
   padding: 0 $horizontal-padding;
@@ -36,7 +36,6 @@
       &.active { text-decoration: underline; }
     }
   }
-  .latest-set { margin-left: auto; }
 }
 
 .search-module {
