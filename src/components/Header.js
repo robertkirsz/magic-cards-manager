@@ -1,6 +1,6 @@
 import React from 'react'
 import { IndexLink, Link } from 'react-router'
-import { LatestSet } from 'components'
+import { LatestSet, UserBadge } from 'components'
 
 export const Header = () => (
   <header className="main-header">
@@ -11,6 +11,7 @@ export const Header = () => (
       <Link to="/login" className="nav-link" activeClassName="active">Login</Link>
     </nav>
     <LatestSet />
+    <UserBadge />
   </header>
 )
 

@@ -233,6 +233,16 @@ $mainMargin: 30px;
   }
 }
 
+.user-badge {
+  &__picture {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+}
+
 // Cards hover effect styles
 
 .atvImg {

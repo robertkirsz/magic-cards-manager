@@ -1,6 +1,7 @@
 import Card            from 'components/Card'
 import Header          from 'components/Header'
 import CmcFilter       from 'components/CmcFilter'
+import UserBadge       from 'components/UserBadge'
 import LatestSet       from 'components/LatestSet'
 import ColorFilter     from 'components/ColorFilter'
 import SearchModule    from 'components/SearchModule'
@@ -13,6 +14,7 @@ export {
   Card,
   Header,
   CmcFilter,
+  UserBadge,
   LatestSet,
   ColorFilter,
   SearchModule,
