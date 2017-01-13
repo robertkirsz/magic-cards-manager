@@ -1,12 +1,15 @@
 import { combineReducers } from 'redux'
-import locationReducer from './location'
+
+import user     from './user'
+import layout   from './layout'
+import myCards  from './myCards'
 import allCards from './allCards'
-import myCards from './myCards'
-import layout from './layout'
+import location from './location'
 
 export const makeRootReducer = (asyncReducers) => {
   return combineReducers({
-    location: locationReducer,
+    location,
+    user,
     allCards,
     myCards,
     layout,
