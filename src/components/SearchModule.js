@@ -4,6 +4,7 @@ import _ from 'lodash'
 import { filterAllCards } from 'store/allCards'
 import { filterMyCards } from 'store/myCards'
 import { ColorFilter, CmcFilter, AllNoneToggle, MonoMultiToggle } from 'components'
+import { cardsDatabase } from 'database'
 
 const clearState = {
   queryName: '',
@@ -159,9 +160,9 @@ export class SearchModule extends Component {
     const queryName = state.queryName.trim().toLowerCase()
     const queryTypes = state.queryTypes.toLowerCase().split(' ')
     const queryText = state.queryText.trim().toLowerCase()
-    let colorsArray = []
+    const colorsArray = []
 
-    for (let key in state.colors) { if (state.colors[key]) colorsArray.push(key) }
+    for (const key in state.colors) { if (state.colors[key]) colorsArray.push(key) }
 
     if (queryName.length || queryTypes.length || queryText.length) {
       return this.props[state.whereToSearch].filter((card) => {
@@ -254,8 +255,8 @@ export class SearchModule extends Component {
 }
 
 const mapDispatchToProps = { filterAllCards, filterMyCards }
-const mapStateToProps = ({ allCards, myCards, location }) => ({
-  allCards: allCards.cards,
+const mapStateToProps = ({ myCards, location }) => ({
+  allCards: cardsDatabase,
   myCards: myCards.cards,
   pathname: location.pathname
 })

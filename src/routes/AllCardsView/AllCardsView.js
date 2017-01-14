@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
+import { cardsDatabase } from 'database'
 import { CardsSearchList } from 'components'
 
 export class AllCardsView extends Component {
@@ -10,10 +11,7 @@ export class AllCardsView extends Component {
   }
 
   render () {
-    const {
-      allCards: { cards, filteredCards, error },
-      children
-    } = this.props
+    const { allCards: { filteredCards, error }, children } = this.props
 
     const errorBox = (
       <div className="alert alert-danger">
@@ -28,7 +26,7 @@ export class AllCardsView extends Component {
         {error && errorBox}
         <CardsSearchList
           path="all-cards"
-          cards={_.slice(filteredCards || cards, 0, 30)}
+          cards={_.slice(filteredCards || cardsDatabase, 0, 30)}
         />
       </div>
     )

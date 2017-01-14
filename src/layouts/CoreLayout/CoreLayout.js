@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import Measure from 'react-measure'
+import { cardsDatabase } from 'database'
 import { saveHeaderHeight } from 'store/layout'
 import { restoreMyCards } from 'store/myCards'
 import { loginSuccess } from 'store/user'
@@ -38,9 +39,9 @@ export class CoreLayout extends Component {
 
   componentWillReceiveProps (nextProps) {
     // If we've received cards database...
-    if (nextProps.allCards.cards.length && !this.props.allCards.cards.length) {
+    if (this.props.allCards.fetching && !nextProps.allCards.fetching) {
       // Get collection from Local Storage
-      const restoredCollection = loadLocalStorage(nextProps.allCards.cards)
+      const restoredCollection = loadLocalStorage(cardsDatabase)
       // Save it to the store
       this.props.restoreMyCards(restoredCollection)
     }

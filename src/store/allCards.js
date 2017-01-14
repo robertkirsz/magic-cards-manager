@@ -2,6 +2,7 @@ import _ from 'lodash'
 import moment from 'moment'
 import { fetchAllSets } from 'api'
 import { Card } from 'classes'
+import { saveCardsDatabase } from 'database'
 
 // TODO: Sort all cards by name perhaps?
 
@@ -11,7 +12,7 @@ import { Card } from 'classes'
 export const ALL_CARDS_REQUEST = 'ALL_CARDS_REQUEST'
 export const ALL_CARDS_SUCCESS = 'ALL_CARDS_SUCCESS'
 export const ALL_CARDS_ERROR   = 'ALL_CARDS_ERROR'
-export const FILTER_ALL_CARDS      = 'FILTER_ALL_CARDS'
+export const FILTER_ALL_CARDS  = 'FILTER_ALL_CARDS'
 
 // ------------------------------------
 // Actions
@@ -33,8 +34,8 @@ export const getCards = () => {
         // Otherwise return response in JSON format
         return response.json()
       })
-      .then((allSets) => dispatch(responseSuccess(allSets))) // Get the response and return all Magic sets
-      .catch((error) => dispatch(responseError(error))) // Catch any errors
+      .then(allSets => dispatch(responseSuccess(allSets))) // Get the response and return all Magic sets
+      .catch(error => dispatch(responseError(error))) // Catch any errors
   }
 }
 export const filterAllCards = cards => ({ type: FILTER_ALL_CARDS, cards })
@@ -87,11 +88,12 @@ const ACTION_HANDLERS = {
     // Remove tokens
     arrayOfCards = _.reject(arrayOfCards, { layout: 'token' })
 
+    saveCardsDatabase(arrayOfCards)
+
     return {
       ...state,
       fetching: false,
       error: null,
-      cards: arrayOfCards,
       cardsNumber: arrayOfCards.length,
       latestSet
     }
@@ -108,7 +110,6 @@ const ACTION_HANDLERS = {
 const initialState = {
   fetching: false,
   error: null,
-  cards: [],
   cardsNumber: 0,
   latestSet: {},
   filteredCards: null

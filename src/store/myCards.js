@@ -106,7 +106,7 @@ const ACTION_HANDLERS = {
     // Copy card collection from store
     let cardsCollection = [...state.cards]
     // Make copies of both main card and its chosen variant
-    let cardCopy = _.find(cardsCollection, { id: card.id }).copy()
+    const cardCopy = _.find(cardsCollection, { id: card.id }).copy()
     const variantCopy = _.find(cardCopy.variants, { id: variant.id }).copy()
     // Find their respective indexes
     const cardIndex = _.findIndex(cardsCollection, cardFromCollection => cardFromCollection.id === cardCopy.id)

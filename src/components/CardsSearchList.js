@@ -1,10 +1,10 @@
-import React, { PropTypes } from 'react'
+import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { Card } from 'components'
 import _ from 'lodash'
 
-class CardsSearchList extends React.Component {
+class CardsSearchList extends Component {
   render () {
     return (
       <div className="cards-search-list" style={{ marginTop: this.props.headerHeight + 20 }}>

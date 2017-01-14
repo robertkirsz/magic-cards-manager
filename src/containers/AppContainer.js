@@ -5,8 +5,8 @@ import { getCards } from 'store/allCards'
 
 class AppContainer extends Component {
   static propTypes = {
-    routes : PropTypes.object.isRequired,
-    store  : PropTypes.object.isRequired
+    routes: PropTypes.object.isRequired,
+    store: PropTypes.object.isRequired
   }
 
   componentWillMount () {

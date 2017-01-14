@@ -3,6 +3,7 @@ import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 import { Card } from 'components'
+import { cardsDatabase } from 'database'
 
 export class CardView extends Component {
   static propTypes = {
@@ -37,7 +38,7 @@ export class CardView extends Component {
 
     if (!card) return null
 
-    const isAllCardsPage = routes[1].path === 'all-cards'
+    // const isAllCardsPage = routes[1].path === 'all-cards'
     const isMyCardsPage = routes[1].path === 'my-cards'
 
     return (
@@ -72,7 +73,7 @@ const mapStateToProps = ({ allCards, myCards }, ownProps) => ({
   card: _.find(
     ownProps.routes[1].path === 'my-cards'
       ? myCards.cards
-      : allCards.cards,
+      : cardsDatabase,
     { cardUrl: ownProps.routeParams.cardUrl }
   )
 })

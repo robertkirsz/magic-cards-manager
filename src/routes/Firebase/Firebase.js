@@ -3,14 +3,14 @@ import { connect } from 'react-redux'
 import { database } from 'utils/firebase'
 import ItemForm from './ItemForm'
 import _ from 'lodash'
+import { cardsDatabase } from 'database'
 
 const itemsRef = database.ref('items')
 const allCardsRef = database.ref('AllCards')
 
 export class Firebase extends Component {
   static propTypes = {
-    headerHeight: PropTypes.number,
-    allCards: PropTypes.object
+    headerHeight: PropTypes.number
   }
 
   constructor () {
@@ -66,7 +66,7 @@ export class Firebase extends Component {
   }
 
   uploadCards () {
-    const cards = this.props.allCards.cards.splice(0, 30)
+    const cards = cardsDatabase.splice(0, 30)
 
     _.forEach(cards, (card) => {
       allCardsRef
@@ -100,6 +100,9 @@ export class Firebase extends Component {
           <button onClick={this.getCards}>Get cards</button>
         </div>
         <div>
+          <button onClick={() => { console.log(cardsDatabase) }}>Get foo</button>
+        </div>
+        <div>
           <ul>
             {
               this.state.items.map(({ key, name }) => <li key={key}>{name}</li>)
@@ -111,6 +114,6 @@ export class Firebase extends Component {
   }
 }
 
-const mapStateToProps = ({ layout, allCards }) => ({ headerHeight: layout.headerHeight, allCards })
+const mapStateToProps = ({ layout }) => ({ headerHeight: layout.headerHeight })
 
 export default connect(mapStateToProps)(Firebase)
