@@ -2,14 +2,9 @@ import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { Card } from 'components'
-import cardHoverEffect from 'utils/cardHoverEffect'
 import _ from 'lodash'
 
 class CardsSearchList extends React.Component {
-  componentDidMount () {
-    cardHoverEffect()
-  }
-
   render () {
     return (
       <div className="cards-search-list" style={{ marginTop: this.props.headerHeight + 20 }}>
