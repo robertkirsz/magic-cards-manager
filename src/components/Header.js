@@ -40,7 +40,7 @@ export const Header = ({ user, signOut, openModal }) => {
         </a>
       </li>
       <li role="presentation">
-        <a data-toggle="modal" data-target="#SignUpModal">
+        <a onClick={() => openModal('signUp')}>
           Sign Up
         </a>
       </li>

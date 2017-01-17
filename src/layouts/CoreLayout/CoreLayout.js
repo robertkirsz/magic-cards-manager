@@ -45,6 +45,7 @@ export class CoreLayout extends Component {
     auth.onAuthStateChanged(firebaseUser => {
       const { signingUp, signedIn } = this.props.user
       console.warn('onAuthStateChanged', firebaseUser)
+
       if (firebaseUser) {
         const userData = {
           name: firebaseUser.displayName,

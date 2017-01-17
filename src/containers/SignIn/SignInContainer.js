@@ -4,15 +4,13 @@ import SignInModal from './SignInModal'
 import { signIn, clearErrors } from 'store/user'
 import { closeModal } from 'store/layout'
 
-// const $ = window.$
-
-const mapStateToProps = ({ layout }) => ({ modal: layout.modal })
+const mapStateToProps = ({ layout }) => ({ modalName: layout.modal.name })
 
 const mapDispatchToProps = { signIn, clearErrors, closeModal }
 
 class SignInContainer extends Component {
   static propTypes = {
-    modal: PropTypes.object.isRequired,
+    modalName: PropTypes.string.isRequired,
     closeModal: PropTypes.func.isRequired,
     signIn: PropTypes.func.isRequired,
     clearErrors: PropTypes.func.isRequired
@@ -47,7 +45,7 @@ class SignInContainer extends Component {
   render () {
     return (
       <SignInModal
-        show={this.props.modal.name === 'signIn'}
+        show={this.props.modalName === 'signIn'}
         onHide={this.props.closeModal}
         formData={this.state}
         onChange={this.updateForm}

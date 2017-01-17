@@ -29,7 +29,7 @@ const SignInModal = ({
         <Modal.Title>Sign in</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <form onSubmit={onSubmit}>
+        <form onSubmit={onSubmit} id="signInForm">
           <div className="form-group">
             <input
               type="email"
@@ -52,19 +52,19 @@ const SignInModal = ({
               onChange={e => onChange('password', e.target.value)}
             />
           </div>
-          { errorMessage && <p className="text-danger">{errorMessage}</p>}
-          <div className="buttons">
-            <button type="submit" className="btn btn-default">
-              {
-                signingIn
-                  ? <span className="fa fa-circle-o-notch fa-spin" />
-                  : 'Sign in'
-              }
-            </button>
-            <button className="btn btn-default" onClick={signInWithGoogle}>{googleIcon}</button>
-            <button className="btn btn-default" onClick={signInWithFacebook}>{facebookIcon}</button>
-          </div>
         </form>
+        { errorMessage && <p className="text-danger">{errorMessage}</p>}
+        <div className="buttons">
+          <button type="submit" form="signInForm" className="btn btn-default">
+            {
+              signingIn
+                ? <span className="fa fa-circle-o-notch fa-spin" />
+                : 'Sign in'
+            }
+          </button>
+          <button className="btn btn-default" onClick={signInWithGoogle}>{googleIcon}</button>
+          <button className="btn btn-default" onClick={signInWithFacebook}>{facebookIcon}</button>
+        </div>
       </Modal.Body>
     </Modal>
   )
