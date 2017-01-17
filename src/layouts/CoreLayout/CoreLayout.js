@@ -4,11 +4,27 @@ import Measure from 'react-measure'
 import { cardsDatabase } from 'database'
 import { saveHeaderHeight } from 'store/layout'
 import { restoreMyCards } from 'store/myCards'
-import { loginSuccess } from 'store/user'
+import { signInSuccess, signUpSuccess, signOutSuccess } from 'store/user'
 import { loadLocalStorage } from 'utils'
 import { auth } from 'utils/firebase'
 import { Header, SearchModule, LoadingScreen } from 'components'
 import 'styles/core.scss'
+
+const $ = window.$
+
+const mapStateToProps = ({ layout, allCards, user }) => ({
+  headerHeight: layout.headerHeight,
+  allCards,
+  user
+})
+
+const mapDispatchToProps = {
+  saveHeaderHeight,
+  restoreMyCards,
+  signInSuccess,
+  signUpSuccess,
+  signOutSuccess
+}
 
 export class CoreLayout extends Component {
   static propTypes = {
@@ -17,22 +33,32 @@ export class CoreLayout extends Component {
     saveHeaderHeight: PropTypes.func,
     restoreMyCards: PropTypes.func,
     allCards: PropTypes.object,
-    loginSuccess: PropTypes.func
+    user: PropTypes.object,
+    signInSuccess: PropTypes.func,
+    signUpSuccess: PropTypes.func,
+    signOutSuccess: PropTypes.func
   }
 
   componentWillMount () {
     auth.onAuthStateChanged(firebaseUser => {
+      const { signingUp, signedIn } = this.props.user
       console.warn('onAuthStateChanged', firebaseUser)
       if (firebaseUser) {
-        console.warn('   we have user')
-        this.props.loginSuccess({
+        const userData = {
           name: firebaseUser.displayName,
           email: firebaseUser.email,
           picture: firebaseUser.photoURL
-        })
+        }
+
+        if (signingUp) {
+          $('#SignUpModal').modal('hide')
+          this.props.signUpSuccess(userData)
+        } else {
+          $('#SignInModal').modal('hide')
+          this.props.signInSuccess(userData)
+        }
       } else {
-        console.warn('   we DON\'T have user')
-        // this.setState({ showLogOutButton: false })
+        if (signedIn) this.props.signOutSuccess()
       }
     })
   }
@@ -67,11 +93,5 @@ export class CoreLayout extends Component {
       : app
   }
 }
-
-const mapStateToProps = ({ layout, allCards }) => ({
-  headerHeight: layout.headerHeight,
-  allCards
-})
-const mapDispatchToProps = { saveHeaderHeight, restoreMyCards, loginSuccess }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CoreLayout)

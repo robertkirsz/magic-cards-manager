@@ -4,7 +4,6 @@ import AllCardsView from 'routes/AllCardsView'
 import MyCardsView  from 'routes/MyCardsView'
 import CardView     from 'routes/CardView'
 import NotFound     from 'routes/NotFound/NotFound' // TODO: make index.js for that
-import LoginView    from 'routes/LoginView'
 import Firebase     from 'routes/Firebase'
 
 // TODO: add route names
@@ -14,7 +13,6 @@ export const createRoutes = (store) => ({
   component: CoreLayout,
   indexRoute: { component: HomeView },
   childRoutes: [
-    { path: 'login', component: LoginView },
     { path: 'firebase', component: Firebase },
     {
       path: 'all-cards',

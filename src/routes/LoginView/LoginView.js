@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { browserHistory } from 'react-router'
-import { auth, googleProvider, facebookProvider } from 'utils/firebase'
+import { auth } from 'utils/firebase'
 
 class LoginView extends Component {
   static propTypes = {
@@ -12,7 +12,6 @@ class LoginView extends Component {
 
     this.backgroundClick = this.backgroundClick.bind(this)
     this.updateForm = this.updateForm.bind(this)
-    this.signIn = this.signIn.bind(this)
     this.signUp = this.signUp.bind(this)
     this.signOut = this.signOut.bind(this)
 
@@ -24,7 +23,7 @@ class LoginView extends Component {
   }
 
   backgroundClick () {
-    // TODO: When you start on login page, there is nowhere to go back
+    // TODO: When you start on signIn page, there is nowhere to go back
     browserHistory.push(`/${this.props.routes[1].path}`)
   }
 
@@ -57,13 +56,6 @@ class LoginView extends Component {
     this.setState({ [field]: value })
   }
 
-  signIn () {
-    this.setState({ authError: '' })
-
-    auth.signInWithEmailAndPassword(this.state.email, this.state.password)
-      .catch(error => this.setState({ authError: error.message }))
-  }
-
   signUp () {
     this.setState({ authError: '' })
 
@@ -71,64 +63,10 @@ class LoginView extends Component {
       .catch(error => this.setState({ authError: error.message }))
   }
 
-  signInGoogle () {
-    auth.signInWithPopup(googleProvider).then((result) => {
-      console.warn('signInWithPopup', result)
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      const token = result.credential.accessToken
-      // The signed-in user info.
-      const user = result.user
-      console.warn('token', token, 'user', user)
-      // ...
-    }).catch((error) => {
-      // Handle Errors here.
-      const errorCode = error.code
-      const errorMessage = error.message
-      // The email of the user's account used.
-      const email = error.email
-      // The firebase.auth.AuthCredential type that was used.
-      const credential = error.credential
-      // ...
-      console.warn('ERROR', 'errorCode', errorCode, 'errorMessage', errorMessage, 'email', email, 'credential', credential) // eslint-disable-line
-    })
-  }
-
-  signInFacebook () {
-    auth.signInWithPopup(facebookProvider).then((result) => {
-      // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-      const token = result.credential.accessToken
-      // The signed-in user info.
-      const user = result.user
-      // ...
-      console.warn('token', token, 'user', user)
-    }).catch((error) => {
-      // Handle Errors here.
-      const errorCode = error.code
-      const errorMessage = error.message
-      // The email of the user's account used.
-      const email = error.email
-      // The firebase.auth.AuthCredential type that was used.
-      const credential = error.credential
-      // ...
-      console.warn('ERROR', 'errorCode', errorCode, 'errorMessage', errorMessage, 'email', email, 'credential', credential) // eslint-disable-line
-    })
-  }
-
-  // TODO: move to a different component (Header?)
-  signOut () {
-    auth.signOut().then(() => {
-      // Sign-out successful.
-      console.warn('Logged out')
-    }, (error) => {
-      // An error happened.
-      console.warn('Logou error', error)
-    })
-  }
-
   // TODO: make a separate modal Component that others can extend
   render () {
     return (
-      <div className="login-view" onClick={this.backgroundClick}>
+      <div className="signIn-view" onClick={this.backgroundClick}>
         <div className="content" onClick={e => e.stopPropagation()}>
           <h5>Login</h5>
           <input
@@ -144,7 +82,6 @@ class LoginView extends Component {
             onChange={e => { this.updateForm('password', e.target.value) }}
           />
           <div>
-            <button onClick={this.signIn}>Log in</button>
             <button onClick={this.signUp}>Sign up</button>
             <button onClick={this.signInGoogle}>Log in with Google</button>
             <button onClick={this.signInFacebook}>Log in with Facebook</button>
