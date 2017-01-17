@@ -1,4 +1,4 @@
-import { auth, googleProvider, facebookProvider } from 'utils/firebase'
+import { auth, database, googleProvider, facebookProvider } from 'utils/firebase'
 
 // ------------------------------------
 // Constants
@@ -93,7 +93,7 @@ export const signInSuccess = user => ({ type: SIGN_IN_SUCCESS, user })
 export const signInError   = errorMessage => ({ type: SIGN_IN_ERROR, errorMessage })
 
 export const signUp = (credentials) => {
-  return (dispatch, getState) => {
+  return async (dispatch, getState) => {
     // Return if request is pending
     if (getState().user.signingUp) return
     // Dispatch action so we can show spinner
@@ -101,8 +101,28 @@ export const signUp = (credentials) => {
 
     const { email, password } = credentials
 
-    auth.createUserWithEmailAndPassword(email, password)
+    const newUserId = await auth
+      .createUserWithEmailAndPassword(email, password)
+      .then(({ uid }) => uid)
       .catch(({ message }) => dispatch(signUpError(message)))
+
+    if (!newUserId) return
+
+    // TODO: move to a separate action
+    // Handle provider signUpError
+
+    const newUser = {
+      email,
+      id: newUserId,
+      createdOn: Date.now()
+    }
+
+    database.ref('Users')
+      .child(newUserId)
+      .set(newUser, (error) => {
+        if (error) console.error('Error ->', error)
+        else console.info('Data set')
+      })
   }
 }
 
