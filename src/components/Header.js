@@ -35,12 +35,12 @@ export const Header = ({ user, signOut, openModal }) => {
   const authenticationLinks = (
     <ul className="nav navbar-nav nav-pills navbar-right">
       <li role="presentation">
-        <a onClick={() => openModal('signIn')}>
+        <a onClick={() => openModal('sign in')}>
           Sign In
         </a>
       </li>
       <li role="presentation">
-        <a onClick={() => openModal('signUp')}>
+        <a onClick={() => openModal('sign up')}>
           Sign Up
         </a>
       </li>

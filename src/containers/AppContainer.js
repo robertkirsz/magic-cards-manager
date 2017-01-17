@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { browserHistory, Router } from 'react-router'
 import { Provider } from 'react-redux'
 import { getCards } from 'store/allCards'
-import { SignInContainer, SignUpContainer } from 'containers'
+import { AuthModal } from 'containers'
 
 class AppContainer extends Component {
   static propTypes = {
@@ -26,8 +26,7 @@ class AppContainer extends Component {
       <Provider store={store}>
         <div>
           <Router history={browserHistory} children={routes} />
-          <SignInContainer />
-          <SignUpContainer />
+          <AuthModal />
         </div>
       </Provider>
     )

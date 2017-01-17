@@ -1,7 +1,3 @@
-import SignInContainer from './SignIn/SignInContainer'
-import SignUpContainer from './SignUp/SignUpContainer'
+import AuthModal from './AuthModal'
 
-export {
-  SignInContainer,
-  SignUpContainer
-}
+export { AuthModal }
