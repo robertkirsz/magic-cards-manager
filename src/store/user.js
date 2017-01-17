@@ -27,7 +27,7 @@ export const signIn = (credentials) => {
     const { email, password } = credentials
 
     auth.signInWithEmailAndPassword(email, password)
-      .catch(({ message }) => dispatch(signInError(message)))
+      .catch(({ message }) => dispatch(showInUpError(message)))
   }
 }
 export const signInWithGoogle = () => {
@@ -55,7 +55,7 @@ export const signInWithGoogle = () => {
       const credential = error.credential
       // ...
       console.info('ERROR', 'errorCode', errorCode, 'errorMessage', errorMessage, 'email', email, 'credential', credential) // eslint-disable-line
-      dispatch(signInError(errorMessage))
+      dispatch(showInUpError(errorMessage))
     })
   }
 }
@@ -83,14 +83,14 @@ export const signInWithFacebook = () => {
       const credential = error.credential
       // ...
       console.info('ERROR', 'errorCode', errorCode, 'errorMessage', errorMessage, 'email', email, 'credential', credential) // eslint-disable-line
-      dispatch(signInError(errorMessage))
+      dispatch(showInUpError(errorMessage))
     })
   }
 }
 
 export const signInRequest = () => ({ type: SIGN_IN_REQUEST })
 export const signInSuccess = user => ({ type: SIGN_IN_SUCCESS, user })
-export const signInError   = errorMessage => ({ type: SIGN_IN_ERROR, errorMessage })
+export const showInUpError   = errorMessage => ({ type: SIGN_IN_ERROR, errorMessage })
 
 export const signUp = (credentials) => {
   return async (dispatch, getState) => {
@@ -104,12 +104,12 @@ export const signUp = (credentials) => {
     const newUserId = await auth
       .createUserWithEmailAndPassword(email, password)
       .then(({ uid }) => uid)
-      .catch(({ message }) => dispatch(signUpError(message)))
+      .catch(({ message }) => dispatch(showSignUpError(message)))
 
     if (!newUserId) return
 
     // TODO: move to a separate action
-    // Handle provider signUpError
+    // Handle provider showSignUpError
 
     const newUser = {
       email,
@@ -128,7 +128,7 @@ export const signUp = (credentials) => {
 
 export const signUpRequest = () => ({ type: SIGN_UP_REQUEST })
 export const signUpSuccess = user => ({ type: SIGN_UP_SUCCESS, user })
-export const signUpError   = errorMessage => ({ type: SIGN_UP_ERROR, errorMessage })
+export const showSignUpError   = errorMessage => ({ type: SIGN_UP_ERROR, errorMessage })
 
 export const signOut = () => {
   return (dispatch, getState) => {

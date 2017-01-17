@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Modal } from 'react-bootstrap'
-import { signIn, signUp, signInWithGoogle, signInWithFacebook, signUpError, clearErrors } from 'store/user'
+import { signIn, signUp, signInWithGoogle, signInWithFacebook, showSignUpError, clearErrors } from 'store/user'
 import { closeModal } from 'store/layout'
 import { googleIcon, facebookIcon } from 'svg'
 
@@ -10,7 +10,7 @@ const mapStateToProps = ({ user, layout }) => ({
   modalName: layout.modal.name
 })
 
-const mapDispatchToProps = { signIn, signUp, signInWithGoogle, signInWithFacebook, signUpError, clearErrors, closeModal }
+const mapDispatchToProps = { signIn, signUp, signInWithGoogle, signInWithFacebook, showSignUpError, clearErrors, closeModal }
 
 class AuthModal extends Component {
   static propTypes = {
@@ -20,7 +20,7 @@ class AuthModal extends Component {
     signUp: PropTypes.func.isRequired,
     signInWithGoogle: PropTypes.func.isRequired,
     signInWithFacebook: PropTypes.func.isRequired,
-    signUpError: PropTypes.func.isRequired,
+    showSignUpError: PropTypes.func.isRequired,
     closeModal: PropTypes.func.isRequired,
     clearErrors: PropTypes.func.isRequired
   }
@@ -44,7 +44,7 @@ class AuthModal extends Component {
 
   onExited () {
     this.setState(this.initialState)
-    this.props.clearErrors()
+    if (this.props.user.errorMessage) this.props.clearErrors()
   }
 
   updateForm (property, value) {
@@ -54,7 +54,7 @@ class AuthModal extends Component {
   validateForm (formData = this.state) {
     // TODO: check if it works with autofill
     if (formData.password !== formData.repeatedPassword) {
-      this.props.signUpError('Passwords don\'t match')
+      this.props.showSignUpError('Passwords don\'t match')
       return false
     }
 
