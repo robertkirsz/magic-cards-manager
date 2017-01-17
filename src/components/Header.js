@@ -1,18 +1,76 @@
-import React from 'react'
-import { IndexLink, Link } from 'react-router'
-import { LatestSet, UserBadge } from 'components'
+import React, { PropTypes } from 'react'
+import { connect } from 'react-redux'
+import { Link } from 'react-router'
+import { UserBadge } from 'components'
+import { signOut } from 'store/user'
 
-export const Header = () => (
-  <header className="main-header">
-    <nav className="route-navigation">
-      <IndexLink to="/" className="nav-link" activeClassName="active">Home</IndexLink>
-      <Link to="/all-cards" className="nav-link" activeClassName="active">All cards</Link>
-      <Link to="/my-cards" className="nav-link" activeClassName="active">My cards</Link>
-      <Link to="/login" className="nav-link" activeClassName="active">Login</Link>
+const mapStateToProps = ({ user }) => ({ user })
+
+const mapDispatchToProps = { signOut }
+
+export const Header = ({ user, signOut }) => {
+  const { loggedIn } = user
+
+  // Brand and toggle get grouped for better mobile display
+  const brandAndToggle = (
+    <div className="navbar-header">
+      <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span className="sr-only">Toggle navigation</span>
+        <span className="icon-bar" />
+        <span className="icon-bar" />
+        <span className="icon-bar" />
+      </button>
+      <a className="navbar-brand">Magic Cards Manager</a>
+    </div>
+  )
+
+  const navigationLinks = (
+    <ul className="route-navigation nav navbar-nav">
+      <li><Link to="all-cards" activeClassName="active">All cards</Link></li>
+      <li><Link to="my-cards" activeClassName="active">My cards</Link></li>
+    </ul>
+  )
+
+  const authenticationLinks = (
+    <ul className="nav navbar-nav nav-pills navbar-right">
+      <li role="presentation"><a data-toggle="modal" data-target="#SignInModal">Sign In</a></li>
+      <li role="presentation"><a data-toggle="modal" data-target="#SignUpModal">Sign Up</a></li>
+    </ul>
+  )
+
+  // Collect the nav links, forms, and other content for toggling
+  const userDropdown = (
+    <ul className="nav navbar-nav navbar-right">
+      <li className="dropdown">
+        <a className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+          <UserBadge />
+        </a>
+        <ul className="dropdown-menu">
+          <li><a>Profile</a></li>
+          <li><a>Settings</a></li>
+          <li role="separator" className="divider" />
+          <li><a onClick={signOut}>Log out</a></li>
+        </ul>
+      </li>
+    </ul>
+  )
+
+  return (
+    <nav id="MainHeader" className="navbar navbar-default">
+      <div className="container-fluid">
+        {brandAndToggle}
+        <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          {navigationLinks}
+          {loggedIn ? userDropdown : authenticationLinks}
+        </div>
+      </div>
     </nav>
-    <LatestSet />
-    <UserBadge />
-  </header>
-)
+  )
+}
 
-export default Header
+Header.propTypes = {
+  user: PropTypes.object.isRequired,
+  signOut: PropTypes.func.isRequired
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header)

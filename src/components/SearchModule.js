@@ -247,7 +247,7 @@ export class SearchModule extends Component {
           changeCmcType={this.handleChangeCmcType}
         />
         <div>
-          <button onClick={this.clearState}>Reset</button>
+          <button className="btn" onClick={this.clearState}>Reset</button>
         </div>
       </div>
     )
