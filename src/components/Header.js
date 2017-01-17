@@ -3,12 +3,13 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { UserBadge } from 'components'
 import { signOut } from 'store/user'
+import { openModal } from 'store/layout'
 
 const mapStateToProps = ({ user }) => ({ user })
 
-const mapDispatchToProps = { signOut }
+const mapDispatchToProps = { signOut, openModal }
 
-export const Header = ({ user, signOut }) => {
+export const Header = ({ user, signOut, openModal }) => {
   const { loggedIn } = user
 
   // Brand and toggle get grouped for better mobile display
@@ -33,8 +34,16 @@ export const Header = ({ user, signOut }) => {
 
   const authenticationLinks = (
     <ul className="nav navbar-nav nav-pills navbar-right">
-      <li role="presentation"><a data-toggle="modal" data-target="#SignInModal">Sign In</a></li>
-      <li role="presentation"><a data-toggle="modal" data-target="#SignUpModal">Sign Up</a></li>
+      <li role="presentation">
+        <a onClick={() => openModal('signIn')}>
+          Sign In
+        </a>
+      </li>
+      <li role="presentation">
+        <a data-toggle="modal" data-target="#SignUpModal">
+          Sign Up
+        </a>
+      </li>
     </ul>
   )
 
@@ -70,6 +79,7 @@ export const Header = ({ user, signOut }) => {
 
 Header.propTypes = {
   user: PropTypes.object.isRequired,
+  openModal: PropTypes.func.isRequired,
   signOut: PropTypes.func.isRequired
 }
 

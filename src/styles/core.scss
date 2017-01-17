@@ -281,8 +281,7 @@ $mainMargin: 30px;
   }
 }
 
-// Authentication modals
-#SignInModal, #SignUpModal {
+.authentication-modal {
   .buttons {
     @include flex();
     .btn {

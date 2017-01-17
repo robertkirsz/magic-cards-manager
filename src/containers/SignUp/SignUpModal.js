@@ -12,7 +12,7 @@ const SignUpModal = ({ formData, user, onChange, onSubmit, signInWithGoogle, sig
   const { signingUp, errorMessage } = user
 
   return (
-    <div className="modal fade" id="SignUpModal" tabIndex="-1" role="dialog" aria-labelledby="signUpModalLabel">
+    <div className="modal fade authentication-modal" id="SignUpModal" tabIndex="-1" role="dialog" aria-labelledby="signUpModalLabel">
       <div className="modal-dialog modal-sm" role="document">
         <div className="modal-content">
           <div className="modal-header">

@@ -2,18 +2,18 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import SignInModal from './SignInModal'
 import { signIn, clearErrors } from 'store/user'
+import { closeModal } from 'store/layout'
 
-const $ = window.$
+// const $ = window.$
 
-const mapStateToProps = () => ({})
+const mapStateToProps = ({ layout }) => ({ modal: layout.modal })
 
-const mapDispatchToProps = {
-  signIn,
-  clearErrors
-}
+const mapDispatchToProps = { signIn, clearErrors, closeModal }
 
 class SignInContainer extends Component {
   static propTypes = {
+    modal: PropTypes.object.isRequired,
+    closeModal: PropTypes.func.isRequired,
     signIn: PropTypes.func.isRequired,
     clearErrors: PropTypes.func.isRequired
   }
@@ -23,6 +23,7 @@ class SignInContainer extends Component {
 
     this.updateForm = this.updateForm.bind(this)
     this.submitForm = this.submitForm.bind(this)
+    this.onExited = this.onExited.bind(this)
 
     this.state = {
       email: '',
@@ -30,10 +31,8 @@ class SignInContainer extends Component {
     }
   }
 
-  componentDidMount () {
-    $('#SignInModal').on('hidden.bs.modal', () => {
-      this.props.clearErrors()
-    })
+  onExited () {
+    this.props.clearErrors()
   }
 
   updateForm (property, value) {
@@ -48,9 +47,12 @@ class SignInContainer extends Component {
   render () {
     return (
       <SignInModal
+        show={this.props.modal.name === 'signIn'}
+        onHide={this.props.closeModal}
         formData={this.state}
         onChange={this.updateForm}
         onSubmit={this.submitForm}
+        onExited={this.onExited}
       />
     )
   }

@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import Measure from 'react-measure'
 import { cardsDatabase } from 'database'
-import { saveHeaderHeight } from 'store/layout'
+import { saveHeaderHeight, closeModal } from 'store/layout'
 import { restoreMyCards } from 'store/myCards'
 import { signInSuccess, signUpSuccess, signOutSuccess } from 'store/user'
 import { loadLocalStorage } from 'utils'
@@ -10,9 +10,8 @@ import { auth } from 'utils/firebase'
 import { Header, SearchModule, LoadingScreen } from 'components'
 import 'styles/core.scss'
 
-const $ = window.$
-
 const mapStateToProps = ({ layout, allCards, user }) => ({
+  modalOpened: layout.modal.name !== '',
   headerHeight: layout.headerHeight,
   allCards,
   user
@@ -23,7 +22,8 @@ const mapDispatchToProps = {
   restoreMyCards,
   signInSuccess,
   signUpSuccess,
-  signOutSuccess
+  signOutSuccess,
+  closeModal
 }
 
 export class CoreLayout extends Component {
@@ -34,9 +34,11 @@ export class CoreLayout extends Component {
     restoreMyCards: PropTypes.func,
     allCards: PropTypes.object,
     user: PropTypes.object,
+    modalOpened: PropTypes.bool,
     signInSuccess: PropTypes.func,
     signUpSuccess: PropTypes.func,
-    signOutSuccess: PropTypes.func
+    signOutSuccess: PropTypes.func,
+    closeModal: PropTypes.func
   }
 
   componentWillMount () {
@@ -51,11 +53,11 @@ export class CoreLayout extends Component {
         }
 
         if (signingUp) {
-          $('#SignUpModal').modal('hide')
           this.props.signUpSuccess(userData)
+          if (this.props.modalOpened) this.props.closeModal()
         } else {
-          $('#SignInModal').modal('hide')
           this.props.signInSuccess(userData)
+          if (this.props.modalOpened) this.props.closeModal()
         }
       } else {
         if (signedIn) this.props.signOutSuccess()
