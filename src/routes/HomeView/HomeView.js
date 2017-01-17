@@ -8,7 +8,7 @@ export class HomeView extends Component {
 
   render () {
     return (
-      <div style={{ fontSize: '0.75em', marginTop: this.props.headerHeight + 20 }}>
+      <div style={{ marginTop: this.props.headerHeight + 20 }}>
         <h1>Home</h1>
       </div>
     )
