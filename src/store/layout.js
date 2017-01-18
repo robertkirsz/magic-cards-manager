@@ -17,7 +17,7 @@ export const closeModal = () => ({ type: CLOSE_MODAL })
 // ------------------------------------
 const ACTION_HANDLERS = {
   [SAVE_HEADER_HEIGHT]: (state, { headerHeight }) => ({ ...state, headerHeight }),
-  [OPEN_MODAL]: (state, { name, props }) => ({ ...state, modal: { name, props } }),
+  [OPEN_MODAL]: (state, { name, props = {} }) => ({ ...state, modal: { name, props } }),
   [CLOSE_MODAL]: state => ({ ...state, modal: { name: '', props: {} } })
 }
 

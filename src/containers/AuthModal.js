@@ -76,7 +76,7 @@ class AuthModal extends Component {
     const { email, password, repeatedPassword } = this.state
 
     const showModal = modalName === 'sign in' || modalName === 'sign up'
-    const disableAutocmplete = modalName === 'sign up'
+    const disableAutocomplete = modalName === 'sign up'
 
     return (
       <Modal
@@ -96,7 +96,7 @@ class AuthModal extends Component {
             <div className="form-group">
               <input
                 type="email"
-                name={disableAutocmplete ? Date.now().toString() : 'email'}
+                name={disableAutocomplete ? Date.now().toString() : 'email'}
                 className="form-control"
                 id="emailInput"
                 placeholder="Email"
@@ -108,7 +108,7 @@ class AuthModal extends Component {
             <div className="form-group">
               <input
                 type="password"
-                name={disableAutocmplete ? Date.now().toString() : 'password'}
+                name={disableAutocomplete ? Date.now().toString() : 'password'}
                 className="form-control"
                 id="passwordInput"
                 placeholder="Password"
@@ -122,7 +122,7 @@ class AuthModal extends Component {
                 <div className="form-group">
                   <input
                     type="password"
-                    name={disableAutocmplete ? Date.now().toString() : 'repeatedPassword'}
+                    name={disableAutocomplete ? Date.now().toString() : 'repeatedPassword'}
                     className="form-control"
                     id="repeatedPasswordInput"
                     placeholder="Repeat password"
