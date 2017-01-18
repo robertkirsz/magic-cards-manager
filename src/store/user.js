@@ -4,20 +4,22 @@ import { openModal } from 'store/layout'
 // ------------------------------------
 // Constants
 // ------------------------------------
-const SIGN_IN_REQUEST  = 'SIGN_IN_REQUEST'
-const SIGN_IN_SUCCESS  = 'SIGN_IN_SUCCESS'
-const SIGN_IN_ERROR    = 'SIGN_IN_ERROR'
-const SIGN_UP_REQUEST  = 'SIGN_UP_REQUEST'
-const SIGN_UP_SUCCESS  = 'SIGN_UP_SUCCESS'
-const SIGN_UP_ERROR    = 'SIGN_UP_ERROR'
-const SIGN_OUT_REQUEST = 'SIGN_OUT_REQUEST'
-const SIGN_OUT_SUCCESS = 'SIGN_OUT_SUCCESS'
-const SIGN_OUT_ERROR   = 'SIGN_OUT_ERROR'
-const CLEAR_ERRORS     = 'CLEAR_ERRORS'
+const SIGN_IN_REQUEST   = 'SIGN_IN_REQUEST'
+const SIGN_IN_SUCCESS   = 'SIGN_IN_SUCCESS'
+const SIGN_UP_REQUEST   = 'SIGN_UP_REQUEST'
+const SIGN_UP_SUCCESS   = 'SIGN_UP_SUCCESS'
+const SIGN_UP_ERROR     = 'SIGN_UP_ERROR'
+const SIGN_OUT_REQUEST  = 'SIGN_OUT_REQUEST'
+const SIGN_OUT_SUCCESS  = 'SIGN_OUT_SUCCESS'
+const SHOW_AUTH_ERROR   = 'SHOW_AUTH_ERROR'
+const CLEAR_AUTH_ERRORR = 'CLEAR_AUTH_ERRORR'
 
 // ------------------------------------
 // Actions
 // ------------------------------------
+
+// TODO: replace 'signInRequest' and 'signUpRequest' with 'authRequest'
+
 export const signIn = ({ email, password }) => {
   return async (dispatch, getState) => {
     // Return if request is pending
@@ -27,12 +29,11 @@ export const signIn = ({ email, password }) => {
     // Sign the user in in Firebase and get his ID or error
     const firebaseSignInResponse = await firebaseSignIn(email, password)
     // If we got error, display it and return
-    if (firebaseSignInResponse.error) dispatch(showSignInError(firebaseSignInResponse.error))
+    if (firebaseSignInResponse.error) dispatch(showAuthError(firebaseSignInResponse.error))
   }
 }
 export const signInRequest = () => ({ type: SIGN_IN_REQUEST })
 export const signInSuccess = user => ({ type: SIGN_IN_SUCCESS, user })
-export const showSignInError = errorMessage => ({ type: SIGN_IN_ERROR, errorMessage })
 
 export const signUp = ({ email, password }) => {
   return async (dispatch, getState) => {
@@ -44,7 +45,7 @@ export const signUp = ({ email, password }) => {
     const firebaseSignUpResponse = await firebaseSignUp(email, password)
     // If we got error, display it and return
     if (firebaseSignUpResponse.error) {
-      dispatch(showSignUpError(firebaseSignUpResponse.error))
+      dispatch(showAuthError(firebaseSignUpResponse.error))
       return
     }
     // If we got ID, gather user's data and save it in Firebase
@@ -59,7 +60,6 @@ export const signUp = ({ email, password }) => {
 }
 export const signUpRequest = () => ({ type: SIGN_UP_REQUEST })
 export const signUpSuccess = user => ({ type: SIGN_UP_SUCCESS, user })
-export const showSignUpError = errorMessage => ({ type: SIGN_UP_ERROR, errorMessage })
 
 export const signOut = () => {
   return (dispatch, getState) => {
@@ -70,13 +70,12 @@ export const signOut = () => {
     auth.signOut().then(() => {
       dispatch(signOutSuccess())
     }, (error) => {
-      dispatch(signOutError(error))
+      dispatch(showAuthError(error))
     })
   }
 }
 export const signOutRequest = () => ({ type: SIGN_OUT_REQUEST })
 export const signOutSuccess = () => ({ type: SIGN_OUT_SUCCESS })
-export const signOutError = errorMessage => ({ type: SIGN_OUT_ERROR, errorMessage })
 
 export const signInWithGoogle = () => {
   return (dispatch, getState) => {
@@ -85,7 +84,7 @@ export const signInWithGoogle = () => {
     // Dispatch action so we can show spinner
     dispatch(signInRequest())
     // Sign in with Google
-    googleSignIn().catch(error => dispatch(showSignInError(error)))
+    googleSignIn().catch(error => dispatch(showAuthError(error)))
   }
 }
 export const signInWithFacebook = () => {
@@ -112,27 +111,27 @@ export const signInWithFacebook = () => {
       const credential = error.credential
       // ...
       console.info('ERROR', 'errorCode', errorCode, 'errorMessage', errorMessage, 'email', email, 'credential', credential) // eslint-disable-line
-      dispatch(showSignInError(errorMessage))
+      dispatch(showAuthError(errorMessage))
     })
   }
 }
 
-export const clearErrors = () => ({ type: CLEAR_ERRORS })
+export const showAuthError = errorMessage => ({ type: SHOW_AUTH_ERROR, errorMessage })
+export const clearErrors = () => ({ type: CLEAR_AUTH_ERRORR })
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [SIGN_IN_REQUEST]:  state => ({ ...state, signingIn: true, errorMessage: null }),
-  [SIGN_IN_SUCCESS]:  (state, { user }) => ({ ...state, ...user, signingIn: false, loggedIn: true }),
-  [SIGN_IN_ERROR]:    (state, { errorMessage }) => ({ ...state, signingIn: false, errorMessage }),
+  [SIGN_IN_REQUEST]: state => ({ ...state, signingIn: true, errorMessage: null }),
+  [SIGN_IN_SUCCESS]: (state, { user }) => ({ ...state, ...user, signingIn: false, loggedIn: true }),
   [SIGN_OUT_REQUEST]: state => ({ ...state, signingOut: true, errorMessage: null }),
   [SIGN_OUT_SUCCESS]: (state, { user }) => ({ ...state, ...user, signingOut: false, loggedIn: false }),
-  [SIGN_OUT_ERROR]:   (state, { errorMessage }) => ({ ...state, signingOut: false, errorMessage }),
-  [SIGN_UP_REQUEST]:  state => ({ ...state, signingUp: true, errorMessage: null }),
-  [SIGN_UP_SUCCESS]:  (state, { user }) => ({ ...state, ...user, signingUp: false, loggedIn: true }),
-  [SIGN_UP_ERROR]:    (state, { errorMessage }) => ({ ...state, signingUp: false, errorMessage }),
-  [CLEAR_ERRORS]:     state => ({ ...state, errorMessage: null })
+  [SIGN_UP_REQUEST]: state => ({ ...state, signingUp: true, errorMessage: null }),
+  [SIGN_UP_SUCCESS]: (state, { user }) => ({ ...state, ...user, signingUp: false, loggedIn: true }),
+  [SIGN_UP_ERROR]: (state, { errorMessage }) => ({ ...state, signingUp: false, errorMessage }),
+  [SHOW_AUTH_ERROR]: (state, { errorMessage }) => ({ ...state, signingIn: false, signingUp: false, signingOut: false, errorMessage }),
+  [CLEAR_AUTH_ERRORR]: state => ({ ...state, errorMessage: null })
 }
 
 // ------------------------------------
