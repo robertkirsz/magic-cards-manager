@@ -1,4 +1,5 @@
-import { auth, database, googleProvider, facebookProvider } from 'utils/firebase'
+import { auth, googleSignIn, signUpUser, facebookProvider, setUserData } from 'utils/firebase'
+import { openModal } from 'store/layout'
 
 // ------------------------------------
 // Constants
@@ -17,15 +18,12 @@ const CLEAR_ERRORS     = 'CLEAR_ERRORS'
 // ------------------------------------
 // Actions
 // ------------------------------------
-export const signIn = (credentials) => {
+export const signIn = ({ email, password }) => {
   return (dispatch, getState) => {
     // Return if request is pending
     if (getState().user.signingIn) return
     // Dispatch action so we can show spinner
     dispatch(signInRequest())
-
-    const { email, password } = credentials
-
     auth.signInWithEmailAndPassword(email, password)
       .catch(({ message }) => dispatch(showInUpError(message)))
   }
@@ -36,27 +34,8 @@ export const signInWithGoogle = () => {
     if (getState().user.signingIn) return
     // Dispatch action so we can show spinner
     dispatch(signInRequest())
-
-    auth.signInWithPopup(googleProvider).then((result) => {
-      console.info('signInWithPopup', result)
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      const token = result.credential.accessToken
-      // The signed-in user info.
-      const user = result.user
-      console.info('token', token, 'user', user)
-      // ...
-    }).catch((error) => {
-      // Handle Errors here.
-      const errorCode = error.code
-      const errorMessage = error.message
-      // The email of the user's account used.
-      const email = error.email
-      // The firebase.auth.AuthCredential type that was used.
-      const credential = error.credential
-      // ...
-      console.info('ERROR', 'errorCode', errorCode, 'errorMessage', errorMessage, 'email', email, 'credential', credential) // eslint-disable-line
-      dispatch(showInUpError(errorMessage))
-    })
+    // Sign in with Google
+    googleSignIn().catch(error => dispatch(showInUpError(error)))
   }
 }
 export const signInWithFacebook = () => {
@@ -92,37 +71,28 @@ export const signInRequest = () => ({ type: SIGN_IN_REQUEST })
 export const signInSuccess = user => ({ type: SIGN_IN_SUCCESS, user })
 export const showInUpError   = errorMessage => ({ type: SIGN_IN_ERROR, errorMessage })
 
-export const signUp = (credentials) => {
+export const signUp = ({ email, password }) => {
   return async (dispatch, getState) => {
     // Return if request is pending
     if (getState().user.signingUp) return
     // Dispatch action so we can show spinner
     dispatch(signUpRequest())
-
-    const { email, password } = credentials
-
-    const newUserId = await auth
-      .createUserWithEmailAndPassword(email, password)
-      .then(({ uid }) => uid)
-      .catch(({ message }) => dispatch(showSignUpError(message)))
-
-    if (!newUserId) return
-
-    // TODO: move to a separate action
-    // Handle provider showSignUpError
-
-    const newUser = {
-      email,
-      id: newUserId,
-      createdOn: Date.now()
+    // Sign the user up in Firebase and get his ID or error
+    const signUpUserResponse = await signUpUser(email, password)
+    // If we got error, display it and return
+    if (signUpUserResponse.error) {
+      dispatch(showSignUpError(signUpUserResponse.error))
+      return
     }
-
-    database.ref('Users')
-      .child(newUserId)
-      .set(newUser, (error) => {
-        if (error) console.error('Error ->', error)
-        else console.info('Data set')
-      })
+    // If we got ID, gather user's data and save it in Firebase
+    const setUserDataResponse = await setUserData({ id: signUpUserResponse.id, email, createdOn: Date.now() })
+    // If we got error back, display it on page
+    console.warn('setUserDataResponse', setUserDataResponse)
+    if (setUserDataResponse.error) {
+      dispatch(openModal('error', {
+        message: `Your account has been created, but there was a problem with saving your data in the database. This is what we know:  ${setUserDataResponse.error}`
+      }))
+    }
   }
 }
 
