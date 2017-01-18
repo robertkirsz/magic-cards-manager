@@ -1,3 +1,4 @@
 import AuthModal from './AuthModal'
+import ErrorModal from './ErrorModal'
 
-export { AuthModal }
+export { AuthModal, ErrorModal }
