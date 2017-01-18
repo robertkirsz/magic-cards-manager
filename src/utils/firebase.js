@@ -16,10 +16,17 @@ export const facebookProvider = new firebase.auth.FacebookAuthProvider()
 export const twitterProvider  = new firebase.auth.TwitterAuthProvider()
 export const gitHubProvider   = new firebase.auth.GithubAuthProvider()
 
-export const signUpUser = (email, password) => (
+export const firebaseSignIn = (email, password) => (
+  auth
+    .signInWithEmailAndPassword(email, password)
+    .then(response => ({ success: true, id: response.uid, response }))
+    .catch(response => ({ error: response.message, response }))
+)
+
+export const firebaseSignUp = (email, password) => (
   auth
     .createUserWithEmailAndPassword(email, password)
-    .then(response => ({ id: response.uid }))
+    .then(response => ({ success: true, id: response.uid }))
     .catch(response => ({ error: response.message }))
 )
 

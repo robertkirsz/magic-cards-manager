@@ -1,4 +1,4 @@
-import { auth, googleSignIn, signUpUser, facebookProvider, setUserData } from 'utils/firebase'
+import { auth, firebaseSignIn, firebaseSignUp, googleSignIn, facebookProvider, setUserData } from 'utils/firebase'
 import { openModal } from 'store/layout'
 
 // ------------------------------------
@@ -19,15 +19,65 @@ const CLEAR_ERRORS     = 'CLEAR_ERRORS'
 // Actions
 // ------------------------------------
 export const signIn = ({ email, password }) => {
-  return (dispatch, getState) => {
+  return async (dispatch, getState) => {
     // Return if request is pending
     if (getState().user.signingIn) return
     // Dispatch action so we can show spinner
     dispatch(signInRequest())
-    auth.signInWithEmailAndPassword(email, password)
-      .catch(({ message }) => dispatch(showInUpError(message)))
+    // Sign the user in in Firebase and get his ID or error
+    const firebaseSignInResponse = await firebaseSignIn(email, password)
+    // If we got error, display it and return
+    if (firebaseSignInResponse.error) dispatch(showSignInError(firebaseSignInResponse.error))
   }
 }
+export const signInRequest = () => ({ type: SIGN_IN_REQUEST })
+export const signInSuccess = user => ({ type: SIGN_IN_SUCCESS, user })
+export const showSignInError = errorMessage => ({ type: SIGN_IN_ERROR, errorMessage })
+
+export const signUp = ({ email, password }) => {
+  return async (dispatch, getState) => {
+    // Return if request is pending
+    if (getState().user.signingUp) return
+    // Dispatch action so we can show spinner
+    dispatch(signUpRequest())
+    // Sign the user up in Firebase and get his ID or error
+    const firebaseSignUpResponse = await firebaseSignUp(email, password)
+    // If we got error, display it and return
+    if (firebaseSignUpResponse.error) {
+      dispatch(showSignUpError(firebaseSignUpResponse.error))
+      return
+    }
+    // If we got ID, gather user's data and save it in Firebase
+    const setUserDataResponse = await setUserData({ id: firebaseSignUpResponse.id, email, createdOn: Date.now() })
+    // If we got error back, display it on page
+    if (setUserDataResponse.error) {
+      dispatch(openModal('error', {
+        message: `Your account has been created, but there was a problem with saving your data in the database. This is what we know:  ${setUserDataResponse.error}`
+      }))
+    }
+  }
+}
+export const signUpRequest = () => ({ type: SIGN_UP_REQUEST })
+export const signUpSuccess = user => ({ type: SIGN_UP_SUCCESS, user })
+export const showSignUpError = errorMessage => ({ type: SIGN_UP_ERROR, errorMessage })
+
+export const signOut = () => {
+  return (dispatch, getState) => {
+    // Return if request is pending
+    if (getState().user.signingOut) return
+    // Dispatch action so we can show spinner
+    dispatch(signOutRequest())
+    auth.signOut().then(() => {
+      dispatch(signOutSuccess())
+    }, (error) => {
+      dispatch(signOutError(error))
+    })
+  }
+}
+export const signOutRequest = () => ({ type: SIGN_OUT_REQUEST })
+export const signOutSuccess = () => ({ type: SIGN_OUT_SUCCESS })
+export const signOutError = errorMessage => ({ type: SIGN_OUT_ERROR, errorMessage })
+
 export const signInWithGoogle = () => {
   return (dispatch, getState) => {
     // Return if request is pending
@@ -35,7 +85,7 @@ export const signInWithGoogle = () => {
     // Dispatch action so we can show spinner
     dispatch(signInRequest())
     // Sign in with Google
-    googleSignIn().catch(error => dispatch(showInUpError(error)))
+    googleSignIn().catch(error => dispatch(showSignInError(error)))
   }
 }
 export const signInWithFacebook = () => {
@@ -62,61 +112,10 @@ export const signInWithFacebook = () => {
       const credential = error.credential
       // ...
       console.info('ERROR', 'errorCode', errorCode, 'errorMessage', errorMessage, 'email', email, 'credential', credential) // eslint-disable-line
-      dispatch(showInUpError(errorMessage))
+      dispatch(showSignInError(errorMessage))
     })
   }
 }
-
-export const signInRequest = () => ({ type: SIGN_IN_REQUEST })
-export const signInSuccess = user => ({ type: SIGN_IN_SUCCESS, user })
-export const showInUpError   = errorMessage => ({ type: SIGN_IN_ERROR, errorMessage })
-
-export const signUp = ({ email, password }) => {
-  return async (dispatch, getState) => {
-    // Return if request is pending
-    if (getState().user.signingUp) return
-    // Dispatch action so we can show spinner
-    dispatch(signUpRequest())
-    // Sign the user up in Firebase and get his ID or error
-    const signUpUserResponse = await signUpUser(email, password)
-    // If we got error, display it and return
-    if (signUpUserResponse.error) {
-      dispatch(showSignUpError(signUpUserResponse.error))
-      return
-    }
-    // If we got ID, gather user's data and save it in Firebase
-    const setUserDataResponse = await setUserData({ id: signUpUserResponse.id, email, createdOn: Date.now() })
-    // If we got error back, display it on page
-    console.warn('setUserDataResponse', setUserDataResponse)
-    if (setUserDataResponse.error) {
-      dispatch(openModal('error', {
-        message: `Your account has been created, but there was a problem with saving your data in the database. This is what we know:  ${setUserDataResponse.error}`
-      }))
-    }
-  }
-}
-
-export const signUpRequest = () => ({ type: SIGN_UP_REQUEST })
-export const signUpSuccess = user => ({ type: SIGN_UP_SUCCESS, user })
-export const showSignUpError   = errorMessage => ({ type: SIGN_UP_ERROR, errorMessage })
-
-export const signOut = () => {
-  return (dispatch, getState) => {
-    // Return if request is pending
-    if (getState().user.signingOut) return
-    // Dispatch action so we can show spinner
-    dispatch(signOutRequest())
-    auth.signOut().then(() => {
-      dispatch(signOutSuccess())
-    }, (error) => {
-      dispatch(signOutError(error))
-    })
-  }
-}
-
-export const signOutRequest = () => ({ type: SIGN_OUT_REQUEST })
-export const signOutSuccess = () => ({ type: SIGN_OUT_SUCCESS })
-export const signOutError   = errorMessage => ({ type: SIGN_OUT_ERROR, errorMessage })
 
 export const clearErrors = () => ({ type: CLEAR_ERRORS })
 
