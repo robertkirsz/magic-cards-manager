@@ -3,8 +3,11 @@ import { connect } from 'react-redux'
 import _ from 'lodash'
 import { CardsSearchList } from 'components'
 
+const mapStateToProps = ({ user, myCards }) => ({ user, myCards })
+
 export class MyCardsView extends Component {
   static propTypes = {
+    user: PropTypes.object,
     myCards: PropTypes.object,
     children: PropTypes.element
   }
@@ -12,8 +15,17 @@ export class MyCardsView extends Component {
   render () {
     const {
       myCards: { cards, filteredCards },
-      children
+      children,
+      user
     } = this.props
+
+    if (!user.loggedIn) {
+      return (
+        <div style={{ marginTop: '25vh' }}>
+          <h1>Log in to be able to save your collection</h1>
+        </div>
+      )
+    }
 
     return (
       <div className="all-cards-view">
@@ -26,7 +38,5 @@ export class MyCardsView extends Component {
     )
   }
 }
-
-const mapStateToProps = ({ myCards }) => ({ myCards })
 
 export default connect(mapStateToProps)(MyCardsView)

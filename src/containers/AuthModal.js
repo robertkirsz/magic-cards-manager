@@ -1,16 +1,16 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Modal } from 'react-bootstrap'
-import { signIn, signUp, signInWithGoogle, signInWithFacebook, showSignUpError, clearErrors } from 'store/user'
+import { signIn, signUp, signInWithProvider, showAuthError, clearErrors } from 'store/user'
 import { closeModal } from 'store/layout'
-import { googleIcon, facebookIcon } from 'svg'
+import { googleIcon, facebookIcon, twitterIcon, githubIcon } from 'svg'
 
 const mapStateToProps = ({ user, layout }) => ({
   user,
   modalName: layout.modal.name
 })
 
-const mapDispatchToProps = { signIn, signUp, signInWithGoogle, signInWithFacebook, showSignUpError, clearErrors, closeModal }
+const mapDispatchToProps = { signIn, signUp, signInWithProvider, showAuthError, clearErrors, closeModal }
 
 class AuthModal extends Component {
   static propTypes = {
@@ -18,9 +18,8 @@ class AuthModal extends Component {
     user: PropTypes.object.isRequired,
     signIn: PropTypes.func.isRequired,
     signUp: PropTypes.func.isRequired,
-    signInWithGoogle: PropTypes.func.isRequired,
-    signInWithFacebook: PropTypes.func.isRequired,
-    showSignUpError: PropTypes.func.isRequired,
+    signInWithProvider: PropTypes.func.isRequired,
+    showAuthError: PropTypes.func.isRequired,
     closeModal: PropTypes.func.isRequired,
     clearErrors: PropTypes.func.isRequired
   }
@@ -54,7 +53,7 @@ class AuthModal extends Component {
   validateForm (formData = this.state) {
     // TODO: check if it works with autofill
     if (formData.password !== formData.repeatedPassword) {
-      this.props.showSignUpError('Passwords don\'t match')
+      this.props.showAuthError('Passwords don\'t match')
       return false
     }
 
@@ -71,7 +70,7 @@ class AuthModal extends Component {
   }
 
   render () {
-    const { modalName, user, signInWithGoogle, signInWithFacebook, closeModal } = this.props
+    const { modalName, user, signInWithProvider, closeModal } = this.props
     const { signingIn, signingUp, errorMessage } = user
     const { email, password, repeatedPassword } = this.state
 
@@ -133,7 +132,7 @@ class AuthModal extends Component {
                 </div>
             }
           </form>
-          { errorMessage && <p className="text-danger">{errorMessage}</p>}
+          {errorMessage && <p className="text-danger">{errorMessage}</p>}
           <div className="buttons">
             <button type="submit" form="authForm" className="btn btn-default">
               {
@@ -142,8 +141,10 @@ class AuthModal extends Component {
                   : modalName
               }
             </button>
-            <button className="btn btn-default" onClick={signInWithGoogle}>{googleIcon}</button>
-            <button className="btn btn-default" onClick={signInWithFacebook}>{facebookIcon}</button>
+            <button className="btn btn-default" onClick={() => signInWithProvider('google')}>{googleIcon}</button>
+            <button className="btn btn-default" onClick={() => signInWithProvider('facebook')}>{facebookIcon}</button>
+            <button className="btn btn-default" onClick={() => signInWithProvider('twitter')}>{twitterIcon}</button>
+            <button className="btn btn-default" onClick={() => signInWithProvider('github')}>{githubIcon}</button>
           </div>
         </Modal.Body>
       </Modal>
