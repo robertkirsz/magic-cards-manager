@@ -9,14 +9,14 @@ class UserBadge extends Component {
   }
 
   render () {
-    const { name, picture } = this.props.user
+    const { name, email, picture } = this.props.user
 
     return (
       <div className="user-badge">
         <div
           className="user-badge__picture"
           style={{ backgroundImage: `url(${picture})` }}
-          title={name}
+          title={name || email}
         />
       </div>
     )

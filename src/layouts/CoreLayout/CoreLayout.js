@@ -10,6 +10,8 @@ import { auth, firebaseGetData } from 'utils/firebase'
 import { Header, SearchModule, LoadingScreen } from 'components'
 import 'styles/core.scss'
 
+const debug = true
+
 const mapStateToProps = ({ layout, allCards, user }) => ({
   authModalOpened: layout.modal.name === 'sign in' || layout.modal.name === 'sign up',
   headerHeight: layout.headerHeight,
@@ -39,6 +41,12 @@ export class CoreLayout extends Component {
     closeModal: PropTypes.func
   }
 
+  constructor () {
+    super()
+
+    this.listenToAuthChange = this.listenToAuthChange.bind(this)
+  }
+
   componentWillMount () {
     this.listenToAuthChange(this.props)
   }
@@ -53,12 +61,12 @@ export class CoreLayout extends Component {
     }
   }
 
-  listenToAuthChange (props) {
+  listenToAuthChange () {
     // When user's authentication status changes...
     auth.onAuthStateChanged(async firebaseUser => {
       // If he's logged in...
       if (firebaseUser) {
-        console.info('User logged in as', firebaseUser.email)
+        if (debug) console.info('User logged in as', firebaseUser.displayName || firebaseUser.email)
         // Get currect time
         const now = Date.now()
         // Gather user's data from Firebase authentication
@@ -75,13 +83,13 @@ export class CoreLayout extends Component {
         if (firebaseResponse.error === 'No data found')
           userData.createdOn = now
         // Save user's data in Fireabse and in store
-        props.authSuccess(userData)
+        this.props.authSuccess(userData)
         // Close any sign in or sign up modals
-        if (props.authModalOpened) props.closeModal()
+        if (this.props.authModalOpened) this.props.closeModal()
       // If user's not logged in or logged out...
       } else {
         // Log that into console
-        console.warn('No user')
+        if (debug) console.warn('No user')
       }
     })
   }
