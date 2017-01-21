@@ -19,7 +19,7 @@ export class MyCardsView extends Component {
       user
     } = this.props
 
-    if (!user.loggedIn) {
+    if (!user.signedIn) {
       return (
         <div style={{ marginTop: '25vh' }}>
           <h1>Log in to be able to save your collection</h1>

@@ -1,7 +1,5 @@
 @import 'base';
 
-// TODO: Refactor native button styles
-
 .alert {
   margin-top: 1vh;
 }
@@ -291,7 +289,7 @@ $mainMargin: 30px;
       min-height: 34px;
       text-transform: capitalize;
       &:not(:first-of-type) { margin-left: 0.4em; }
-      svg { width: 100%; height: 100%; }
+      svg { width: 1.2em; height: 1.2em; }
     }
   }
 }

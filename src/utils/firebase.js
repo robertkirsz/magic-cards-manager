@@ -50,15 +50,17 @@ export const firebaseProviderSignIn = (providerName) => (
     .catch(response => ({ error: response.message }))
 )
 
-// TODO: maybe make a generic 'setDataFirebase'?
-export const setUserData = (data) => (
+// Generic 'set' function
+export const firebaseSetData = (table, id, data) => (
   database
-    .ref('Users')
-    .child(data.id)
+    .ref(table)
+    .child(id)
     .set(data)
     .then(() => ({ success: true }))
     .catch(response => ({ error: response.message }))
 )
+
+export const setUserData = data => firebaseSetData('Users', data.id, data)
 
 // LOGIN
 // Code that check if user is logged in on launch is in CoreLayout
