@@ -4,7 +4,7 @@ import Measure from 'react-measure'
 import { cardsDatabase } from 'database'
 import { saveHeaderHeight, closeModal } from 'store/layout'
 import { restoreMyCards } from 'store/myCards'
-import { signInSuccess, signUpSuccess, signOutSuccess } from 'store/user'
+import { authSuccess, signOutSuccess } from 'store/user'
 import { loadLocalStorage } from 'utils'
 import { auth } from 'utils/firebase'
 import { Header, SearchModule, LoadingScreen } from 'components'
@@ -20,8 +20,7 @@ const mapStateToProps = ({ layout, allCards, user }) => ({
 const mapDispatchToProps = {
   saveHeaderHeight,
   restoreMyCards,
-  signInSuccess,
-  signUpSuccess,
+  authSuccess,
   signOutSuccess,
   closeModal
 }
@@ -35,16 +34,13 @@ export class CoreLayout extends Component {
     allCards: PropTypes.object,
     user: PropTypes.object,
     modalOpened: PropTypes.bool,
-    signInSuccess: PropTypes.func,
-    signUpSuccess: PropTypes.func,
+    authSuccess: PropTypes.func,
     signOutSuccess: PropTypes.func,
     closeModal: PropTypes.func
   }
 
   componentWillMount () {
     auth.onAuthStateChanged(firebaseUser => {
-      const { signingUp, signedIn } = this.props.user
-
       if (!firebaseUser) console.warn('No user')
       else console.info('User logged in as', firebaseUser.email)
 
@@ -55,15 +51,8 @@ export class CoreLayout extends Component {
           picture: firebaseUser.photoURL
         }
 
-        if (signingUp) {
-          this.props.signUpSuccess(userData)
-          if (this.props.modalOpened) this.props.closeModal()
-        } else {
-          this.props.signInSuccess(userData)
-          if (this.props.modalOpened) this.props.closeModal()
-        }
-      } else {
-        if (signedIn) this.props.signOutSuccess()
+        this.props.authSuccess(userData)
+        if (this.props.modalOpened) this.props.closeModal()
       }
     })
   }

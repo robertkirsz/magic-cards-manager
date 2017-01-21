@@ -10,7 +10,7 @@ const mapStateToProps = ({ user }) => ({ user })
 const mapDispatchToProps = { signOut, openModal }
 
 export const Header = ({ user, signOut, openModal }) => {
-  const { loggedIn } = user
+  const { signedIn } = user
 
   // Brand and toggle get grouped for better mobile display
   const brandAndToggle = (
@@ -70,7 +70,7 @@ export const Header = ({ user, signOut, openModal }) => {
         {brandAndToggle}
         <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           {navigationLinks}
-          {loggedIn ? userDropdown : authenticationLinks}
+          {signedIn ? userDropdown : authenticationLinks}
         </div>
       </div>
     </nav>

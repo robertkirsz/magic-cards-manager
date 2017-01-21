@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Modal } from 'react-bootstrap'
-import { signIn, signUp, signInWithProvider, showAuthError, clearErrors } from 'store/user'
+import { signIn, signUp, signInWithProvider, authError, clearAuthErrors } from 'store/user'
 import { closeModal } from 'store/layout'
 import { googleIcon, facebookIcon, twitterIcon, githubIcon } from 'svg'
 
@@ -10,7 +10,7 @@ const mapStateToProps = ({ user, layout }) => ({
   modalName: layout.modal.name
 })
 
-const mapDispatchToProps = { signIn, signUp, signInWithProvider, showAuthError, clearErrors, closeModal }
+const mapDispatchToProps = { signIn, signUp, signInWithProvider, authError, clearAuthErrors, closeModal }
 
 class AuthModal extends Component {
   static propTypes = {
@@ -19,9 +19,9 @@ class AuthModal extends Component {
     signIn: PropTypes.func.isRequired,
     signUp: PropTypes.func.isRequired,
     signInWithProvider: PropTypes.func.isRequired,
-    showAuthError: PropTypes.func.isRequired,
+    authError: PropTypes.func.isRequired,
     closeModal: PropTypes.func.isRequired,
-    clearErrors: PropTypes.func.isRequired
+    clearAuthErrors: PropTypes.func.isRequired
   }
 
   constructor () {
@@ -41,9 +41,12 @@ class AuthModal extends Component {
     this.state = this.initialState
   }
 
+  // Called when modal disappears
   onExited () {
+    // Clear modal's state
     this.setState(this.initialState)
-    if (this.props.user.errorMessage) this.props.clearErrors()
+    // Clear any authentication errors
+    if (this.props.user.error) this.props.clearAuthErrors()
   }
 
   updateForm (property, value) {
@@ -53,7 +56,7 @@ class AuthModal extends Component {
   validateForm (formData = this.state) {
     // TODO: check if it works with autofill
     if (formData.password !== formData.repeatedPassword) {
-      this.props.showAuthError('Passwords don\'t match')
+      this.props.authError('Passwords don\'t match')
       return false
     }
 
@@ -71,7 +74,7 @@ class AuthModal extends Component {
 
   render () {
     const { modalName, user, signInWithProvider, closeModal } = this.props
-    const { signingIn, signingUp, errorMessage } = user
+    const { authPending, error } = user
     const { email, password, repeatedPassword } = this.state
 
     const showModal = modalName === 'sign in' || modalName === 'sign up'
@@ -84,8 +87,8 @@ class AuthModal extends Component {
         onHide={closeModal}
         bsSize="small"
         onExited={this.onExited}
-        style={(signingIn || signingUp) && { pointerEvents: 'none' }}
-        backdrop={signingIn || signingUp ? 'static' : true}
+        style={authPending && { pointerEvents: 'none' }}
+        backdrop={authPending ? 'static' : true}
       >
         <Modal.Header closeButton>
           <Modal.Title>{modalName}</Modal.Title>
@@ -99,6 +102,7 @@ class AuthModal extends Component {
                 className="form-control"
                 id="emailInput"
                 placeholder="Email"
+                title="Email"
                 required
                 value={email}
                 onChange={e => this.updateForm('email', e.target.value)}
@@ -111,6 +115,7 @@ class AuthModal extends Component {
                 className="form-control"
                 id="passwordInput"
                 placeholder="Password"
+                title="Password"
                 required
                 value={password}
                 onChange={e => this.updateForm('password', e.target.value)}
@@ -125,6 +130,7 @@ class AuthModal extends Component {
                     className="form-control"
                     id="repeatedPasswordInput"
                     placeholder="Repeat password"
+                    title="Repeat password"
                     required
                     value={repeatedPassword}
                     onChange={e => this.updateForm('repeatedPassword', e.target.value)}
@@ -132,11 +138,11 @@ class AuthModal extends Component {
                 </div>
             }
           </form>
-          {errorMessage && <p className="text-danger">{errorMessage}</p>}
+          {error && <p className="text-danger">{error}</p>}
           <div className="buttons">
             <button type="submit" form="authForm" className="btn btn-default">
               {
-                signingIn || signingUp
+                authPending
                   ? <span className="fa fa-circle-o-notch fa-spin" />
                   : modalName
               }
