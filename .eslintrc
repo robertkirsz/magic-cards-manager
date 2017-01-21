@@ -21,14 +21,13 @@
   "rules": {
     "key-spacing"          : 0,
     "jsx-quotes"           : [1, "prefer-double"],
-    # "max-len"              : [2, 120, 2],
     "object-curly-spacing" : [2, "always"],
     "prefer-const"         : 1,
     "no-var"               : 1,
     "react/jsx-indent"     : [2, 2],
     "object-shorthand"     : [1, "always"],
     "indent"               : [2, 2, { "SwitchCase": 1 }],
-    "curly"                : [1, "multi-line", "consistent"],
+    "curly"                : [1, "multi-or-nest", "consistent"],
     "no-multi-spaces"      : [1, { "exceptions": { "ImportDeclaration": true, "VariableDeclarator": true } }]
   }
 }

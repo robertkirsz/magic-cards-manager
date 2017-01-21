@@ -24,6 +24,14 @@ const clearState = {
   }
 }
 
+const mapStateToProps = ({ myCards, location }) => ({
+  allCards: cardsDatabase,
+  myCards: myCards.cards,
+  pathname: location.pathname
+})
+
+const mapDispatchToProps = { filterAllCards, filterMyCards }
+
 export class SearchModule extends Component {
   static propTypes = {
     allCards: PropTypes.array,
@@ -59,11 +67,10 @@ export class SearchModule extends Component {
 
   componentDidUpdate () {
     // TODO: check if it's truely the best way to handle this (in a 'didUpdate' - I don't like it >:/)
-    if (this.state.whereToSearch === 'allCards') {
+    if (this.state.whereToSearch === 'allCards')
       this.props.filterAllCards(this.search(this.state))
-    } else {
+    else
       this.props.filterMyCards(this.search(this.state))
-    }
   }
 
   componentWillReceiveProps (nextProps) {
@@ -162,7 +169,7 @@ export class SearchModule extends Component {
     const queryText = state.queryText.trim().toLowerCase()
     const colorsArray = []
 
-    for (const key in state.colors) { if (state.colors[key]) colorsArray.push(key) }
+    for (const key in state.colors) if (state.colors[key]) colorsArray.push(key)
 
     if (queryName.length || queryTypes.length || queryText.length) {
       return this.props[state.whereToSearch].filter((card) => {
@@ -253,12 +260,5 @@ export class SearchModule extends Component {
     )
   }
 }
-
-const mapDispatchToProps = { filterAllCards, filterMyCards }
-const mapStateToProps = ({ myCards, location }) => ({
-  allCards: cardsDatabase,
-  myCards: myCards.cards,
-  pathname: location.pathname
-})
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchModule)

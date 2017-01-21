@@ -103,13 +103,10 @@ export class Card extends Component {
     const arad = Math.atan2(dy, dx)
     let angle = arad * 180 / Math.PI - 90
 
-    if (angle < 0) {
-      angle = angle + 360
-    }
+    if (angle < 0) angle = angle + 360
 
-    if (elem.firstChild.className.indexOf(' over') !== -1) {
-      imgCSS += ' scale3d(1.07,1.07,1.07)'
-    }
+    if (elem.firstChild.className.indexOf(' over') !== -1) imgCSS += ' scale3d(1.07,1.07,1.07)'
+
     elem.firstChild.style.transform = imgCSS
 
     shine.style.background = 'linear-gradient(' + angle + 'deg, rgba(255,255,255,' + (pageY - offsets.top - bdst) / h * 0.4 + ') 0%,rgba(255,255,255,0) 80%)'
@@ -140,9 +137,7 @@ export class Card extends Component {
     container.style.transform = ''
     shine.style.cssText = ''
 
-    for (let ly = 0; ly < totalLayers; ly++) {
-      layers[ly].style.transform = ''
-    }
+    for (let ly = 0; ly < totalLayers; ly++) layers[ly].style.transform = ''
   }
 
   render () {
