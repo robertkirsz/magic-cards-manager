@@ -6,12 +6,12 @@ import { saveHeaderHeight, closeModal } from 'store/layout'
 import { restoreMyCards } from 'store/myCards'
 import { authSuccess, signOutSuccess } from 'store/user'
 import { loadLocalStorage } from 'utils'
-import { auth } from 'utils/firebase'
+import { auth, firebaseGetData } from 'utils/firebase'
 import { Header, SearchModule, LoadingScreen } from 'components'
 import 'styles/core.scss'
 
 const mapStateToProps = ({ layout, allCards, user }) => ({
-  modalOpened: layout.modal.name !== '',
+  authModalOpened: layout.modal.name === 'sign in' || layout.modal.name === 'sign up',
   headerHeight: layout.headerHeight,
   allCards,
   user
@@ -33,28 +33,14 @@ export class CoreLayout extends Component {
     restoreMyCards: PropTypes.func,
     allCards: PropTypes.object,
     user: PropTypes.object,
-    modalOpened: PropTypes.bool,
+    authModalOpened: PropTypes.bool,
     authSuccess: PropTypes.func,
     signOutSuccess: PropTypes.func,
     closeModal: PropTypes.func
   }
 
   componentWillMount () {
-    auth.onAuthStateChanged(firebaseUser => {
-      if (!firebaseUser) console.warn('No user')
-      else console.info('User logged in as', firebaseUser.email)
-
-      if (firebaseUser) {
-        const userData = {
-          name: firebaseUser.displayName,
-          email: firebaseUser.email,
-          picture: firebaseUser.photoURL
-        }
-
-        this.props.authSuccess(userData)
-        if (this.props.modalOpened) this.props.closeModal()
-      }
-    })
+    this.listenToAuthChange(this.props)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -65,6 +51,39 @@ export class CoreLayout extends Component {
       // Save it to the store
       this.props.restoreMyCards(restoredCollection)
     }
+  }
+
+  listenToAuthChange (props) {
+    // When user's authentication status changes...
+    auth.onAuthStateChanged(async firebaseUser => {
+      // If he's logged in...
+      if (firebaseUser) {
+        console.info('User logged in as', firebaseUser.email)
+        // Get currect time
+        const now = Date.now()
+        // Gather user's data from Firebase authentication
+        const userData = {
+          id: firebaseUser.uid,
+          name: firebaseUser.displayName,
+          email: firebaseUser.email,
+          picture: firebaseUser.photoURL,
+          lastLogin: now
+        }
+        // Get user's data from database
+        const firebaseResponse = await firebaseGetData('Users', firebaseUser.uid)
+        // Set 'createdOn' property if user's date doesn't exist yet
+        if (firebaseResponse.error === 'No data found')
+          userData.createdOn = now
+        // Save user's data in Fireabse and in store
+        props.authSuccess(userData)
+        // Close any sign in or sign up modals
+        if (props.authModalOpened) props.closeModal()
+      // If user's not logged in or logged out...
+      } else {
+        // Log that into console
+        console.warn('No user')
+      }
+    })
   }
 
   render () {

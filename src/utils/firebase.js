@@ -46,8 +46,22 @@ export const firebaseSignOut = () => (
 // Provider sign in
 export const firebaseProviderSignIn = (providerName) => (
   auth.signInWithPopup(providers[providerName])
-    .then(() => ({ success: true }))
+    .then(response => ({ success: true, user: response.user }))
     .catch(response => ({ error: response.message }))
+)
+
+// Generic 'get' function
+export const firebaseGetData = (table, id) => (
+  database
+    .ref(table)
+    .child(id)
+    .once('value')
+    .then(snapshot => {
+      const data = snapshot.val()
+      return data
+        ? ({ success: true, data })
+        : ({ error: 'No data found' })
+    })
 )
 
 // Generic 'set' function
@@ -60,8 +74,24 @@ export const firebaseSetData = (table, id, data) => (
     .catch(response => ({ error: response.message }))
 )
 
-export const setUserData = data => firebaseSetData('Users', data.id, data)
+// Generic 'push' function
+export const firebasePushData = (table, data) => (
+  database
+    .ref(table)
+    .push()
+    .set(data)
+    .then(() => ({ success: true }))
+    .catch(response => ({ error: response.message }))
+)
 
-// LOGIN
-// Code that check if user is logged in on launch is in CoreLayout
-// Code for signing out is in (... Header?)
+// Generic 'update' function
+export const firebaseUpdateData = (table, id, data) => (
+  database
+    .ref(table)
+    .child(id)
+    .update(data)
+    .then(() => ({ success: true }))
+    .catch(response => ({ error: response.message }))
+)
+
+export const updateUserData = data => firebaseUpdateData('Users', data.id, data)

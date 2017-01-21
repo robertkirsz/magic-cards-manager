@@ -1,12 +1,10 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { database } from 'utils/firebase'
 import ItemForm from './ItemForm'
 import _ from 'lodash'
-import { cardsDatabase } from 'database'
+import { database, firebaseSetData, firebasePushData, firebaseUpdateData } from 'utils/firebase'
 
 const itemsRef = database.ref('items')
-const allCardsRef = database.ref('AllCards')
 
 export class Firebase extends Component {
   static propTypes = {
@@ -31,31 +29,19 @@ export class Firebase extends Component {
     this.addUsersDatabaseListener()
   }
 
-  setItem ({ id, name }) {
-    itemsRef
-      .child(id)
-      .set({ id, name }, (error) => {
-        if (error) console.error('Error ->', error)
-        else console.info('Data set')
-      })
+  async setItem (data) {
+    const result = await firebaseSetData('items', data.id, data)
+    console.log('set', result)
   }
 
-  pushItem ({ id, name }) {
-    itemsRef
-      .push()
-      .set({ id, name }, (error) => {
-        if (error) console.error('Error ->', error)
-        else console.info('Data pushed')
-      })
+  async pushItem (data) {
+    const result = await firebasePushData('items', data)
+    console.log('push', result)
   }
 
-  updateItem ({ id, name }) {
-    itemsRef
-      .child(id)
-      .update({ id, name }, (error) => {
-        if (error) console.error('Error ->', error)
-        else console.info('Data pushed')
-      })
+  async updateItem (data) {
+    const result = await firebaseUpdateData('items', data.id, data)
+    console.log('update', result)
   }
 
   addUsersDatabaseListener () {
@@ -65,27 +51,6 @@ export class Firebase extends Component {
     })
   }
 
-  uploadCards () {
-    const cards = cardsDatabase.splice(0, 30)
-
-    _.forEach(cards, (card) => {
-      allCardsRef
-        .child(card.multiverseid)
-        .set(card, (error) => {
-          if (error) console.error('Error ->', error)
-          else console.info('Data set for', card.multiverseid)
-        })
-    })
-  }
-
-  getCards () {
-    allCardsRef
-      .orderByChild('name')
-      .once('value', (snapshot) => {
-        console.log('cards', snapshot.val())
-      })
-  }
-
   render () {
     return (
       <div style={{ fontSize: '0.75em', marginTop: this.props.headerHeight + 20 }}>
@@ -93,15 +58,6 @@ export class Firebase extends Component {
         <ItemForm onSubmit={this.setItem} buttonLabel="Set" />
         <ItemForm onSubmit={this.pushItem} buttonLabel="Push" />
         <ItemForm onSubmit={this.updateItem} buttonLabel="Update" />
-        <div>
-          <button onClick={this.uploadCards}>Upload</button>
-        </div>
-        <div>
-          <button onClick={this.getCards}>Get cards</button>
-        </div>
-        <div>
-          <button onClick={() => { console.log(cardsDatabase) }}>Get foo</button>
-        </div>
         <div>
           <ul>
             {

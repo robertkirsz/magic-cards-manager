@@ -1,4 +1,4 @@
-import { firebaseSignIn, firebaseSignUp, firebaseSignOut, firebaseProviderSignIn, setUserData } from 'utils/firebase'
+import { firebaseSignIn, firebaseSignUp, firebaseSignOut, firebaseProviderSignIn, updateUserData } from 'utils/firebase'
 import { openModal } from 'store/layout'
 
 // ------------------------------------
@@ -32,18 +32,10 @@ export const signUp = ({ email, password }) => {
     if (getState().user.authPending) return
     // Dispatch action so we can show spinner
     dispatch(authRequest())
-    // Sign the user up in Firebase and get his ID or error
+    // Sign the user up in Firebase
     const firebaseSignUpResponse = await firebaseSignUp(email, password)
-    // If we got error, display it and return
-    if (firebaseSignUpResponse.error) {
-      dispatch(authError(firebaseSignUpResponse.error))
-      return
-    }
-    // On success, if we got ID, gather user's data and save it in Firebase
-    const setUserDataResponse = await setUserData({ id: firebaseSignUpResponse.id, email, createdOn: Date.now() })
-    // If we got error back, display it on page
-    // TODO: test it again
-    if (setUserDataResponse.error) dispatch(openModal('error', { message: `Your account has been created, but there was a problem with saving your data in the database. This is what we know: ${setUserDataResponse.error}` }))
+    // If we got error, display it
+    if (firebaseSignUpResponse.error) dispatch(authError(firebaseSignUpResponse.error))
   }
 }
 export const signOut = () => {
@@ -73,7 +65,7 @@ export const signInWithProvider = (providerName) => {
 }
 
 export const authRequest = () => ({ type: AUTH_REQUEST })
-export const authSuccess = user => ({ type: AUTH_SUCCESS, user })
+export const authSuccess = user => ({ type: AUTH_SUCCESS, user }) // TODO: sprawdzić czy createdOn już istnieje
 export const authError = error => ({ type: AUTH_ERROR, error })
 export const signOutSuccess = () => ({ type: SIGN_OUT_SUCCESS })
 export const clearAuthErrors = () => ({ type: CLEAR_AUTH_ERROR })
@@ -83,7 +75,10 @@ export const clearAuthErrors = () => ({ type: CLEAR_AUTH_ERROR })
 // ------------------------------------
 const ACTION_HANDLERS = {
   [AUTH_REQUEST]: state => ({ ...state, authPending: true, error: null }),
-  [AUTH_SUCCESS]: (state, { user }) => ({ ...state, ...user, authPending: false, signedIn: true }),
+  [AUTH_SUCCESS]: (state, { user }) => {
+    updateUserData(user)
+    return { ...state, ...user, authPending: false, signedIn: true }
+  },
   [AUTH_ERROR]: (state, { error }) => ({ ...state, authPending: false, error }),
   [SIGN_OUT_SUCCESS]: () => initialState,
   [CLEAR_AUTH_ERROR]: state => ({ ...state, error: null })
