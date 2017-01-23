@@ -1,4 +1,5 @@
 import firebase from 'firebase'
+import _forEach from 'lodash/forEach'
 
 // Firebase configuration
 const config = {
@@ -22,33 +23,9 @@ const providers = {
   github: new firebase.auth.GithubAuthProvider()
 }
 
-// Generic email and password sign in
-export const firebaseSignIn = (email, password) => (
-  auth.signInWithEmailAndPassword(email, password)
-    .then(response => ({ success: true, id: response.uid, response }))
-    .catch(response => ({ error: response.message, response }))
-)
+// ---------- GENERIC STUFF ----------
 
-// Generic email and password sign up
-export const firebaseSignUp = (email, password) => (
-  auth.createUserWithEmailAndPassword(email, password)
-    .then(response => ({ success: true, id: response.uid }))
-    .catch(response => ({ error: response.message }))
-)
-
-// Sign out
-export const firebaseSignOut = () => (
-  auth.signOut()
-    .then(() => ({ success: true }))
-    .catch(response => ({ error: response.message }))
-)
-
-// Provider sign in
-export const firebaseProviderSignIn = (providerName) => (
-  auth.signInWithPopup(providers[providerName])
-    .then(response => ({ success: true, user: response.user }))
-    .catch(response => ({ error: response.message }))
-)
+// TODO: id mozna zastpić  auth.currentUser.uid
 
 // Generic 'get' function
 export const firebaseGetData = (table, id) => (
@@ -94,4 +71,46 @@ export const firebaseUpdateData = (table, id, data) => (
     .catch(response => ({ error: response.message }))
 )
 
-export const updateUserData = data => firebaseUpdateData('Users', data.id, data)
+// ---------- AUTHENTICATION ----------
+
+// Generic email and password sign in
+export const firebaseSignIn = (email, password) => (
+  auth.signInWithEmailAndPassword(email, password)
+    .then(response => ({ success: true, id: response.uid, response }))
+    .catch(response => ({ error: response.message, response }))
+)
+
+// Generic email and password sign up
+export const firebaseSignUp = (email, password) => (
+  auth.createUserWithEmailAndPassword(email, password)
+    .then(response => ({ success: true, id: response.uid }))
+    .catch(response => ({ error: response.message }))
+)
+
+// Sign out
+export const firebaseSignOut = () => (
+  auth.signOut()
+    .then(() => ({ success: true }))
+    .catch(response => ({ error: response.message }))
+)
+
+// Provider sign in
+export const firebaseProviderSignIn = (providerName) => (
+  auth.signInWithPopup(providers[providerName])
+    .then(response => ({ success: true, user: response.user }))
+    .catch(response => ({ error: response.message }))
+)
+
+// ---------- USER DATA UPDATING ----------
+
+export const updateUserData = user => firebaseUpdateData('Users', user.id, user)
+
+export const saveCollection = collection => {
+  const reducedCollection = {}
+  _forEach(collection, singleCard => { reducedCollection[singleCard.id] = singleCard.formatForLocalStorage2() })
+  return firebaseSetData('Collections', auth.currentUser.uid, reducedCollection)
+}
+
+export const loadCollection = () => {
+  return firebaseGetData('Collections', auth.currentUser.uid)
+}

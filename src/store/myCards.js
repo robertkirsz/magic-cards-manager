@@ -1,65 +1,88 @@
-import _ from 'lodash'
-import { saveLocalStorage } from 'utils'
+import _map from 'lodash/map'
+import _find from 'lodash/find'
+import _findIndex from 'lodash/findIndex'
+import { Card } from 'classes'
+import { saveCollection, loadCollection } from 'utils/firebase'
+import { cardsDatabase } from 'database'
+
+const debug = false
 
 // ------------------------------------
 // Constants
 // ------------------------------------
-export const ADD_CARD         = 'ADD_CARD'
-export const REMOVE_CARD      = 'REMOVE_CARD'
-export const CLEAR_MY_CARDS   = 'CLEAR_MY_CARDS'
-export const RESTORE_MY_CARDS = 'RESTORE_MY_CARDS'
-export const FILTER_MY_CARDS  = 'FILTER_MY_CARDS'
+const ADD_CARD = 'ADD_CARD'
+const REMOVE_CARD = 'REMOVE_CARD'
+const CLEAR_MY_CARDS = 'CLEAR_MY_CARDS'
+const LOAD_MY_CARDS_REQUEST = 'LOAD_MY_CARDS_REQUEST'
+const LOAD_MY_CARDS_SUCCESS = 'LOAD_MY_CARDS_SUCCESS'
+const FILTER_MY_CARDS = 'FILTER_MY_CARDS'
 
 // ------------------------------------
 // Actions
 // ------------------------------------
-export const addCard = (card, variant) => ({
-  type: ADD_CARD, card, variant
-})
-export const removeCard = (card, variant) => ({
-  type: REMOVE_CARD, card, variant
-})
-export const clearMyCards = () => ({
-  type: CLEAR_MY_CARDS
-})
-export const restoreMyCards = collection => ({ type: RESTORE_MY_CARDS, collection })
-export const filterMyCards = cards => ({ type: FILTER_MY_CARDS, cards })
+export const addCard = (card, variant) => ({ type: ADD_CARD, card, variant })
+export const removeCard = (card, variant) => ({ type: REMOVE_CARD, card, variant })
+export const clearMyCards = () => ({ type: CLEAR_MY_CARDS })
+export const filterMyCards = filteredCards => ({ type: FILTER_MY_CARDS, filteredCards })
+export const loadMyCards = () => {
+  return async (dispatch, getState) => {
+    if (getState().myCards.loading) return
 
-export const actions = {
-  addCard,
-  removeCard,
-  clearMyCards,
-  restoreMyCards,
-  filterMyCards
+    dispatch(loadMyCardsRequest())
+
+    let retrievedCollection = []
+
+    await loadCollection()
+      .then(response => {
+        if (response.success) {
+          const collection = response.data
+
+          retrievedCollection = _map(collection, (value, key) => {
+            const mainCard = new Card(_find(cardsDatabase, { id: key }))
+            mainCard.cardsInCollection = value.cardsInCollection
+            mainCard.variants = _map(value.variants, (value, key) => {
+              const variant = new Card(_find(mainCard.variants, { id: key }))
+              variant.cardsInCollection = value.cardsInCollection
+              return variant
+            })
+            return mainCard
+          })
+        }
+      })
+
+    dispatch(loadMyCardsSuccess(retrievedCollection))
+  }
 }
+export const loadMyCardsRequest = () => ({ type: LOAD_MY_CARDS_REQUEST, loading: true })
+export const loadMyCardsSuccess = cards => ({ type: LOAD_MY_CARDS_SUCCESS, cards, loading: false })
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
   [ADD_CARD]: (state, { card, variant }) => {
-    console.log('%cADD_CARD', 'color: #A1C659;', variant.name)
+    if (debug) console.log('%cADD_CARD', 'color: #A1C659;', variant.name)
     // Make copies of both main card and its chosen variant
     let cardCopy = card.copy()
     const variantCopy = variant.copy()
     // Copy card collection from store
     let cardsCollection = [...state.cards]
     // Check if this card already exists in collection
-    const cardsInCollection = _.find(cardsCollection, cardFromCollection => cardFromCollection.name === cardCopy.name)
+    const cardsInCollection = _find(cardsCollection, cardFromCollection => cardFromCollection.name === cardCopy.name)
     // If it does...
     if (cardsInCollection) {
       // Reassign it as a 'cardCopy'
       cardCopy = cardsInCollection.copy()
       // Check if it contains chosen variant
-      const variantToUpdate = _.find(cardCopy.variants, { id: variantCopy.id })
+      const variantToUpdate = _find(cardCopy.variants, { id: variantCopy.id })
       // If it does...
       if (variantToUpdate) {
-        console.log('%c   existing card - existing variant - incrementing', 'color: #A1C659;')
+        if (debug) console.log('%c   existing card - existing variant - incrementing', 'color: #A1C659;')
         // Increment its count
         variantToUpdate.cardsInCollection++
       // In other case...
       } else {
-        console.log('%c   existing card - new variant', 'color: #A1C659;')
+        if (debug) console.log('%c   existing card - new variant', 'color: #A1C659;')
         // Set variant's count to 1
         variantCopy.cardsInCollection = 1
         // Insert it into main card
@@ -68,7 +91,7 @@ const ACTION_HANDLERS = {
       // Increment main card's count
       cardCopy.cardsInCollection++
       // Get that card's index in the collection
-      const cardIndex = _.findIndex(cardsCollection, cardFromCollection => cardFromCollection.id === cardCopy.id)
+      const cardIndex = _findIndex(cardsCollection, cardFromCollection => cardFromCollection.id === cardCopy.id)
       // Use that index to insert the updated card into the collection
       cardsCollection = [
         ...cardsCollection.slice(0, cardIndex),
@@ -76,7 +99,7 @@ const ACTION_HANDLERS = {
         ...cardsCollection.slice(cardIndex + 1)
       ]
       // Save changes to Local Storage
-      saveLocalStorage(cardsCollection)
+      saveCollection(cardsCollection)
       // Update the store
       return {
         ...state,
@@ -85,7 +108,7 @@ const ACTION_HANDLERS = {
     }
 
     // If chosen card doesn't exist in the collection yet...
-    console.log('%c   new card - new variant', 'color: #A1C659;')
+    if (debug) console.log('%c   new card - new variant', 'color: #A1C659;')
     // Set both its chosen variant's counts to one
     cardCopy.cardsInCollection = 1
     variantCopy.cardsInCollection = 1
@@ -94,7 +117,7 @@ const ACTION_HANDLERS = {
     // Add the main card to the collection
     cardsCollection.push(cardCopy)
     // Save changes to Local Storage
-    saveLocalStorage(cardsCollection)
+    saveCollection(cardsCollection)
     // Update the store
     return {
       ...state,
@@ -102,19 +125,19 @@ const ACTION_HANDLERS = {
     }
   },
   [REMOVE_CARD]: (state, { card, variant }) => {
-    console.log('%cREMOVE_CARD payload', 'color: #A1C659;', variant.name)
+    if (debug) console.log('%cREMOVE_CARD payload', 'color: #A1C659;', variant.name)
     // Copy card collection from store
     let cardsCollection = [...state.cards]
     // Make copies of both main card and its chosen variant
-    const cardCopy = _.find(cardsCollection, { id: card.id }).copy()
-    const variantCopy = _.find(cardCopy.variants, { id: variant.id }).copy()
+    const cardCopy = _find(cardsCollection, { id: card.id }).copy()
+    const variantCopy = _find(cardCopy.variants, { id: variant.id }).copy()
     // Find their respective indexes
-    const cardIndex = _.findIndex(cardsCollection, cardFromCollection => cardFromCollection.id === cardCopy.id)
-    const variantIndex = _.findIndex(cardCopy.variants, cardVariant => cardVariant.id === variantCopy.id)
+    const cardIndex = _findIndex(cardsCollection, cardFromCollection => cardFromCollection.id === cardCopy.id)
+    const variantIndex = _findIndex(cardCopy.variants, cardVariant => cardVariant.id === variantCopy.id)
 
     // If there is only one main card...
     if (cardCopy.cardsInCollection === 1) {
-      console.log('%c   only one main card - removing it', 'color: #A1C659;')
+      if (debug) console.log('%c   only one main card - removing it', 'color: #A1C659;')
       // Remove it from the collection
       cardsCollection = [
         ...cardsCollection.slice(0, cardIndex),
@@ -126,7 +149,7 @@ const ACTION_HANDLERS = {
     if (cardCopy.cardsInCollection > 1) {
       // If there is only one card of the chosen variant...
       if (variantCopy.cardsInCollection === 1) {
-        console.log('%c   only one variant card - removing it', 'color: #A1C659;')
+        if (debug) console.log('%c   only one variant card - removing it', 'color: #A1C659;')
         // Remove it from the main card
         cardCopy.variants = [
           ...cardCopy.variants.slice(0, variantIndex),
@@ -136,7 +159,7 @@ const ACTION_HANDLERS = {
 
       // If there are more copies of the chosen variant...
       if (variantCopy.cardsInCollection > 1) {
-        console.log('%c   more variant cards - decrementing', 'color: #A1C659;')
+        if (debug) console.log('%c   more variant cards - decrementing', 'color: #A1C659;')
         // Decrement it
         variantCopy.cardsInCollection--
         // Update main card's varaint array
@@ -158,16 +181,17 @@ const ACTION_HANDLERS = {
     }
 
     // Save changes to Local Storage
-    saveLocalStorage(cardsCollection)
+    saveCollection(cardsCollection)
     // Update the store
     return {
       ...state,
       cards: cardsCollection
     }
   },
-  [CLEAR_MY_CARDS]: (state) => initialState,
-  [RESTORE_MY_CARDS]: (state, { collection }) => ({ cards: collection }),
-  [FILTER_MY_CARDS]: (state, action) => ({ ...state, filteredCards: action.cards })
+  [CLEAR_MY_CARDS]: () => initialState,
+  [LOAD_MY_CARDS_REQUEST]: state => ({ ...state, loading: true }),
+  [LOAD_MY_CARDS_SUCCESS]: (state, { cards }) => ({ ...state, loading: false, cards }),
+  [FILTER_MY_CARDS]: (state, { filteredCards }) => ({ ...state, filteredCards })
 }
 
 // ------------------------------------
@@ -175,10 +199,11 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 const initialState = {
   cards: [],
+  loading: false,
   filteredCards: null
 }
 
-export default function myCards (state = initialState, action) {
+export default function myCardsReducer (state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type]
 
   return handler ? handler(state, action) : state

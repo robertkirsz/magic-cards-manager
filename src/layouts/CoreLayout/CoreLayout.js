@@ -1,27 +1,26 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import Measure from 'react-measure'
-import { cardsDatabase } from 'database'
 import { saveHeaderHeight, closeModal } from 'store/layout'
-import { restoreMyCards } from 'store/myCards'
+import { loadMyCards } from 'store/myCards'
 import { authSuccess, signOutSuccess } from 'store/user'
-import { loadLocalStorage } from 'utils'
 import { auth, firebaseGetData } from 'utils/firebase'
 import { Header, SearchModule, LoadingScreen } from 'components'
 import 'styles/core.scss'
 
 const debug = true
 
-const mapStateToProps = ({ layout, allCards, user }) => ({
+const mapStateToProps = ({ layout, allCards, myCards, user }) => ({
   authModalOpened: layout.modal.name === 'sign in' || layout.modal.name === 'sign up',
   headerHeight: layout.headerHeight,
   allCards,
+  myCards,
   user
 })
 
 const mapDispatchToProps = {
   saveHeaderHeight,
-  restoreMyCards,
+  loadMyCards,
   authSuccess,
   signOutSuccess,
   closeModal
@@ -32,8 +31,9 @@ export class CoreLayout extends Component {
     children: PropTypes.element.isRequired,
     headerHeight: PropTypes.number,
     saveHeaderHeight: PropTypes.func,
-    restoreMyCards: PropTypes.func,
+    loadMyCards: PropTypes.func,
     allCards: PropTypes.object,
+    myCards: PropTypes.object,
     user: PropTypes.object,
     authModalOpened: PropTypes.bool,
     authSuccess: PropTypes.func,
@@ -49,16 +49,6 @@ export class CoreLayout extends Component {
 
   componentWillMount () {
     this.listenToAuthChange(this.props)
-  }
-
-  componentWillReceiveProps (nextProps) {
-    // If we've received cards database...
-    if (this.props.allCards.fetching && !nextProps.allCards.fetching) {
-      // Get collection from Local Storage
-      const restoredCollection = loadLocalStorage(cardsDatabase)
-      // Save it to the store
-      this.props.restoreMyCards(restoredCollection)
-    }
   }
 
   listenToAuthChange () {
@@ -86,6 +76,8 @@ export class CoreLayout extends Component {
         this.props.authSuccess(userData)
         // Close any sign in or sign up modals
         if (this.props.authModalOpened) this.props.closeModal()
+        // Load user's collection
+        this.props.loadMyCards()
       // If user's not logged in or logged out...
       } else {
         // Log that into console

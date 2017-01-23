@@ -1,4 +1,5 @@
-import _ from 'lodash'
+import _find from 'lodash/find'
+import _forEach from 'lodash/forEach'
 
 export default class Card {
   constructor (card) {
@@ -14,7 +15,7 @@ export default class Card {
 
   decrease (variantId) {
     // This mutates the object, so make sure to call it on a copied card
-    const variantToUpdate = _.find(this.variants, { id: variantId })
+    const variantToUpdate = _find(this.variants, { id: variantId })
     variantToUpdate.cardsInCollection--
     this.cardsInCollection--
   }
@@ -24,12 +25,27 @@ export default class Card {
   }
 
   formatForLocalStorage () {
-    return {
-      id: this.id,
-      cardsInCollection: this.cardsInCollection,
-      variants: this.variants
-        ? this.variants.map(variant => variant.formatForLocalStorage())
-        : undefined
+    const { id, cardsInCollection, variants } = this
+
+    const formattedCard = { id, cardsInCollection }
+
+    if (variants) formattedCard.variants = variants.map(variant => variant.formatForLocalStorage())
+
+    return formattedCard
+  }
+
+  formatForLocalStorage2 () {
+    const { cardsInCollection, variants } = this
+
+    const formattedCard = { cardsInCollection }
+
+    if (variants) {
+      formattedCard.variants = {}
+      _forEach(variants, variant => {
+        formattedCard.variants[variant.id] = variant.formatForLocalStorage2()
+      })
     }
+
+    return formattedCard
   }
 }

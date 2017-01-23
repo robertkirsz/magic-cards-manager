@@ -13,7 +13,6 @@ const CLEAR_AUTH_ERROR = 'CLEAR_AUTH_ERROR'
 // ------------------------------------
 // Actions
 // ------------------------------------
-
 export const signIn = ({ email, password }) => {
   return async (dispatch, getState) => {
     // Return if request is pending
@@ -65,7 +64,7 @@ export const signInWithProvider = (providerName) => {
 }
 
 export const authRequest = () => ({ type: AUTH_REQUEST })
-export const authSuccess = user => ({ type: AUTH_SUCCESS, user }) // TODO: sprawdzić czy createdOn już istnieje
+export const authSuccess = user => ({ type: AUTH_SUCCESS, user })
 export const authError = error => ({ type: AUTH_ERROR, error })
 export const signOutSuccess = () => ({ type: SIGN_OUT_SUCCESS })
 export const clearAuthErrors = () => ({ type: CLEAR_AUTH_ERROR })
