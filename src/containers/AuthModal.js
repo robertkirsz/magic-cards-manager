@@ -27,18 +27,22 @@ class AuthModal extends Component {
   constructor () {
     super()
 
+    this.togglePassword = this.togglePassword.bind(this)
     this.updateForm = this.updateForm.bind(this)
-    this.validateForm = this.validateForm.bind(this)
     this.submitForm = this.submitForm.bind(this)
     this.onExited = this.onExited.bind(this)
 
     this.initialState = {
       email: '',
       password: '',
-      repeatedPassword: ''
+      showPassword: false
     }
 
     this.state = this.initialState
+  }
+
+  togglePassword () {
+    this.setState({ showPassword: !this.state.showPassword })
   }
 
   // Called when modal disappears
@@ -53,29 +57,19 @@ class AuthModal extends Component {
     this.setState({ [property]: value })
   }
 
-  validateForm (formData = this.state) {
-    // TODO: check if it works with autofill
-    if (formData.password !== formData.repeatedPassword) {
-      this.props.authError('Passwords don\'t match')
-      return false
-    }
-
-    return true
-  }
-
   submitForm (e) {
     e.preventDefault()
 
     const { modalName, signIn, signUp } = this.props
 
     if (modalName === 'sign in') signIn(this.state)
-    if (modalName === 'sign up' && this.validateForm()) signUp(this.state)
+    if (modalName === 'sign up') signUp(this.state)
   }
 
   render () {
     const { modalName, user, signInWithProvider, closeModal } = this.props
     const { authPending, error } = user
-    const { email, password, repeatedPassword } = this.state
+    const { email, password, showPassword } = this.state
 
     const showModal = modalName === 'sign in' || modalName === 'sign up'
     const disableAutocomplete = modalName === 'sign up'
@@ -90,9 +84,6 @@ class AuthModal extends Component {
         style={authPending && { pointerEvents: 'none' }}
         backdrop={authPending ? 'static' : true}
       >
-        <Modal.Header closeButton>
-          <Modal.Title>{modalName}</Modal.Title>
-        </Modal.Header>
         <Modal.Body>
           <form onSubmit={this.submitForm} id="authForm">
             <div className="form-group">
@@ -110,7 +101,7 @@ class AuthModal extends Component {
             </div>
             <div className="form-group">
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 name={disableAutocomplete ? Date.now().toString() : 'password'}
                 className="form-control"
                 id="passwordInput"
@@ -120,23 +111,12 @@ class AuthModal extends Component {
                 value={password}
                 onChange={e => this.updateForm('password', e.target.value)}
               />
+              <span
+                className="fa fa-eye"
+                style={showPassword ? { opacity: 1 } : {}}
+                onClick={this.togglePassword}
+              />
             </div>
-            {
-              modalName === 'sign up' &&
-                <div className="form-group">
-                  <input
-                    type="password"
-                    name={disableAutocomplete ? Date.now().toString() : 'repeatedPassword'}
-                    className="form-control"
-                    id="repeatedPasswordInput"
-                    placeholder="Repeat password"
-                    title="Repeat password"
-                    required
-                    value={repeatedPassword}
-                    onChange={e => this.updateForm('repeatedPassword', e.target.value)}
-                  />
-                </div>
-            }
           </form>
           {error && <p className="text-danger">{error}</p>}
           <div className="buttons">
