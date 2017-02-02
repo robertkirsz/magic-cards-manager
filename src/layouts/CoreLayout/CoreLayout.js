@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import Measure from 'react-measure'
 import { saveHeaderHeight, closeModal } from 'store/layout'
 import { loadMyCards } from 'store/myCards'
 import { authSuccess, signOutSuccess } from 'store/user'
@@ -12,7 +11,6 @@ const debug = true
 
 const mapStateToProps = ({ layout, allCards, myCards, user }) => ({
   authModalOpened: layout.modal.name === 'sign in' || layout.modal.name === 'sign up',
-  headerHeight: layout.headerHeight,
   allCards,
   myCards,
   user
@@ -29,7 +27,6 @@ const mapDispatchToProps = {
 export class CoreLayout extends Component {
   static propTypes = {
     children: PropTypes.element.isRequired,
-    headerHeight: PropTypes.number,
     saveHeaderHeight: PropTypes.func,
     loadMyCards: PropTypes.func,
     allCards: PropTypes.object,
@@ -89,15 +86,13 @@ export class CoreLayout extends Component {
   render () {
     const app = (
       <div id="app">
-        <Measure onMeasure={({ height }) => {
-          if (height !== this.props.headerHeight) this.props.saveHeaderHeight(height)
-        }}>
-          <div className="fixed-wrapper">
-            <Header />
-            <SearchModule />
-          </div>
-        </Measure>
+        <div className="fixed-wrapper">
+          <Header />
+        </div>
         {this.props.children}
+        <div className="app-buttons">
+          <SearchModule />
+        </div>
       </div>
     )
 

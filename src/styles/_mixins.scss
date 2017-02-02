@@ -38,6 +38,35 @@
   }
 }
 
+@mixin phone-only {
+  @media (max-width: 599px) { @content; }
+}
+@mixin tablet-portrait-up {
+  @media (min-width: 600px) { @content; }
+}
+@mixin tablet-landscape-up {
+  @media (min-width: 900px) { @content; }
+}
+@mixin desktop-up {
+  @media (min-width: 1200px) { @content; }
+}
+@mixin big-desktop-up {
+  @media (min-width: 1800px) { @content; }
+}
+
+%flex-center {
+  @include flex(column, nowrap, center, center);
+}
+
+%inline-flex-center {
+  @include inline-flex(column, nowrap, center, center);
+}
+
+%layer {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+}
+
 @mixin placeholder {
   ::-webkit-input-placeholder { @content }
   :-moz-placeholder { @content }

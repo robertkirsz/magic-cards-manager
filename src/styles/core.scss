@@ -17,13 +17,20 @@
   flex: none;
   position: fixed;
   top: 0; right: 0; left: 0;
-  background-color: rgba(white, 0.95);
   z-index: 5;
+  pointer-events: none;
+}
+
+.app-buttons {
+  flex: none;
+  position: fixed;
+  bottom: 20px; right: 0; left: 0;
+  z-index: 5;
+  pointer-events: none;
 }
 
 #MainHeader {
-  // flex: none;
-  // padding: 0 $horizontal-padding;
+  pointer-events: auto;
   .route-navigation {
     a {
       &.active { text-decoration: underline; }
@@ -35,55 +42,7 @@
   }
 }
 
-.search-module {
-  @include flex(row, wrap, flex-start, center);
-  flex: none;
-  margin-top: 5px;
-  padding: 0 $horizontal-padding;
-  label, input { cursor: pointer; }
-  > div {
-    @include inline-flex(row, wrap, flex-start, center);
-    min-height: 30px;
-    margin: 0 5px 5px 0;
-  }
-  .text-inputs {
-    align-items: stretch;
-    input {
-      &:not(:last-child) { margin-right: 5px; }
-    }
-  }
-  .color-filter {
-    .icon {
-      @include inline-flex(column, nowrap, center, center);
-      cursor: pointer;
-      font-size: 1.5em;
-      transition: all 0.2s;
-      &:not(:last-child) { margin-right: 5px; }
-      &.unchecked {
-        background-color: transparent;
-        opacity: 0.4;
-      }
-    }
-  }
-  .all-none-checkboxes {
-    label:not(:last-child) { margin-right: 5px; }
-    input { margin-right: 5px; }
-  }
-  .cmc-filter {
-    &__value-input { margin-right: 5px; }
-    &__type {
-      &__label {
-        text-transform: capitalize;
-        &:not(:last-child) { margin-right: 5px; }
-      }
-      &__input { margin-right: 5px; }
-    }
-  }
-  .mono-multi-checkboxes {
-    label:not(:last-child) { margin-right: 5px; }
-    input { margin-right: 5px; }
-  }
-}
+@import "search-module";
 
 $cardWidth: 223;
 $cardHeight: 311;

@@ -44,6 +44,7 @@ body {
 *:before,
 *:after {
   box-sizing: inherit;
+  outline: none;
 }
 
 a { cursor: pointer; }

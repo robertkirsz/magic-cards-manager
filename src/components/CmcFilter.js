@@ -1,31 +1,34 @@
 import React, { PropTypes } from 'react'
+import cn from 'classnames'
 
-const CmcTypeInput = ({ thisType, activeType, onChange }) => (
-  <label className="cmc-filter__type__label">
-    <input
-      className="cmc-filter__type__input"
-      type="radio"
-      name="activeType"
-      value={thisType}
-      checked={activeType === thisType}
-      onChange={() => { onChange(thisType) }}
-    />
-    {thisType}
-  </label>
+const CmcTypeButton = ({ thisType, activeType, onChange, label }) => (
+  <button
+    className={
+      cn(
+        'cmc-filter__button btn btn-default',
+        { 'active': activeType === thisType }
+      )
+    }
+    title={thisType} // TODO: capitalize
+    onClick={() => { onChange(thisType) }}
+  >
+    {label}
+  </button>
 )
 
-CmcTypeInput.propTypes = {
+CmcTypeButton.propTypes = {
   thisType: PropTypes.string,
   activeType: PropTypes.string,
+  label: PropTypes.string,
   onChange: PropTypes.func
 }
 
 const CmcFilter = ({ cmcValue, cmcType, changeCmcValue, changeCmcType }) => (
-  <div className="cmc-filter">
-    <label>
-      CMC:
+  <div className="cmc-filter form-group form-inline">
+    <div className="input-group">
+      <div className="input-group-addon" title="Converted Mana Cost">CMC</div>
       <input
-        className="cmc-filter__value-input"
+        className="cmc-filter__input form-control"
         type="number"
         min="0"
         max="30"
@@ -33,10 +36,27 @@ const CmcFilter = ({ cmcValue, cmcType, changeCmcValue, changeCmcType }) => (
         value={cmcValue}
         onChange={e => { changeCmcValue(parseInt(e.target.value || 0, 10)) }}
       />
-    </label>
-    <CmcTypeInput thisType="minimum" activeType={cmcType} onChange={changeCmcType} />
-    <CmcTypeInput thisType="exactly" activeType={cmcType} onChange={changeCmcType} />
-    <CmcTypeInput thisType="maximum" activeType={cmcType} onChange={changeCmcType} />
+      <div className="input-group-btn">
+        <CmcTypeButton
+          thisType="minimum"
+          label=">="
+          activeType={cmcType}
+          onChange={changeCmcType}
+        />
+        <CmcTypeButton
+          thisType="exactly"
+          label="="
+          activeType={cmcType}
+          onChange={changeCmcType}
+        />
+        <CmcTypeButton
+          thisType="maximum"
+          label="<="
+          activeType={cmcType}
+          onChange={changeCmcType}
+        />
+      </div>
+    </div>
   </div>
 )
 

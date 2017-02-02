@@ -1,0 +1,99 @@
+.search-module {
+  @include flex(column, nowrap, center);
+  flex: none;
+  position: relative;
+  width: 415px; height: 207px;
+  margin: 0 auto; padding: $horizontal-padding;
+  background-color: rgba(white, 0.95);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 5px rgba(black, 0.3);
+  pointer-events: auto;
+  .search-form {
+    @include flex(column, nowrap, center);
+    position: absolute;
+    left: $horizontal-padding;
+    width: 385px; height: 177px;
+    transform: scale(1);
+    transform-origin: left center;
+    transition: all 0.3s ease;
+    .text-inputs {
+      @include flex(row);
+      input {
+        flex: 1;
+        &:not(:last-child) { margin-right: 5px; }
+      }
+    }
+    .color-filter-group {
+      @include flex(row, nowrap, space-between, center);
+    }
+    .color-filter {
+      .icon {
+        @include inline-flex(column, nowrap, center, center);
+        cursor: pointer;
+        font-size: 1.5em;
+        transition: all 0.2s;
+        &:not(:last-child) { margin-right: 5px; }
+        &.unchecked {
+          background-color: transparent;
+          opacity: 0.4;
+        }
+      }
+    }
+    .color-buttons {}
+    .all-none-checkboxes {
+      label:not(:last-child) { margin-right: 5px; }
+      input { margin-right: 5px; }
+    }
+    .cmc-filter {
+      .input-group { width: 240px; }
+      &__input {}
+      &__button {}
+    }
+    .mono-multi-checkboxes {
+      label:not(:last-child) { margin-right: 5px; }
+      input { margin-right: 5px; }
+    }
+  }
+  .search-button {
+    @extend %layer;
+    width: 100%; height: 100%;
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    opacity: 0;
+    transform: scale(3);
+    pointer-events: none;
+    transition: all 0.3s ease;
+  }
+  .close-icon {
+    display: block;
+    position: absolute;
+    top: -9px; right: -7px;
+    width: 20px; height: 20px;
+    color: black;
+    text-align: center;
+    line-height: 20px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(black, 0.2);
+    cursor: pointer;
+    opacity: 1;
+    transition: all 0.3s ease;
+  }
+  &--hidden {
+    width: 40px; height: 40px;
+    padding: 0;
+    border-radius: 50%;
+    .close-icon { opacity: 0; }
+    .search-button {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
+    }
+    .search-form {
+      opacity: 0;
+      transform: scale(0);
+    }
+  }
+}

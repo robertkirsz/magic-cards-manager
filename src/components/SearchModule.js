@@ -1,17 +1,21 @@
 import React, { Component, PropTypes } from 'react'
+// import { findDOMNode } from 'react-dom'
 import { connect } from 'react-redux'
 import _ from 'lodash'
+import cn from 'classnames'
 import { filterAllCards } from 'store/allCards'
 import { filterMyCards } from 'store/myCards'
-import { ColorFilter, CmcFilter, AllNoneToggle, MonoMultiToggle } from 'components'
+import { openSearchModule, closeSearchModule } from 'store/layout'
+import { ColorFilter, CmcFilter, ColorButtons } from 'components'
 import { cardsDatabase } from 'database'
+// import { isContainedIn } from 'utils'
 
 const clearState = {
   queryName: '',
   queryTypes: '',
   queryText: '',
   cmcValue: 0,
-  cmcType: 'minimum',
+  cmcType: 'minimum', // 'minimum' || 'exactly' || 'maximum'
   monocoloredOnly: false,
   multicoloredOnly: false,
   colors: {
@@ -24,13 +28,14 @@ const clearState = {
   }
 }
 
-const mapStateToProps = ({ myCards, location }) => ({
+const mapStateToProps = ({ myCards, location, layout }) => ({
   allCards: cardsDatabase,
   myCards: myCards.cards,
-  pathname: location.pathname
+  pathname: location.pathname,
+  searchModule: layout.searchModule
 })
 
-const mapDispatchToProps = { filterAllCards, filterMyCards }
+const mapDispatchToProps = { filterAllCards, filterMyCards, openSearchModule, closeSearchModule }
 
 export class SearchModule extends Component {
   static propTypes = {
@@ -38,7 +43,10 @@ export class SearchModule extends Component {
     myCards: PropTypes.array,
     pathname: PropTypes.string,
     filterAllCards: PropTypes.func,
-    filterMyCards: PropTypes.func
+    filterMyCards: PropTypes.func,
+    searchModule: PropTypes.bool,
+    openSearchModule: PropTypes.func,
+    closeSearchModule: PropTypes.func
   }
 
   constructor (props) {
@@ -56,6 +64,8 @@ export class SearchModule extends Component {
     this.toggleAll = this.toggleAll.bind(this)
     this.toggleNone = this.toggleNone.bind(this)
     this.search = this.search.bind(this)
+    this.toggleSearchModule = this.toggleSearchModule.bind(this)
+    this.windowClick = this.windowClick.bind(this)
 
     this.state = {
       ...clearState,
@@ -63,6 +73,10 @@ export class SearchModule extends Component {
         ? 'allCards'
         : 'myCards'
     }
+  }
+
+  componentDidMount () {
+    window.addEventListener('click', this.windowClick)
   }
 
   componentDidUpdate () {
@@ -80,6 +94,18 @@ export class SearchModule extends Component {
         : 'myCards'
       this.setState({ whereToSearch })
     }
+  }
+
+  componentWillUnmount () {
+    window.removeEventListener('click', this.windowClick)
+  }
+
+  windowClick (e) {
+    // if (this.props.searchModule) {
+      // const clickedOut = !isContainedIn(e.target, findDOMNode(this.refs.wrapper))
+      // console.warn('clickedOut', clickedOut)
+      // if (clickedOut) this.toggleSearchModule()
+    // }
   }
 
   // TODO: Refactor this since a lot if them do the same thing
@@ -209,44 +235,63 @@ export class SearchModule extends Component {
     }
   }
 
+  toggleSearchModule () {
+    if (this.props.searchModule) this.props.closeSearchModule()
+    else this.props.openSearchModule()
+  }
+
   render () {
-    return (
-      <div className="search-module">
-        <div className="text-inputs">
+    const { searchModule } = this.props
+
+    const searchButton = (
+      <button
+        className="search-button fa fa-search"
+        aria-hidden="true"
+        onClick={this.toggleSearchModule}
+      />
+    )
+
+    const searchForm = (
+      <div className="search-form">
+        {/* <SearchQuerySummary {...this.state} /> */}
+        <div className="text-inputs form-group">
           <input
             type="text"
+            className="form-control"
+            placeholder="Name"
             value={this.state.queryName}
             onChange={this.handleChangeName}
-            placeholder="Name"
           />
           <input
             type="text"
+            className="form-control"
+            placeholder="Type"
             value={this.state.queryTypes}
             onChange={this.handleChangeTypes}
-            placeholder="Type"
           />
           <input
             type="text"
+            className="form-control"
+            placeholder="Text"
             value={this.state.queryText}
             onChange={this.handleChangeText}
-            placeholder="Text"
           />
         </div>
-        <ColorFilter
-          colors={this.state.colors}
-          onColorChange={this.handleChangeColor}
-        />
-        <AllNoneToggle
-          colors={this.state.colors}
-          toggleAll={this.toggleAll}
-          toggleNone={this.toggleNone}
-        />
-        <MonoMultiToggle
-          monocoloredOnly={this.state.monocoloredOnly}
-          multicoloredOnly={this.state.multicoloredOnly}
-          handleChangeMonocolored={this.handleChangeMonocolored}
-          handleChangeMulticolored={this.handleChangeMulticolored}
-        />
+        <div className="color-filter-group form-group">
+          <ColorFilter
+            colors={this.state.colors}
+            onColorChange={this.handleChangeColor}
+          />
+          <ColorButtons
+            colors={this.state.colors}
+            toggleAll={this.toggleAll}
+            toggleNone={this.toggleNone}
+            monocoloredOnly={this.state.monocoloredOnly}
+            multicoloredOnly={this.state.multicoloredOnly}
+            handleChangeMonocolored={this.handleChangeMonocolored}
+            handleChangeMulticolored={this.handleChangeMulticolored}
+          />
+        </div>
         <CmcFilter
           cmcValue={this.state.cmcValue}
           cmcType={this.state.cmcType}
@@ -256,6 +301,14 @@ export class SearchModule extends Component {
         <div>
           <button className="btn" onClick={this.clearState}>Reset</button>
         </div>
+      </div>
+    )
+
+    return (
+      <div className={cn('search-module', { 'search-module--hidden': !searchModule })}>
+        <span className="close-icon fa fa-times" onClick={this.toggleSearchModule} />
+        {searchForm}
+        {searchButton}
       </div>
     )
   }
