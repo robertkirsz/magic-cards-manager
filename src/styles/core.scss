@@ -13,14 +13,6 @@
   z-index: 10;
 }
 
-.fixed-wrapper {
-  flex: none;
-  position: fixed;
-  top: 0; right: 0; left: 0;
-  z-index: 5;
-  pointer-events: none;
-}
-
 .app-buttons {
   flex: none;
   position: fixed;
@@ -37,8 +29,8 @@
     }
   }
   .dropdown-toggle {
-    padding-bottom: 5px;
     padding-top: 5px;
+    padding-bottom: 5px;
   }
 }
 

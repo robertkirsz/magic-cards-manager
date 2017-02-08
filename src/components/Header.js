@@ -65,7 +65,7 @@ export const Header = ({ user, signOut, openModal }) => {
   )
 
   return (
-    <nav id="MainHeader" className="navbar navbar-default">
+    <nav id="MainHeader" className="navbar navbar-default navbar-fixed-top">
       <div className="container-fluid">
         {brandAndToggle}
         <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">

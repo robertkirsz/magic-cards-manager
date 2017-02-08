@@ -86,9 +86,7 @@ export class CoreLayout extends Component {
   render () {
     const app = (
       <div id="app">
-        <div className="fixed-wrapper">
-          <Header />
-        </div>
+        <Header />
         {this.props.children}
         <div className="app-buttons">
           <SearchModule />
