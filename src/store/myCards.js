@@ -23,7 +23,7 @@ const FILTER_MY_CARDS = 'FILTER_MY_CARDS'
 export const addCard = (card, variant) => ({ type: ADD_CARD, card, variant })
 export const removeCard = (card, variant) => ({ type: REMOVE_CARD, card, variant })
 export const clearMyCards = () => ({ type: CLEAR_MY_CARDS })
-export const filterMyCards = filteredCards => ({ type: FILTER_MY_CARDS, filteredCards })
+export const filterMyCards = filterFunction => ({ type: FILTER_MY_CARDS, filterFunction })
 export const loadMyCards = () => {
   return async (dispatch, getState) => {
     if (getState().myCards.loading) return
@@ -191,7 +191,10 @@ const ACTION_HANDLERS = {
   [CLEAR_MY_CARDS]: () => initialState,
   [LOAD_MY_CARDS_REQUEST]: state => ({ ...state, loading: true }),
   [LOAD_MY_CARDS_SUCCESS]: (state, { cards }) => ({ ...state, loading: false, cards }),
-  [FILTER_MY_CARDS]: (state, { filteredCards }) => ({ ...state, filteredCards })
+  [FILTER_MY_CARDS]: (state, { filterFunction }) => ({
+    ...state,
+    filteredCards: state.cards.filter(filterFunction)
+  })
 }
 
 // ------------------------------------

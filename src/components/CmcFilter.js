@@ -39,19 +39,19 @@ const CmcFilter = ({ cmcValue, cmcType, changeCmcValue, changeCmcType }) => (
       <div className="input-group-btn">
         <CmcTypeButton
           thisType="minimum"
-          label=">="
+          label="Min"
           activeType={cmcType}
           onChange={changeCmcType}
         />
         <CmcTypeButton
           thisType="exactly"
-          label="="
+          label="Exactly"
           activeType={cmcType}
           onChange={changeCmcType}
         />
         <CmcTypeButton
           thisType="maximum"
-          label="<="
+          label="Max"
           activeType={cmcType}
           onChange={changeCmcType}
         />

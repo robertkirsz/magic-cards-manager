@@ -10,7 +10,6 @@ import AllNoneToggle   from 'components/AllNoneToggle'
 import LoadingScreen   from 'components/LoadingScreen'
 import CardsSearchList from 'components/CardsSearchList'
 import MonoMultiToggle from 'components/MonoMultiToggle'
-import SearchQuerySummary from 'components/SearchQuerySummary'
 
 export {
   Card,
@@ -24,6 +23,5 @@ export {
   AllNoneToggle,
   LoadingScreen,
   CardsSearchList,
-  MonoMultiToggle,
-  SearchQuerySummary
+  MonoMultiToggle
 }

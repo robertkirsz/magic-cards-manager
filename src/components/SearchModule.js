@@ -1,14 +1,12 @@
 import React, { Component, PropTypes } from 'react'
-// import { findDOMNode } from 'react-dom'
 import { connect } from 'react-redux'
-import _ from 'lodash'
-import cn from 'classnames'
+import _debounce from 'lodash/debounce'
+import _every from 'lodash/every'
+import _find from 'lodash/find'
+import _camelCase from 'lodash/camelCase'
 import { filterAllCards } from 'store/allCards'
 import { filterMyCards } from 'store/myCards'
-import { openSearchModule, closeSearchModule } from 'store/layout'
 import { ColorFilter, CmcFilter, ColorButtons } from 'components'
-import { cardsDatabase } from 'database'
-// import { isContainedIn } from 'utils'
 
 const clearState = {
   queryName: '',
@@ -19,284 +17,209 @@ const clearState = {
   monocoloredOnly: false,
   multicoloredOnly: false,
   colors: {
-    'White': true,
-    'Blue': true,
-    'Black': true,
-    'Red': true,
-    'Green': true,
-    'Colorless': true
+    White: true,
+    Blue: true,
+    Black: true,
+    Red: true,
+    Green: true,
+    Colorless: true
   }
 }
 
-const mapStateToProps = ({ myCards, location, layout }) => ({
-  allCards: cardsDatabase,
-  myCards: myCards.cards,
-  pathname: location.pathname,
-  searchModule: layout.searchModule
+const mapStateToProps = ({ location }) => ({
+  pathname: location.pathname
 })
 
-const mapDispatchToProps = { filterAllCards, filterMyCards, openSearchModule, closeSearchModule }
+const mapDispatchToProps = { filterAllCards, filterMyCards }
 
-export class SearchModule extends Component {
+class SearchModule extends Component {
   static propTypes = {
-    allCards: PropTypes.array,
-    myCards: PropTypes.array,
-    pathname: PropTypes.string,
-    filterAllCards: PropTypes.func,
-    filterMyCards: PropTypes.func,
-    searchModule: PropTypes.bool,
-    openSearchModule: PropTypes.func,
-    closeSearchModule: PropTypes.func
+    pathname: PropTypes.string.isRequired,
+    filterAllCards: PropTypes.func.isRequired,
+    filterMyCards: PropTypes.func.isRequired
   }
 
-  constructor (props) {
-    super(props)
-
-    this.clearState = this.clearState.bind(this)
-    this.handleChangeName = this.handleChangeName.bind(this)
-    this.handleChangeTypes = this.handleChangeTypes.bind(this)
-    this.handleChangeText = this.handleChangeText.bind(this)
-    this.handleChangeColor = this.handleChangeColor.bind(this)
-    this.handleChangeCmcValue = this.handleChangeCmcValue.bind(this)
-    this.handleChangeCmcType = this.handleChangeCmcType.bind(this)
-    this.handleChangeMonocolored = this.handleChangeMonocolored.bind(this)
-    this.handleChangeMulticolored = this.handleChangeMulticolored.bind(this)
-    this.toggleAll = this.toggleAll.bind(this)
-    this.toggleNone = this.toggleNone.bind(this)
-    this.search = this.search.bind(this)
-    this.toggleSearchModule = this.toggleSearchModule.bind(this)
-    this.windowClick = this.windowClick.bind(this)
-
-    this.state = {
-      ...clearState,
-      whereToSearch: props.pathname === '/all-cards'
-        ? 'allCards'
-        : 'myCards'
-    }
+  state = {
+    ...clearState,
+    whereToSearch: this.props.pathname === '/all-cards'
+      ? 'allCards'
+      : 'myCards'
   }
 
-  componentDidMount () {
-    window.addEventListener('click', this.windowClick)
-  }
+  debouncedFilter = _debounce(state => { this.filter(state) }, 300, { leading: true })
 
-  componentDidUpdate () {
-    // TODO: check if it's truely the best way to handle this (in a 'didUpdate' - I don't like it >:/)
-    if (this.state.whereToSearch === 'allCards')
-      this.props.filterAllCards(this.search(this.state))
-    else
-      this.props.filterMyCards(this.search(this.state))
-  }
-
-  componentWillReceiveProps (nextProps) {
-    if (this.props.pathname !== nextProps.pathname) {
-      const whereToSearch = nextProps.pathname === '/all-cards'
-        ? 'allCards'
-        : 'myCards'
+  componentWillReceiveProps ({ pathname }) {
+    // When route changes and only if it's one of the card list pages...
+    if (this.props.pathname !== pathname && (pathname === 'all-cards' || pathname === 'my-cards')) {
+      // Save information of the collection that will be filtered
+      const whereToSearch = _camelCase(pathname)
       this.setState({ whereToSearch })
+      // Filter it
+      this.filter({ ...this.state, whereToSearch })
     }
   }
 
-  componentWillUnmount () {
-    window.removeEventListener('click', this.windowClick)
+  // Reverts to initial state
+  clearState = () => {
+    const newState = { ...clearState }
+    newState.whereToSearch = this.state.whereToSearch
+    this.setState(newState)
+    this.filter(newState)
   }
 
-  windowClick (e) {
-    // if (this.props.searchModule) {
-      // const clickedOut = !isContainedIn(e.target, findDOMNode(this.refs.wrapper))
-      // console.warn('clickedOut', clickedOut)
-      // if (clickedOut) this.toggleSearchModule()
-    // }
+  // Updates various search queries
+  updateQuery = (property, value) => {
+    const newState = { ...this.state }
+    newState[property] = value
+    this.setState(newState)
+    this.debouncedFilter(newState)
   }
 
-  // TODO: Refactor this since a lot if them do the same thing
-
-  clearState () {
-    this.setState(clearState)
+  // Updates card color query
+  handleChangeColor = (color, state) => {
+    const newState = { ...this.state }
+    newState.colors[color] = state
+    this.setState(newState)
+    this.debouncedFilter(newState)
   }
 
-  handleChangeName (e) {
-    this.setState({
-      queryName: e.target.value
-    })
+  handleChangeMonocolored = () => {
+    const newState = { ...this.state }
+    newState.monocoloredOnly = !this.state.monocoloredOnly
+    newState.multicoloredOnly = false
+    this.setState(newState)
+    this.debouncedFilter(newState)
   }
 
-  handleChangeTypes (e) {
-    this.setState({
-      queryTypes: e.target.value
-    })
+  handleChangeMulticolored = () => {
+    const newState = { ...this.state }
+    newState.multicoloredOnly = !this.state.multicoloredOnly
+    newState.monocoloredOnly = false
+    this.setState(newState)
+    this.debouncedFilter(newState)
   }
 
-  handleChangeText (e) {
-    this.setState({
-      queryText: e.target.value
-    })
+  // Turns on or off all the color buttons
+  toggleColors = state => {
+    const newState = { ...this.state }
+    newState.colors = {
+      White: state,
+      Blue: state,
+      Black: state,
+      Red: state,
+      Green: state,
+      Colorless: state
+    }
+    this.setState(newState)
+    this.debouncedFilter(newState)
   }
 
-  handleChangeColor (color, state) {
-    this.setState({
-      colors: {
-        ...this.state.colors,
-        [color]: state
-      }
-    })
-  }
-
-  handleChangeCmcValue (cmcValue) {
-    this.setState({ cmcValue })
-  }
-
-  handleChangeCmcType (cmcType) {
-    this.setState({ cmcType })
-  }
-
-  handleChangeMonocolored () {
-    this.setState({
-      monocoloredOnly: !this.state.monocoloredOnly,
-      multicoloredOnly: false
-    })
-  }
-
-  handleChangeMulticolored () {
-    this.setState({
-      multicoloredOnly: !this.state.multicoloredOnly,
-      monocoloredOnly: false
-    })
-  }
-
-  toggleAll () {
-    this.setState({
-      colors: {
-        'White': true,
-        'Blue': true,
-        'Black': true,
-        'Red': true,
-        'Green': true,
-        'Colorless': true
-      }
-    })
-  }
-
-  toggleNone () {
-    this.setState({
-      colors: {
-        'White': false,
-        'Blue': false,
-        'Black': false,
-        'Red': false,
-        'Green': false,
-        'Colorless': false
-      }
-    })
-  }
-
-  search (state) {
+  // Returns filtering function that will be used by reducers to filter cards
+  search = state => {
     const queryName = state.queryName.trim().toLowerCase()
     const queryTypes = state.queryTypes.toLowerCase().split(' ')
     const queryText = state.queryText.trim().toLowerCase()
-    const colorsArray = []
 
-    for (const key in state.colors) if (state.colors[key]) colorsArray.push(key)
+    return card => {
+      // Hide cards with no text when text is specified
+      if (queryText && !card.text) return false
+      // Checking card name
+      const nameOk = card.name.toLowerCase().indexOf(queryName) > -1
+      // Checking card types
+      const typeOk = queryTypes.length
+        ? _every(queryTypes, qt => (
+            _find(card.types, ct => ct.toLowerCase().indexOf(qt) > -1) ||
+            _find(card.subtypes, cst => cst.toLowerCase().indexOf(qt) > -1)
+          ))
+        : true
+      // Checking card types
+      const textOk = card.text
+        ? card.text.toLowerCase().indexOf(queryText) > -1
+        : true
+      // Checking card colors
+      const colorsOk = card.colors
+        ? _find(card.colors, color => state.colors[color])
+        : state.colors.Colorless
+      // Monocolored only test
+      let monoOk = true
+      if (state.monocoloredOnly && card.colors && card.colors.length !== 1) monoOk = false
+      // Multicolored only test
+      let multiOk = true
+      if (state.multicoloredOnly && (!card.colors || (card.colors && card.colors.length < 2))) multiOk = false
+      // Converted mana cost test
+      let cmcOk = false
+      if (state.cmcType === 'minimum' && (card.cmc || 0) >= state.cmcValue) cmcOk = true
+      if (state.cmcType === 'exactly' && (card.cmc || 0) === state.cmcValue) cmcOk = true
+      if (state.cmcType === 'maximum' && (card.cmc || 0) <= state.cmcValue) cmcOk = true
 
-    if (queryName.length || queryTypes.length || queryText.length) {
-      return this.props[state.whereToSearch].filter((card) => {
-        // Hide cards with no text when text is specified
-        if (queryText && !card.text) return false
-        // Checking card name
-        const nameOk = card.name.toLowerCase().indexOf(queryName) > -1
-        // Checking card types
-        const typeOk = queryTypes.length
-          ? _.every(queryTypes, qt => (
-              _.find(card.types, ct => ct.toLowerCase().indexOf(qt) > -1) ||
-              _.find(card.subtypes, cst => cst.toLowerCase().indexOf(qt) > -1)
-            ))
-          : true
-        // Checking card types
-        const textOk = card.text
-          ? card.text.toLowerCase().indexOf(queryText) > -1
-          : true
-        // Checking card colors
-        const colorsOk = card.colors
-          ? colorsArray.filter((val) => card.colors.indexOf(val) !== -1).length > 0
-          : state.colors.Colorless
-        // Monocolored only test
-        let monoOk = true
-        if (state.monocoloredOnly && card.colors && card.colors.length !== 1) monoOk = false
-        // Multicolored only test
-        let multiOk = true
-        if (state.multicoloredOnly && (!card.colors || (card.colors && card.colors.length < 2))) multiOk = false
-        // Converted mana cost test
-        let cmcOk = false
-        if (state.cmcType === 'minimum' && (card.cmc || 0) >= state.cmcValue) cmcOk = true
-        if (state.cmcType === 'exactly' && (card.cmc || 0) === state.cmcValue) cmcOk = true
-        if (state.cmcType === 'maximum' && (card.cmc || 0) <= state.cmcValue) cmcOk = true
-
-        return nameOk && typeOk && textOk && colorsOk && cmcOk && monoOk && multiOk
-      })
+      return nameOk && typeOk && textOk && colorsOk && cmcOk && monoOk && multiOk
     }
   }
 
-  toggleSearchModule () {
-    if (this.props.searchModule) this.props.closeSearchModule()
-    else this.props.openSearchModule()
+  // Passes filtering function to a particular reducer
+  filter = state => {
+    if (state.whereToSearch === 'allCards') this.props.filterAllCards(this.search(state))
+    if (state.whereToSearch === 'myCards') this.props.filterMyCards(this.search(state))
   }
 
   render () {
-    const { searchModule } = this.props
+    const {
+      queryName, queryTypes, queryText, colors,
+      monocoloredOnly, multicoloredOnly, cmcValue, cmcType
+    } = this.state
 
     const searchButton = (
       <button
         className="search-button fa fa-search"
         aria-hidden="true"
-        onClick={this.toggleSearchModule}
       />
     )
 
     const searchForm = (
       <div className="search-form">
-        {/* <SearchQuerySummary {...this.state} /> */}
         <div className="text-inputs form-group">
           <input
             type="text"
             className="form-control"
             placeholder="Name"
-            value={this.state.queryName}
-            onChange={this.handleChangeName}
+            value={queryName}
+            onChange={e => this.updateQuery('queryName', e.target.value)}
           />
           <input
             type="text"
             className="form-control"
             placeholder="Type"
-            value={this.state.queryTypes}
-            onChange={this.handleChangeTypes}
+            value={queryTypes}
+            onChange={e => this.updateQuery('queryTypes', e.target.value)}
           />
           <input
             type="text"
             className="form-control"
             placeholder="Text"
-            value={this.state.queryText}
-            onChange={this.handleChangeText}
+            value={queryText}
+            onChange={e => this.updateQuery('queryText', e.target.value)}
           />
         </div>
         <div className="color-filter-group form-group">
           <ColorFilter
-            colors={this.state.colors}
+            colors={colors}
             onColorChange={this.handleChangeColor}
           />
           <ColorButtons
-            colors={this.state.colors}
-            toggleAll={this.toggleAll}
-            toggleNone={this.toggleNone}
-            monocoloredOnly={this.state.monocoloredOnly}
-            multicoloredOnly={this.state.multicoloredOnly}
+            colors={colors}
+            toggleAll={() => { this.toggleColors(true) }}
+            toggleNone={() => { this.toggleColors(false) }}
+            monocoloredOnly={monocoloredOnly}
+            multicoloredOnly={multicoloredOnly}
             handleChangeMonocolored={this.handleChangeMonocolored}
             handleChangeMulticolored={this.handleChangeMulticolored}
           />
         </div>
         <CmcFilter
-          cmcValue={this.state.cmcValue}
-          cmcType={this.state.cmcType}
-          changeCmcValue={this.handleChangeCmcValue}
-          changeCmcType={this.handleChangeCmcType}
+          cmcValue={cmcValue}
+          cmcType={cmcType}
+          changeCmcValue={value => this.updateQuery('cmcValue', value)}
+          changeCmcType={value => this.updateQuery('cmcType', value)}
         />
         <div>
           <button className="btn" onClick={this.clearState}>Reset</button>
@@ -305,10 +228,9 @@ export class SearchModule extends Component {
     )
 
     return (
-      <div className={cn('search-module', { 'search-module--hidden': !searchModule })}>
-        <span className="close-icon fa fa-times" onClick={this.toggleSearchModule} />
-        {searchForm}
+      <div className="search-module">
         {searchButton}
+        {searchForm}
       </div>
     )
   }

@@ -2,7 +2,7 @@ import _ from 'lodash'
 import moment from 'moment'
 import { fetchAllSets } from 'api'
 import { Card } from 'classes'
-import { saveCardsDatabase } from 'database'
+import { cardsDatabase, saveCardsDatabase } from 'database'
 
 // TODO: Sort all cards by name perhaps?
 
@@ -38,7 +38,7 @@ export const getCards = () => {
       .catch(error => dispatch(responseError(error))) // Catch any errors
   }
 }
-export const filterAllCards = cards => ({ type: FILTER_ALL_CARDS, cards })
+export const filterAllCards = filterFunction => ({ type: FILTER_ALL_CARDS, filterFunction })
 
 export const actions = {
   sendRequest,
@@ -52,11 +52,12 @@ export const actions = {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [ALL_CARDS_REQUEST]: (state, action) => {
-    return state.fetching ? state : { ...state, fetching: true, error: null }
-  },
-  [ALL_CARDS_SUCCESS]: (state, action) => {
-    const { allSets } = action
+  [ALL_CARDS_REQUEST]: state => (
+    state.fetching
+      ? state
+      : { ...state, fetching: true, error: null }
+  ),
+  [ALL_CARDS_SUCCESS]: (state, { allSets }) => {
     const allCards = [] // Will contain every single Magic card
     const uniqueCards = {} // Will contain unique cards
     // Compares release dates and chooses the latest one
@@ -98,10 +99,15 @@ const ACTION_HANDLERS = {
       latestSet
     }
   },
-  [ALL_CARDS_ERROR]: (state, action) => {
-    return { ...state, fetching: false, error: action.error }
-  },
-  [FILTER_ALL_CARDS]: (state, action) => ({ ...state, filteredCards: action.cards })
+  [ALL_CARDS_ERROR]: (state, { error }) => ({
+    ...state,
+    fetching: false,
+    error
+  }),
+  [FILTER_ALL_CARDS]: (state, { filterFunction }) => ({
+    ...state,
+    filteredCards: cardsDatabase.filter(filterFunction)
+  })
 }
 
 // ------------------------------------

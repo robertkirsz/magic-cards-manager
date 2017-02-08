@@ -1,34 +1,25 @@
-import React, { Component, PropTypes } from 'react'
-import { connect } from 'react-redux'
+import React, { PropTypes } from 'react'
 import { browserHistory } from 'react-router'
 import { Card } from 'components'
-import _ from 'lodash'
 
-class CardsSearchList extends Component {
-  render () {
-    return (
-      <div className="cards-search-list" style={{ marginTop: this.props.headerHeight + 20 }}>
-        {
-          _.map(this.props.cards, (card) => (
-            <Card
-              key={card.id}
-              mainCard={card}
-              onClick={() => { browserHistory.push(`/${this.props.path}/${card.cardUrl}`) }}
-            />
-          ))
-        }
-      </div>
-    )
-  }
-}
+const CardsSearchList = props => (
+  <div className="cards-search-list">
+    {
+      props.cards.map(card => (
+        <Card
+          key={card.id}
+          mainCard={card}
+          onClick={() => { browserHistory.push(`/${props.path}/${card.cardUrl}`) }}
+        />
+      ))
+    }
+  </div>
+)
 
 CardsSearchList.propTypes = {
   cards: PropTypes.array,
   path: PropTypes.string,
-  addCard: PropTypes.func,
-  headerHeight: PropTypes.number
+  addCard: PropTypes.func
 }
 
-const mapStateToProps = ({ layout }) => ({ headerHeight: layout.headerHeight })
-
-export default connect(mapStateToProps)(CardsSearchList)
+export default CardsSearchList

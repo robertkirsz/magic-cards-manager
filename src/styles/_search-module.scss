@@ -2,10 +2,10 @@
   @include flex(column, nowrap, center);
   flex: none;
   position: relative;
-  width: 415px; height: 207px;
+  width: 40px; height: 40px;
   margin: 0 auto; padding: $horizontal-padding;
   background-color: rgba(white, 0.95);
-  border-radius: 10px;
+  border-radius: 50%;
   transition: all 0.3s ease;
   box-shadow: 0 3px 5px rgba(black, 0.3);
   pointer-events: auto;
@@ -14,8 +14,9 @@
     position: absolute;
     left: $horizontal-padding;
     width: 385px; height: 177px;
-    transform: scale(1);
+    transform: scale(0);
     transform-origin: left center;
+    opacity: 0;
     transition: all 0.3s ease;
     .text-inputs {
       @include flex(row);
@@ -46,7 +47,7 @@
       input { margin-right: 5px; }
     }
     .cmc-filter {
-      .input-group { width: 240px; }
+      .input-group { width: 290px; }
       &__input {}
       &__button {}
     }
@@ -61,39 +62,20 @@
     background: none;
     border: none;
     font-size: 1.5em;
-    opacity: 0;
-    transform: scale(3);
-    pointer-events: none;
-    transition: all 0.3s ease;
-  }
-  .close-icon {
-    display: block;
-    position: absolute;
-    top: -9px; right: -7px;
-    width: 20px; height: 20px;
-    color: black;
-    text-align: center;
-    line-height: 20px;
-    background: white;
-    border-radius: 50%;
-    box-shadow: 0 2px 5px rgba(black, 0.2);
-    cursor: pointer;
     opacity: 1;
     transition: all 0.3s ease;
   }
-  &--hidden {
-    width: 40px; height: 40px;
+  &:hover {
+    width: 415px; height: 207px;
     padding: 0;
-    border-radius: 50%;
-    .close-icon { opacity: 0; }
+    border-radius: 10px;
     .search-button {
-      opacity: 1;
-      transform: scale(1);
-      pointer-events: auto;
+      font-size: 4em;
+      opacity: 0;
     }
     .search-form {
-      opacity: 0;
-      transform: scale(0);
+      transform: scale(1);
+      opacity: 1;
     }
   }
 }
