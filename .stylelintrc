@@ -1,0 +1,19 @@
+{
+  "rules": {
+    "block-no-empty": null,
+    "color-no-invalid-hex": true,
+    "comment-empty-line-before": ["always", {
+      "ignore": ["stylelint-command", "after-comment"]
+    }],
+    "declaration-colon-space-after": "always",
+    "indentation": 2,
+    "max-empty-lines": 2,
+    "declaration-empty-line-before": "never",
+    "rule-empty-line-before": ["always", {
+      "ignore": ["inside-block"]
+    }],
+    "at-rule-empty-line-before": ["always", {
+      "except": ["inside-block"]
+    }]
+  }
+}
