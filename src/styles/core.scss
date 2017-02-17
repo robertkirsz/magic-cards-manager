@@ -117,21 +117,33 @@ $mainMargin: 30px;
     $cardsInRow: 4;
     $width: calc((100vw - #{$mainMargin}) / #{$cardsInRow} - 5px);
     width: $width; height: calc(#{$width} * #{$cardRatio});
+    &.small {
+      width: calc(#{$width} * 0.6); height: calc(#{$width} * #{$cardRatio} * 0.6);
+    }
   };
   @include MQ(M) {
     $cardsInRow: 5;
     $width: calc((100vw - #{$mainMargin}) / #{$cardsInRow} - 5px);
     width: $width; height: calc(#{$width} * #{$cardRatio});
+    &.small {
+      width: calc(#{$width} * 0.6); height: calc(#{$width} * #{$cardRatio} * 0.6);
+    }
   };
   @include MQ(L) {
     $cardsInRow: 6;
     $width: calc((100vw - #{$mainMargin}) / #{$cardsInRow} - 5px);
     width: $width; height: calc(#{$width} * #{$cardRatio});
+    &.small {
+      width: calc(#{$width} * 0.6); height: calc(#{$width} * #{$cardRatio} * 0.6);
+    }
   };
   @include MQ(XL) {
     $cardsInRow: 7;
     $width: calc((100vw - #{$mainMargin}) / #{$cardsInRow} - 5px);
     width: $width; height: calc(#{$width} * #{$cardRatio});
+    &.small {
+      width: calc(#{$width} * 0.6); height: calc(#{$width} * #{$cardRatio} * 0.6);
+    }
   };
 }
 
@@ -139,27 +151,7 @@ $mainMargin: 30px;
 
 .all-cards-view {}
 
-.card-view {
-  @include flex(column, nowrap, center, center);
-  position: fixed;
-  top: 0; right: 0; bottom: 0; left: 0;
-  background: rgba(black, 0.5);
-  z-index: 10;
-  .card-panel {
-    max-width: 70vw;
-    min-height: 50vh;
-    max-height: 95vh;
-    padding: 10px;
-    background: white;
-    overflow-y: auto;
-  }
-  .card-variants-list {
-    @include flex(row, wrap, flex-start, flex-start);
-    .card {
-      &:not(:last-child) { margin-right: 10px; }
-    }
-  }
-}
+@import "card-view";
 
 .user-badge {
   &__picture {

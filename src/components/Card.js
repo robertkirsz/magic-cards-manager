@@ -21,7 +21,9 @@ export class Card extends Component {
     addCard: PropTypes.func,
     removeCard: PropTypes.func,
     onClick: PropTypes.func,
-    setTimeout: PropTypes.func
+    setTimeout: PropTypes.func,
+    className: PropTypes.string,
+    hoverAnimation: PropTypes.bool
   }
 
   constructor () {
@@ -141,7 +143,7 @@ export class Card extends Component {
   }
 
   render () {
-    const { mainCard, variantCard, setIcon, showCount, showAdd, showRemove, onClick } = this.props
+    const { mainCard, variantCard, setIcon, showCount, showAdd, showRemove, onClick, className, hoverAnimation } = this.props
     const { animations } = this.state
 
     const cardData = variantCard || mainCard
@@ -163,11 +165,11 @@ export class Card extends Component {
 
     return (
       <div
-        className="card atvImg"
+        className={cn('card atvImg', className)}
         onClick={onClick}
-        onMouseMove={e => { this.processMovement(e) }}
-        onMouseEnter={e => { this.processEnter(e) }}
-        onMouseLeave={e => { this.processExit(e) }}
+        onMouseMove={hoverAnimation && this.processMovement}
+        onMouseEnter={hoverAnimation && this.processEnter}
+        onMouseLeave={hoverAnimation && this.processExit}
         ref={node => { this.cardElement = node }}
       >
         <div className="atvImg-container">

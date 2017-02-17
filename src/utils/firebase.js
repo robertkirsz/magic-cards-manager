@@ -10,7 +10,6 @@ const config = {
   messagingSenderId: '378575387948'
 }
 
-// TODO: check if we still need to export those
 export const app = firebase.initializeApp(config)
 export const auth = firebase.auth()
 export const database = firebase.database()
@@ -24,8 +23,6 @@ const providers = {
 }
 
 // ---------- GENERIC STUFF ----------
-
-// TODO: id mozna zastpić  auth.currentUser.uid
 
 // Generic 'get' function
 export const firebaseGetData = (table, id) => (
@@ -107,7 +104,7 @@ export const updateUserData = user => firebaseUpdateData('Users', user.id, user)
 
 export const saveCollection = collection => {
   const reducedCollection = {}
-  _forEach(collection, singleCard => { reducedCollection[singleCard.id] = singleCard.formatForLocalStorage2() })
+  _forEach(collection, singleCard => { reducedCollection[singleCard.id] = singleCard.formatForFirebase() })
   return firebaseSetData('Collections', auth.currentUser.uid, reducedCollection)
 }
 

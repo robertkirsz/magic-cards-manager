@@ -24,17 +24,7 @@ export default class Card {
     return new Card(this)
   }
 
-  formatForLocalStorage () {
-    const { id, cardsInCollection, variants } = this
-
-    const formattedCard = { id, cardsInCollection }
-
-    if (variants) formattedCard.variants = variants.map(variant => variant.formatForLocalStorage())
-
-    return formattedCard
-  }
-
-  formatForLocalStorage2 () {
+  formatForFirebase () {
     const { cardsInCollection, variants } = this
 
     const formattedCard = { cardsInCollection }
@@ -42,7 +32,7 @@ export default class Card {
     if (variants) {
       formattedCard.variants = {}
       _forEach(variants, variant => {
-        formattedCard.variants[variant.id] = variant.formatForLocalStorage2()
+        formattedCard.variants[variant.id] = variant.formatForFirebase()
       })
     }
 
