@@ -16,15 +16,28 @@ class CardDetailsPopup extends Component {
   timeout = null
 
   componentWillReceiveProps (nextProps) {
-    if (!this.props.show && nextProps.show) this.showDetailsPopup()
+    // On mouse move...
+    if (nextProps.coordinates) {
+      clearTimeout(this.timeout)
+      // If popup is visible
+      if (this.state.popupVisible) {
+        // Hide it
+        this.hideDetailsPopup()
+      // If popup is hidden
+      } else {
+        // Show it
+        this.timeout = setTimeout(() => {
+          this.showDetailsPopup()
+        }, 1500)
+      }
+    }
+
     if (this.props.show && !nextProps.show) this.hideDetailsPopup()
-    if (nextProps.coordinates) this.updateDetailsPopupPosition(nextProps.coordinates)
   }
 
   showDetailsPopup () {
-    this.timeout = setTimeout(() => {
-      this.setState({ popupVisible: true })
-    }, 1000)
+    this.setState({ popupVisible: true })
+    this.updateDetailsPopupPosition(this.props.coordinates)
   }
 
   hideDetailsPopup () {
@@ -32,7 +45,7 @@ class CardDetailsPopup extends Component {
     this.setState({ popupVisible: false })
   }
 
-  updateDetailsPopupPosition = ({ pageX, pageY, cardX, cardY }) => {
+  updateDetailsPopupPosition = ({ pageX, pageY }) => {
     if (!this.state.popupVisible) return
 
     const offset = 10
@@ -40,8 +53,8 @@ class CardDetailsPopup extends Component {
     const popupHeight = this.refs.detailsPopup.clientHeight
     const windowWidth = window.innerWidth
     const windowHeight = window.innerHeight
-    let top = pageY - cardY + offset
-    let left = pageX - cardX + offset
+    let top = pageY + offset
+    let left = pageX + offset
 
     if (pageY + popupHeight > windowHeight) top = top - popupHeight
     if (pageX + popupWidth > windowWidth) left = left - popupWidth

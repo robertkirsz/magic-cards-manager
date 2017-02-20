@@ -112,7 +112,7 @@ class Card extends Component {
     const arad = Math.atan2(dy, dx)
     let angle = arad * 180 / Math.PI - 90
 
-    this.updateDetailsPopupPosition({ pageX, pageY, cardX: offsets.left, cardY: offsets.top })
+    this.updateDetailsPopupPosition({ pageX, pageY })
 
     if (angle < 0) angle = angle + 360
 
@@ -174,7 +174,7 @@ class Card extends Component {
     )
 
     return (
-      <div style={{ position: 'relative' }}>
+      <div>
         <CardDetailsPopup
           cardData={cardData}
           show={detailsPopupShow}
