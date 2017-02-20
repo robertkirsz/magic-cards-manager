@@ -104,11 +104,21 @@ export const updateProfile = userProfile => (
   auth.currentUser.updateProfile({
     displayName: userProfile.displayName,
     photoURL: userProfile.photoURL
-  }).then(function () {
-    // Update successful.
-  }, function (error) {
-    // An error happened.
   })
+    .then(() => {
+      console.log('Success')
+    }, error => {
+      console.log('Error', error)
+    })
+)
+
+export const updateEmail = email => (
+  auth.currentUser.updateEmail(email)
+    .then(() => {
+      console.log('Success')
+    }, error => {
+      console.log('Error', error)
+    })
 )
 
 // ---------- USER DATA UPDATING ----------
