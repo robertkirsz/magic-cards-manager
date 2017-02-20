@@ -16,6 +16,7 @@ const CLEAR_MY_CARDS = 'CLEAR_MY_CARDS'
 const LOAD_MY_CARDS_REQUEST = 'LOAD_MY_CARDS_REQUEST'
 const LOAD_MY_CARDS_SUCCESS = 'LOAD_MY_CARDS_SUCCESS'
 const FILTER_MY_CARDS = 'FILTER_MY_CARDS'
+const LOCK_MY_CARDS = 'LOCK_MY_CARDS'
 
 // ------------------------------------
 // Actions
@@ -55,6 +56,7 @@ export const loadMyCards = () => {
 }
 export const loadMyCardsRequest = () => ({ type: LOAD_MY_CARDS_REQUEST, loading: true })
 export const loadMyCardsSuccess = cards => ({ type: LOAD_MY_CARDS_SUCCESS, cards, loading: false })
+export const toggleLockMyCards = () => ({ type: LOCK_MY_CARDS })
 
 // ------------------------------------
 // Action Handlers
@@ -194,7 +196,8 @@ const ACTION_HANDLERS = {
   [FILTER_MY_CARDS]: (state, { filterFunction }) => ({
     ...state,
     filteredCards: state.cards.filter(filterFunction)
-  })
+  }),
+  [LOCK_MY_CARDS]: state => ({ ...state, locked: !state.locked })
 }
 
 // ------------------------------------
@@ -202,6 +205,7 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 const initialState = {
   cards: [],
+  locked: true,
   loading: false,
   filteredCards: null
 }

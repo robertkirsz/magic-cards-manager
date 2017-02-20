@@ -3,6 +3,7 @@ import Header          from 'components/Header'
 import CmcFilter       from 'components/CmcFilter'
 import UserBadge       from 'components/UserBadge'
 import LatestSet       from 'components/LatestSet'
+import LockButton      from 'components/LockButton'
 import ColorFilter     from 'components/ColorFilter'
 import ColorButtons    from 'components/ColorButtons'
 import SearchModule    from 'components/SearchModule'
@@ -17,6 +18,7 @@ export {
   CmcFilter,
   UserBadge,
   LatestSet,
+  LockButton,
   ColorFilter,
   ColorButtons,
   SearchModule,

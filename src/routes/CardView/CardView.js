@@ -7,6 +7,7 @@ import { Card } from 'components'
 import { cardsDatabase } from 'database'
 
 const mapStateToProps = ({ allCards, myCards }, ownProps) => ({
+  myCardsLocked: myCards.locked,
   // Find card by its name from the URL in all the cards or cards
   // from user's collection based of what page we are on
   card: _.find(
@@ -22,7 +23,8 @@ class CardView extends Component {
     card: PropTypes.object,
     routes: PropTypes.array,
     routeParams: PropTypes.object,
-    addCard: PropTypes.func
+    addCard: PropTypes.func,
+    myCardsLocked: PropTypes.bool
   }
 
   state = {
@@ -45,7 +47,7 @@ class CardView extends Component {
   }
 
   render () {
-    const { card, routes } = this.props
+    const { card, routes, myCardsLocked } = this.props
     const { modalOpened } = this.state
 
     if (!card) return null
@@ -82,8 +84,8 @@ class CardView extends Component {
                   variantCard={variantCard}
                   setIcon
                   showCount={this.isCollectionPage}
-                  showAdd
-                  showRemove={isMyCardsPage}
+                  showAdd={!myCardsLocked}
+                  showRemove={!myCardsLocked && isMyCardsPage}
                 />
               ))
             }

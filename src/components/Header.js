@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
-import { UserBadge } from 'components'
+import { UserBadge, LockButton } from 'components'
 import { signOut } from 'store/user'
 import { openModal } from 'store/layout'
 
@@ -68,6 +68,9 @@ export const Header = ({ user, signOut, openModal }) => {
     <nav id="MainHeader" className="navbar navbar-default navbar-fixed-top">
       <div className="container-fluid">
         {brandAndToggle}
+        <p className="navbar-text">
+          {signedIn && <LockButton />}
+        </p>
         <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           {navigationLinks}
           {signedIn ? userDropdown : authenticationLinks}

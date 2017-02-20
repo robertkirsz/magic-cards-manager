@@ -10,6 +10,10 @@ import cn from 'classnames'
 let bd
 let htm
 
+const mapStateToProps = () => ({})
+
+const mapDispatchToProps = { addCard, removeCard }
+
 export class Card extends Component {
   static propTypes = {
     mainCard: PropTypes.object,
@@ -202,8 +206,5 @@ export class Card extends Component {
     )
   }
 }
-
-const mapStateToProps = () => ({})
-const mapDispatchToProps = { addCard, removeCard }
 
 export default ReactTimeout(connect(mapStateToProps, mapDispatchToProps)(Card))
