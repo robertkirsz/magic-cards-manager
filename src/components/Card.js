@@ -4,7 +4,7 @@ import ReactTimeout from 'react-timeout' // Prevents errors when updating unmoun
 // TODO: maybe I can just clear timeout on willUnmount and do not update stat if timeout is null
 import _ from 'lodash'
 import { addCard, removeCard } from 'store/myCards'
-import { CardDetails } from 'components'
+import { CardDetailsPopup } from 'components'
 import cardBack from 'components/assets/card_back.jpg'
 import cn from 'classnames'
 
@@ -33,8 +33,8 @@ class Card extends Component {
 
   state = {
     animations: [],
-    detailsPopupVisible: false,
-    detailsPopupPosition: {}
+    detailsPopupShow: null,
+    detailsPopupCoordinates: {}
   }
 
   componentDidMount () {
@@ -55,20 +55,16 @@ class Card extends Component {
     this.animate('remove')
   }
 
-  // Updatea popups's position
-  updateDetailsPopupPosition = (pageX, pageY, cardX, cardY) => {
-    const offset = 10
-    const popupWidth = this.refs.detailsPopup.clientWidth
-    const popupHeight = this.refs.detailsPopup.clientHeight
-    const windowWidth = window.innerWidth
-    const windowHeight = window.innerHeight
-    let top = pageY - cardY + offset
-    let left = pageX - cardX + offset
+  showDetailsPopup () {
+    this.setState({ detailsPopupShow: true })
+  }
 
-    if (pageY + popupHeight > windowHeight) top = top - popupHeight
-    if (pageX + popupWidth > windowWidth) left = left - popupWidth
+  hideDetailsPopup () {
+    this.setState({ detailsPopupShow: false })
+  }
 
-    this.setState({ detailsPopupPosition: { top, left } })
+  updateDetailsPopupPosition = detailsPopupCoordinates => {
+    this.setState({ detailsPopupCoordinates })
   }
 
   animate = animationType => {
@@ -116,7 +112,7 @@ class Card extends Component {
     const arad = Math.atan2(dy, dx)
     let angle = arad * 180 / Math.PI - 90
 
-    this.updateDetailsPopupPosition(pageX, pageY, offsets.left, offsets.top)
+    this.updateDetailsPopupPosition({ pageX, pageY, cardX: offsets.left, cardY: offsets.top })
 
     if (angle < 0) angle = angle + 360
 
@@ -135,13 +131,13 @@ class Card extends Component {
   }
 
   processEnter = e => {
-    this.setState({ detailsPopupVisible: true })
+    this.showDetailsPopup()
 
     this.refs.cardContainer.className += ' over'
   }
 
   processExit = e => {
-    this.setState({ detailsPopupVisible: false })
+    this.hideDetailsPopup()
 
     const layers = [this.refs.cardElementLayer1, this.refs.cardElementLayer2]
     const totalLayers = 2
@@ -158,7 +154,7 @@ class Card extends Component {
 
   render () {
     const { mainCard, variantCard, setIcon, showCount, showAdd, showRemove, onClick, className, hoverAnimation } = this.props
-    const { animations, detailsPopupVisible, detailsPopupPosition } = this.state
+    const { animations, detailsPopupShow, detailsPopupCoordinates } = this.state
 
     const cardData = variantCard || mainCard
     const numberOfCards = <span className="card__count">{cardData.cardsInCollection}</span>
@@ -176,19 +172,14 @@ class Card extends Component {
         }
       </div>
     )
-    const detailsPopup = (
-      <div
-        className="card__details-popup"
-        style={detailsPopupPosition}
-        ref="detailsPopup"
-      >
-        <CardDetails card={cardData} />
-      </div>
-    )
 
     return (
       <div style={{ position: 'relative' }}>
-        {detailsPopupVisible && detailsPopup}
+        <CardDetailsPopup
+          cardData={cardData}
+          show={detailsPopupShow}
+          coordinates={detailsPopupCoordinates}
+        />
         <div
           className={cn('card atvImg', className)}
           onClick={onClick}
