@@ -4,6 +4,7 @@ import ReactTimeout from 'react-timeout' // Prevents errors when updating unmoun
 // TODO: maybe I can just clear timeout on willUnmount and do not update stat if timeout is null
 import _ from 'lodash'
 import { addCard, removeCard } from 'store/myCards'
+import { CardDetails } from 'components'
 import cardBack from 'components/assets/card_back.jpg'
 import cn from 'classnames'
 
@@ -14,7 +15,7 @@ const mapStateToProps = () => ({})
 
 const mapDispatchToProps = { addCard, removeCard }
 
-export class Card extends Component {
+class Card extends Component {
   static propTypes = {
     mainCard: PropTypes.object,
     variantCard: PropTypes.object,
@@ -30,40 +31,31 @@ export class Card extends Component {
     hoverAnimation: PropTypes.bool
   }
 
-  constructor () {
-    super()
-
-    this.addCard = this.addCard.bind(this)
-    this.removeCard = this.removeCard.bind(this)
-    this.animate = this.animate.bind(this)
-    this.processMovement = this.processMovement.bind(this)
-    this.processEnter = this.processEnter.bind(this)
-    this.processExit = this.processExit.bind(this)
-
-    this.state = {
-      animations: []
-    }
+  state = {
+    animations: [],
+    detailsPopupVisible: false,
+    detailsPopupPosition: {}
   }
 
   componentDidMount () {
     bd = document.getElementsByTagName('body')[0]
     htm = document.getElementsByTagName('html')[0]
 
-    const w = this.cardElement.clientWidth || this.cardElement.offsetWidth || this.cardElement.scrollWidth
-    this.cardElement.style.transform = 'perspective(' + w * 3 + 'px)'
+    const w = this.refs.cardElement.clientWidth || this.refs.cardElement.offsetWidth || this.refs.cardElement.scrollWidth
+    this.refs.cardElement.style.transform = 'perspective(' + w * 3 + 'px)'
   }
 
-  addCard () {
+  addCard = () => {
     this.props.addCard(this.props.mainCard, this.props.variantCard)
     this.animate('add')
   }
 
-  removeCard () {
+  removeCard = () => {
     this.props.removeCard(this.props.mainCard, this.props.variantCard)
     this.animate('remove')
   }
 
-  animate (animationType) {
+  animate = animationType => {
     const id = Date.now()
     const animations = [...this.state.animations]
 
@@ -84,17 +76,16 @@ export class Card extends Component {
     }, 1000)
   }
 
-  processMovement (e) {
+  processMovement = e => {
     const touchEnabled = false
-    const elem = this.cardElement
-    const layers = [this.cardElementLayer1, this.cardElementLayer2]
+    const elem = this.refs.cardElement
+    const layers = [this.refs.cardElementLayer1, this.refs.cardElementLayer2]
     const totalLayers = 2
-    const shine = this.cardElementShine
-
+    const shine = this.refs.cardElementShine
     const bdst = bd.scrollTop || htm.scrollTop
     const bdsl = bd.scrollLeft
-    const pageX = (touchEnabled) ? e.touches[0].pageX : e.pageX
-    const pageY = (touchEnabled) ? e.touches[0].pageY : e.pageY
+    const pageX = touchEnabled ? e.touches[0].pageX : e.pageX
+    const pageY = touchEnabled ? e.touches[0].pageY : e.pageY
     const offsets = elem.getBoundingClientRect()
     const w = elem.clientWidth || elem.offsetWidth || elem.scrollWidth
     const h = elem.clientHeight || elem.offsetHeight || elem.scrollHeight
@@ -109,11 +100,19 @@ export class Card extends Component {
     const arad = Math.atan2(dy, dx)
     let angle = arad * 180 / Math.PI - 90
 
+    // Update popups's position
+    this.setState({
+      detailsPopupPosition: {
+        top: pageY - offsets.top + 5,
+        left: pageX - offsets.left + 5
+      }
+    })
+
     if (angle < 0) angle = angle + 360
 
-    if (elem.firstChild.className.indexOf(' over') !== -1) imgCSS += ' scale3d(1.07,1.07,1.07)'
+    if (this.refs.cardContainer.className.indexOf(' over') !== -1) imgCSS += ' scale3d(1.07,1.07,1.07)'
 
-    elem.firstChild.style.transform = imgCSS
+    this.refs.cardContainer.style.transform = imgCSS
 
     shine.style.background = 'linear-gradient(' + angle + 'deg, rgba(255,255,255,' + (pageY - offsets.top - bdst) / h * 0.4 + ') 0%,rgba(255,255,255,0) 80%)'
     shine.style.transform = 'translateX(' + (offsetX * totalLayers) - 0.1 + 'px) translateY(' + (offsetY * totalLayers) - 0.1 + 'px)'
@@ -125,19 +124,20 @@ export class Card extends Component {
     }
   }
 
-  processEnter (e) {
-    const elem = this.cardElement
+  processEnter = e => {
+    this.setState({ detailsPopupVisible: true })
 
-    elem.firstChild.className += ' over'
+    this.refs.cardContainer.className += ' over'
   }
 
-  processExit (e) {
-    const elem = this.cardElement
-    const layers = [this.cardElementLayer1, this.cardElementLayer2]
-    const totalLayers = 2
-    const shine = this.cardElementShine
+  processExit = e => {
+    this.setState({ detailsPopupVisible: false })
 
-    const container = elem.firstChild
+    const layers = [this.refs.cardElementLayer1, this.refs.cardElementLayer2]
+    const totalLayers = 2
+    const shine = this.refs.cardElementShine
+
+    const container = this.refs.cardContainer
 
     container.className = container.className.replace(' over', '')
     container.style.transform = ''
@@ -148,7 +148,7 @@ export class Card extends Component {
 
   render () {
     const { mainCard, variantCard, setIcon, showCount, showAdd, showRemove, onClick, className, hoverAnimation } = this.props
-    const { animations } = this.state
+    const { animations, detailsPopupVisible, detailsPopupPosition } = this.state
 
     const cardData = variantCard || mainCard
     const numberOfCards = <span className="card__count">{cardData.cardsInCollection}</span>
@@ -166,41 +166,55 @@ export class Card extends Component {
         }
       </div>
     )
+    const detailsPopup = (
+      <div
+        className="card__details-popup"
+        style={detailsPopupPosition}
+      >
+        <CardDetails card={cardData} />
+      </div>
+    )
 
     return (
-      <div
-        className={cn('card atvImg', className)}
-        onClick={onClick}
-        onMouseMove={hoverAnimation && this.processMovement}
-        onMouseEnter={hoverAnimation && this.processEnter}
-        onMouseLeave={hoverAnimation && this.processExit}
-        ref={node => { this.cardElement = node }}
+      <div style={{ position: 'relative' }}>
+        {detailsPopupVisible && detailsPopup}
+        <div
+          className={cn('card atvImg', className)}
+          onClick={onClick}
+          onMouseMove={hoverAnimation && this.processMovement}
+          onMouseEnter={hoverAnimation && this.processEnter}
+          onMouseLeave={hoverAnimation && this.processExit}
+          ref="cardElement"
       >
-        <div className="atvImg-container">
-          <div className="atvImg-shadow" />
-          <div className="atvImg-layers">
-            <div
-              className="atvImg-rendered-layer"
-              style={{ backgroundImage: `url(${cardData.image}), url(${cardBack})` }}
-              ref={node => { this.cardElementLayer1 = node }}
+          <div
+            className="atvImg-container"
+            ref="cardContainer"
+        >
+            <div className="atvImg-shadow" />
+            <div className="atvImg-layers">
+              <div
+                className="atvImg-rendered-layer"
+                style={{ backgroundImage: `url(${cardData.image}), url(${cardBack})` }}
+                ref="cardElementLayer1"
              />
-            <div className="atvImg-rendered-layer card__content"
-              ref={node => { this.cardElementLayer2 = node }}
+              <div className="atvImg-rendered-layer card__content"
+                ref="cardElementLayer2"
 
               >
-              {setIcon && <span className={cn('card__set-icon', cardData.setIcon)} />}
-              {showCount && numberOfCards}
-              {(showAdd || showRemove) && addRemoveControls}
-              {
-                animations.map((o) => (
-                  o.animationType === 'add'
-                    ? <span key={o.id} className="card__count-animation card__count-animation--add">+1</span>
-                    : <span key={o.id} className="card__count-animation card__count-animation--remove">-1</span>
+                {setIcon && <span className={cn('card__set-icon', cardData.setIcon)} />}
+                {showCount && numberOfCards}
+                {(showAdd || showRemove) && addRemoveControls}
+                {
+                animations.map(a => (
+                  a.animationType === 'add'
+                    ? <span key={a.id} className="card__count-animation card__count-animation--add">+1</span>
+                    : <span key={a.id} className="card__count-animation card__count-animation--remove">-1</span>
                 ))
               }
+              </div>
             </div>
+            <div className="atvImg-shine" ref="cardElementShine" />
           </div>
-          <div className="atvImg-shine" ref={node => { this.cardElementShine = node }} />
         </div>
       </div>
     )
