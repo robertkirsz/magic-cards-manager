@@ -16,23 +16,30 @@ class CardDetailsPopup extends Component {
   timeout = null
 
   componentWillReceiveProps (nextProps) {
+    if (this.props.show && !nextProps.show) {
+      this.hideDetailsPopup()
+      return
+    }
+
     // On mouse move...
-    if (nextProps.coordinates) {
+    if (nextProps.coordinates.pageX !== undefined && nextProps.coordinates.pageY !== undefined) {
       clearTimeout(this.timeout)
       // If popup is visible
       if (this.state.popupVisible) {
         // Hide it
         this.hideDetailsPopup()
       // If popup is hidden
-      } else {
+      } else if (nextProps.show) {
         // Show it
         this.timeout = setTimeout(() => {
           this.showDetailsPopup()
         }, 1500)
       }
     }
+  }
 
-    if (this.props.show && !nextProps.show) this.hideDetailsPopup()
+  componentWillUnmount () {
+    clearTimeout(this.timeout)
   }
 
   showDetailsPopup () {

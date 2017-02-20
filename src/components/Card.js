@@ -2,7 +2,8 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import ReactTimeout from 'react-timeout' // Prevents errors when updating unmounted component
 // TODO: maybe I can just clear timeout on willUnmount and do not update stat if timeout is null
-import _ from 'lodash'
+import _includes from 'lodash/includes'
+import _findIndex from 'lodash/findIndex'
 import { addCard, removeCard } from 'store/myCards'
 import { CardDetailsPopup } from 'components'
 import cardBack from 'components/assets/card_back.jpg'
@@ -28,7 +29,8 @@ class Card extends Component {
     onClick: PropTypes.func,
     setTimeout: PropTypes.func,
     className: PropTypes.string,
-    hoverAnimation: PropTypes.bool
+    hoverAnimation: PropTypes.bool,
+    detailsPopup: PropTypes.bool
   }
 
   state = {
@@ -43,6 +45,11 @@ class Card extends Component {
 
     const w = this.refs.cardElement.clientWidth || this.refs.cardElement.offsetWidth || this.refs.cardElement.scrollWidth
     this.refs.cardElement.style.transform = 'perspective(' + w * 3 + 'px)'
+  }
+
+  onCardClick = () => {
+    this.processExit()
+    this.props.onClick()
   }
 
   addCard = () => {
@@ -77,7 +84,7 @@ class Card extends Component {
 
     this.props.setTimeout(() => {
       let animations = [...this.state.animations]
-      const index = _.findIndex(animations, { id })
+      const index = _findIndex(animations, { id })
 
       animations = [
         ...animations.slice(0, index),
@@ -89,6 +96,9 @@ class Card extends Component {
   }
 
   processMovement = e => {
+    // This covers situation where "mouseMove" happens without "mouseEnter"
+    if (!_includes(this.refs.cardContainer.className, ' over')) this.processEnter()
+
     const touchEnabled = false
     const elem = this.refs.cardElement
     const layers = [this.refs.cardElementLayer1, this.refs.cardElementLayer2]
@@ -130,13 +140,13 @@ class Card extends Component {
     }
   }
 
-  processEnter = e => {
+  processEnter = () => {
     this.showDetailsPopup()
 
     this.refs.cardContainer.className += ' over'
   }
 
-  processExit = e => {
+  processExit = () => {
     this.hideDetailsPopup()
 
     const layers = [this.refs.cardElementLayer1, this.refs.cardElementLayer2]
@@ -153,7 +163,10 @@ class Card extends Component {
   }
 
   render () {
-    const { mainCard, variantCard, setIcon, showCount, showAdd, showRemove, onClick, className, hoverAnimation } = this.props
+    const {
+      mainCard, variantCard, setIcon, showCount, showAdd, showRemove,
+      className, hoverAnimation, detailsPopup
+    } = this.props
     const { animations, detailsPopupShow, detailsPopupCoordinates } = this.state
 
     const cardData = variantCard || mainCard
@@ -182,7 +195,7 @@ class Card extends Component {
         />
         <div
           className={cn('card atvImg', className)}
-          onClick={onClick}
+          onClick={this.onCardClick}
           onMouseMove={hoverAnimation && this.processMovement}
           onMouseEnter={hoverAnimation && this.processEnter}
           onMouseLeave={hoverAnimation && this.processExit}
