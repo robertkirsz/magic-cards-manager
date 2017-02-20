@@ -162,6 +162,10 @@ class SearchModule extends Component {
     if (state.whereToSearch === 'myCards') this.props.filterMyCards(this.search(state))
   }
 
+  focusNameInput = () => {
+    this.refs.nameInput.select()
+  }
+
   render () {
     const {
       queryName, queryTypes, queryText, colors,
@@ -172,6 +176,7 @@ class SearchModule extends Component {
       <button
         className="search-button fa fa-search"
         aria-hidden="true"
+        onMouseEnter={this.focusNameInput}
       />
     )
 
@@ -181,6 +186,7 @@ class SearchModule extends Component {
           <input
             type="text"
             className="form-control"
+            ref="nameInput"
             placeholder="Name"
             value={queryName}
             onChange={e => this.updateQuery('queryName', e.target.value)}

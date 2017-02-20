@@ -6,31 +6,10 @@
 @import './mixins';
 @import './media-queries';
 
-@font-face {
-  font-family: 'Keyrune';
-  src: url('./fonts/keyrune.eot?v=1.5.6');
-  src: url('./fonts/keyrune.eot?#iefix&v=1.5.6') format('embedded-opentype'), url('./fonts/keyrune.woff2?v=1.5.6') format('woff2'), url('./fonts/keyrune.woff?v=1.5.6') format('woff'), url('./fonts/keyrune.ttf?v=1.5.6') format('truetype'), url('./fonts/keyrune.svg?v=1.5.6#keyrune') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Mana';
-  src: url('./fonts/mana.eot?v=0.6');
-  src: url('./fonts/mana.eot?#iefix&v=0.6') format('embedded-opentype'), url('./fonts/mana.woff?v=0.6') format('woff'), url('./fonts/mana.ttf?v=0.6') format('truetype'), url('./fonts/mana.svg?v=0.6#mana') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'MPlantin';
-  src: url('./fonts/mplantin.eot?v=0.6');
-  src: url('./fonts/mplantin.eot?#iefix&v=0.6') format('embedded-opentype'), url('./fonts/mplantin.woff?v=0.6') format('woff'), url('./fonts/mplantin.ttf?v=0.6') format('truetype'), url('./fonts/mplantin.svg?v=0.6#mplantin') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
-
 html { box-sizing: border-box; }
 
-html, body {
+html,
+body {
   margin: 0; padding: 0;
   height: 100%;
 }
@@ -42,15 +21,16 @@ body {
 }
 
 *,
-*:before,
-*:after {
+*::before,
+*::after {
   box-sizing: inherit;
   outline: none;
 }
 
 a { cursor: pointer; }
 
-#root, #app { height: 100%; }
+#root,
+#app { height: 100%; }
 
 #app {
   @include flex(column);
