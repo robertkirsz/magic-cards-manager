@@ -55,8 +55,8 @@ export const Header = ({ user, signOut, openModal }) => {
           <UserBadge />
         </a>
         <ul className="dropdown-menu">
-          <li><a>Profile</a></li>
-          <li><a>Settings</a></li>
+          <li><Link to="profile">Profile</Link></li>
+          <li><Link to="settings">Settings</Link></li>
           <li role="separator" className="divider" />
           <li><a onClick={signOut}>Log out</a></li>
         </ul>

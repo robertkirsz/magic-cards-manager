@@ -1,9 +1,11 @@
-import CoreLayout   from 'layouts/CoreLayout'
-import HomeView     from 'routes/HomeView'
-import AllCardsView from 'routes/AllCardsView'
-import MyCardsView  from 'routes/MyCardsView'
-import CardView     from 'routes/CardView'
-import NotFound     from 'routes/NotFound/NotFound' // TODO: make index.js for that
+import CoreLayout    from 'layouts/CoreLayout'
+import HomeView      from 'routes/HomeView'
+import AllCardsView  from 'routes/AllCardsView'
+import MyCardsView   from 'routes/MyCardsView'
+import CardView      from 'routes/CardView'
+import ProfileView   from 'routes/ProfileView'
+import SettingsView  from 'routes/SettingsView'
+import NotFoundView  from 'routes/NotFoundView'
 
 // TODO: add route names
 
@@ -26,7 +28,9 @@ export const createRoutes = (store) => ({
         { path: '/my-cards/:cardUrl', component : CardView }
       ]
     },
-    { path: '*', component : NotFound }
+    { path: 'settings', component : SettingsView },
+    { path: 'profile', component : ProfileView },
+    { path: '*', component : NotFoundView }
   ]
 })
 
