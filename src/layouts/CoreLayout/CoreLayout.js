@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { saveHeaderHeight, closeModal } from 'store/layout'
+import { closeModal } from 'store/layout'
 import { loadMyCards } from 'store/myCards'
 import { authSuccess, signOutSuccess } from 'store/user'
 import { auth, firebaseGetData } from 'utils/firebase'
@@ -18,7 +18,6 @@ const mapStateToProps = ({ layout, allCards, myCards, user }) => ({
 })
 
 const mapDispatchToProps = {
-  saveHeaderHeight,
   loadMyCards,
   authSuccess,
   signOutSuccess,
@@ -28,7 +27,6 @@ const mapDispatchToProps = {
 export class CoreLayout extends Component {
   static propTypes = {
     children: PropTypes.element.isRequired,
-    saveHeaderHeight: PropTypes.func,
     loadMyCards: PropTypes.func,
     allCards: PropTypes.object,
     myCards: PropTypes.object,
