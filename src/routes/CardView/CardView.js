@@ -3,7 +3,7 @@ import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { Row, Col, Modal } from 'react-bootstrap'
 import _ from 'lodash'
-import { Card } from 'components'
+import { Card, CardDetails } from 'components'
 import { cardsDatabase } from 'database'
 
 const mapStateToProps = ({ allCards, myCards }, ownProps) => ({
@@ -50,6 +50,8 @@ class CardView extends Component {
     // const isAllCardsPage = routes[1].path === 'all-cards'
     const isMyCardsPage = routes[1].path === 'my-cards'
 
+    console.warn(card)
+
     return (
       <Modal
         className="card-view"
@@ -68,11 +70,14 @@ class CardView extends Component {
         </Modal.Header>
         <Modal.Body>
           <Row>
-            <Col xs={12}>
-              <div className="card-info">
+            <Col xs={4}>
+              <div className="card-picture">
                 <Card mainCard={card} hoverAnimation />
                 {this.isCollectionPage && <span>&nbsp;(Total: {card.cardsInCollection})</span>}
               </div>
+            </Col>
+            <Col xs={8}>
+              <CardDetails card={card} />
             </Col>
           </Row>
           <div className="card-variants-list">

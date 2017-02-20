@@ -1,10 +1,8 @@
 .card-view {
-  .card-info {
-    // background-color: rgba(yellow, 0.2);
-  }
+  .card-picture {}
+  .card-details {}
   .card-variants-list {
     @include flex(row, wrap, flex-start, flex-start);
-    // background-color: rgba(lime, 0.2);
     .card {
       &:not(:last-child) { margin-right: 10px; }
     }

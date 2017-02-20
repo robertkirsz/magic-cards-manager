@@ -6,6 +6,7 @@ import LatestSet       from 'components/LatestSet'
 import ManaBadge       from 'components/ManaBadge'
 import LockButton      from 'components/LockButton'
 import ColorFilter     from 'components/ColorFilter'
+import CardDetails     from 'components/CardDetails'
 import ColorButtons    from 'components/ColorButtons'
 import SearchModule    from 'components/SearchModule'
 import AllNoneToggle   from 'components/AllNoneToggle'
@@ -22,6 +23,7 @@ export {
   ManaBadge,
   LockButton,
   ColorFilter,
+  CardDetails,
   ColorButtons,
   SearchModule,
   AllNoneToggle,
