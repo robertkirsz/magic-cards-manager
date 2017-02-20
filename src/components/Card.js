@@ -55,6 +55,22 @@ class Card extends Component {
     this.animate('remove')
   }
 
+  // Updatea popups's position
+  updateDetailsPopupPosition = (pageX, pageY, cardX, cardY) => {
+    const offset = 10
+    const popupWidth = this.refs.detailsPopup.clientWidth
+    const popupHeight = this.refs.detailsPopup.clientHeight
+    const windowWidth = window.innerWidth
+    const windowHeight = window.innerHeight
+    let top = pageY - cardY + offset
+    let left = pageX - cardX + offset
+
+    if (pageY + popupHeight > windowHeight) top = top - popupHeight
+    if (pageX + popupWidth > windowWidth) left = left - popupWidth
+
+    this.setState({ detailsPopupPosition: { top, left } })
+  }
+
   animate = animationType => {
     const id = Date.now()
     const animations = [...this.state.animations]
@@ -100,13 +116,7 @@ class Card extends Component {
     const arad = Math.atan2(dy, dx)
     let angle = arad * 180 / Math.PI - 90
 
-    // Update popups's position
-    this.setState({
-      detailsPopupPosition: {
-        top: pageY - offsets.top + 5,
-        left: pageX - offsets.left + 5
-      }
-    })
+    this.updateDetailsPopupPosition(pageX, pageY, offsets.left, offsets.top)
 
     if (angle < 0) angle = angle + 360
 
@@ -170,6 +180,7 @@ class Card extends Component {
       <div
         className="card__details-popup"
         style={detailsPopupPosition}
+        ref="detailsPopup"
       >
         <CardDetails card={cardData} />
       </div>

@@ -83,9 +83,10 @@ $mainMargin: 30px;
   &__details-popup {
     position: absolute;
     width: 250px;
-    padding: 5px;
+    padding: 5px 8px;
     background: white;
     border-radius: 5px;
+    font-size: 12px;
     box-shadow: 0 3px 10px rgba(black, 0.3);
     pointer-events: none;
     z-index: 1000;
