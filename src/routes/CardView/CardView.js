@@ -47,21 +47,13 @@ class CardView extends Component {
 
     if (!card) return null
 
-    // const isAllCardsPage = routes[1].path === 'all-cards'
     const isMyCardsPage = routes[1].path === 'my-cards'
-
-    console.warn(card)
 
     return (
       <Modal
         className="card-view"
         show={modalOpened}
         bsSize="large"
-        // onEnter={() => { console.log('onEnter') }}
-        // onEntering={() => { console.log('onEntering') }}
-        // onEntered={() => { console.log('onEntered') }}
-        // onExit={() => { console.log('onExit') }}
-        // onExiting={() => { console.log('onExiting') }}
         onExited={this.goBack}
         onHide={this.closeModal}
       >
