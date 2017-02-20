@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { Row, Col, Modal } from 'react-bootstrap'
-import _ from 'lodash'
+import _find from 'lodash/find'
 import { Card, CardDetails } from 'components'
 import { cardsDatabase } from 'database'
 
@@ -10,7 +10,7 @@ const mapStateToProps = ({ allCards, myCards }, ownProps) => ({
   myCardsLocked: myCards.locked,
   // Find card by its name from the URL in all the cards or cards
   // from user's collection based of what page we are on
-  card: _.find(
+  card: _find(
     ownProps.routes[1].path === 'my-cards'
       ? myCards.cards
       : cardsDatabase,

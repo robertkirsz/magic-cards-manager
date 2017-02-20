@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import _ from 'lodash'
+import _slice from 'lodash/slice'
 import { CardsSearchList } from 'components'
 
 const mapStateToProps = ({ user, myCards }) => ({ user, myCards })
@@ -44,7 +44,7 @@ export class MyCardsView extends Component {
         {children}
         <CardsSearchList
           path="my-cards"
-          cards={_.slice(filteredCards || cards, 0, 30)}
+          cards={_slice(filteredCards || cards, 0, 30)}
         />
       </div>
     )

@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import _ from 'lodash'
+import _slice from 'lodash/slice'
 import { cardsDatabase } from 'database'
 import { CardsSearchList } from 'components'
 
@@ -26,7 +26,7 @@ export class AllCardsView extends Component {
         {error && errorBox}
         <CardsSearchList
           path="all-cards"
-          cards={_.slice(filteredCards || cardsDatabase, 0, 30)}
+          cards={_slice(filteredCards || cardsDatabase, 0, 30)}
         />
       </div>
     )

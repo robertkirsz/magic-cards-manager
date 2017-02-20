@@ -1,9 +1,9 @@
 import React, { PropTypes } from 'react'
-import _ from 'lodash'
+import _every from 'lodash/every'
 
 const AllNoneToggle = ({ colors, toggleAll, toggleNone }) => {
-  const allChecked = _.every(colors, c => c)
-  const noneChecked = _.every(colors, c => !c)
+  const allChecked = _every(colors, c => c)
+  const noneChecked = _every(colors, c => !c)
 
   return (
     <div className="all-none-checkboxes">
