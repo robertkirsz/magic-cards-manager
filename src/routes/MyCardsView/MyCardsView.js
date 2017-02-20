@@ -29,6 +29,16 @@ export class MyCardsView extends Component {
       )
     }
 
+    if (!cards.length) {
+      return (
+        <div className="my-cards-view">
+          <h1 className="my-cards-view__login-prompt">
+            No cards in collection
+          </h1>
+        </div>
+      )
+    }
+
     return (
       <div className="my-cards-view">
         {children}
