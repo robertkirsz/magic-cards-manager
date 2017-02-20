@@ -33,16 +33,11 @@ class CardView extends Component {
 
   isCollectionPage = this.props.routes[1].path === 'my-cards'
 
-  componentDidMount () {
-    // document.body.classList.add('no-scroll')
-  }
-
-  componentWillUnmount () {
-    // document.body.classList.remove('no-scroll')
-  }
-
   closeModal = () => {
     this.setState({ modalOpened: false })
+  }
+
+  goBack = () => {
     browserHistory.push(`/${this.props.routes[1].path}`)
   }
 
@@ -59,8 +54,14 @@ class CardView extends Component {
       <Modal
         className="card-view"
         show={modalOpened}
-        onHide={this.closeModal}
         bsSize="large"
+        // onEnter={() => { console.log('onEnter') }}
+        // onEntering={() => { console.log('onEntering') }}
+        // onEntered={() => { console.log('onEntered') }}
+        // onExit={() => { console.log('onExit') }}
+        // onExiting={() => { console.log('onExiting') }}
+        onExited={this.goBack}
+        onHide={this.closeModal}
       >
         <Modal.Header closeButton>
           <Modal.Title>{card.name}</Modal.Title>

@@ -6,4 +6,8 @@ const SettingsView = () => (
   </div>
 )
 
+// TODO:
+// * option to turn off hover effects
+// * option to turn modal animations
+
 export default SettingsView
