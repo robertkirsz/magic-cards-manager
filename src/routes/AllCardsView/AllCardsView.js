@@ -1,32 +1,23 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import _slice from 'lodash/slice'
 import { cardsDatabase } from 'database'
 import { CardsSearchList } from 'components'
 
-export class AllCardsView extends Component {
+class AllCardsView extends Component {
   static propTypes = {
     allCards: PropTypes.object,
     children: PropTypes.element
   }
 
   render () {
-    const { allCards: { filteredCards, error }, children } = this.props
-
-    const errorBox = (
-      <div className="alert alert-danger">
-        <strong>Oh snap!</strong>
-        {error}
-      </div>
-    )
+    const { allCards: { filteredCards }, children } = this.props
 
     return (
       <div className="all-cards-view">
         {children}
-        {error && errorBox}
         <CardsSearchList
           path="all-cards"
-          cards={_slice(filteredCards || cardsDatabase, 0, 30)}
+          cards={filteredCards || cardsDatabase}
         />
       </div>
     )

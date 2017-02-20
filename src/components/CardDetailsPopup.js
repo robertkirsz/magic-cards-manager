@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import { CardDetails } from 'components'
 
+// TODO: popup is not positionen properly on lower cards when window is scolled down
+
 class CardDetailsPopup extends Component {
   static propTypes = {
     cardData: PropTypes.object,
@@ -33,7 +35,7 @@ class CardDetailsPopup extends Component {
         // Show it
         this.timeout = setTimeout(() => {
           this.showDetailsPopup()
-        }, 1500)
+        }, 1000)
       }
     }
   }

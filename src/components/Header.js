@@ -58,7 +58,7 @@ export const Header = ({ user, signOut, openModal }) => {
           <li><Link to="profile">Profile</Link></li>
           <li><Link to="settings">Settings</Link></li>
           <li role="separator" className="divider" />
-          <li><a onClick={signOut}>Log out</a></li>
+          <li><a onClick={signOut}>Sign out</a></li>
         </ul>
       </li>
     </ul>

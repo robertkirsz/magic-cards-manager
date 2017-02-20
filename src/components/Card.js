@@ -49,7 +49,7 @@ class Card extends Component {
 
   onCardClick = () => {
     this.processExit()
-    this.props.onClick()
+    this.props.onClick(this.props.variantCard || this.props.mainCard)
   }
 
   addCard = () => {

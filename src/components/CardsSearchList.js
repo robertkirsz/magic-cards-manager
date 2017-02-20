@@ -1,27 +1,66 @@
-import React, { PropTypes } from 'react'
+import React, { Component, PropTypes } from 'react'
 import { browserHistory } from 'react-router'
+import _slice from 'lodash/slice'
 import { Card } from 'components'
 
-const CardsSearchList = props => (
-  <div className="cards-search-list">
-    {
-      props.cards.map(card => (
-        <Card
-          key={card.id}
-          mainCard={card}
-          hoverAnimation
-          detailsPopup
-          onClick={() => { browserHistory.push(`/${props.path}/${card.cardUrl}`) }}
-        />
-      ))
-    }
-  </div>
-)
-
-CardsSearchList.propTypes = {
-  cards: PropTypes.array,
-  path: PropTypes.string,
-  addCard: PropTypes.func
+const propTypes = {
+  cards: PropTypes.array.isRequired,
+  path: PropTypes.string.isRequired
 }
+
+const initialCardsNumber = 20
+
+class CardsSearchList extends Component {
+  state = {
+    cardsLimit: initialCardsNumber
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.cards !== this.props.cards)
+      this.setState({ cardsLimit: initialCardsNumber })
+  }
+
+  shouldShowButton = () => {
+    return this.props.cards.length > this.state.cardsLimit
+  }
+
+  showMoreCards = () => {
+    this.setState({ cardsLimit: this.state.cardsLimit + initialCardsNumber })
+  }
+
+  onCardClick = card => {
+    browserHistory.push(`/${this.props.path}/${card.cardUrl}`)
+  }
+
+  render () {
+    const { cards } = this.props
+    const { cardsLimit } = this.state
+
+    return (
+      <div className="cards-search-list">
+        {
+          _slice(cards, 0, cardsLimit).map(card => (
+            <Card
+              key={card.id}
+              mainCard={card}
+              hoverAnimation
+              detailsPopup
+              onClick={this.onCardClick}
+            />
+          ))
+        }
+        {
+          this.shouldShowButton() && (
+            <div className="cards-search-list__show-more-button card" onClick={this.showMoreCards}>
+              <i className="fa fa-search-plus" />
+            </div>
+          )
+        }
+      </div>
+    )
+  }
+}
+
+CardsSearchList.propTypes = propTypes
 
 export default CardsSearchList

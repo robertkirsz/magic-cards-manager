@@ -10,6 +10,9 @@ export const isContainedIn = (target, container) => {
   return false
 }
 
+// TODO: handle half mana (Mon's Goblin Waiters)
+// TODO: check snow layout (Goblin Rimerunner) (check every mana icon layout)
+
 // Converts 'Something {R}' to 'Something <i class="ms ms-cost ms-r"></i>'
 export const manaLettersToIcons = string => {
   // Call function for every '{X}' value

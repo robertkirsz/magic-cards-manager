@@ -1,3 +1,14 @@
 .cards-search-list {
-  @include flex(row, wrap, center, flex-start);
+  @include flex(row, wrap, flex-start, flex-start);
+  &__show-more-button {
+    @extend %flex-center;
+    border: 2px dashed;
+    font-size: 4em;
+    color: #bbb;
+    cursor: pointer;
+    transition: color 0.3s;
+    &:hover {
+      color: #555;
+    }
+  }
 }
