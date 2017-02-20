@@ -10,7 +10,9 @@ const UserBadge = ({ user: { displayName, email, photoURL } }) => (
     className="user-badge"
     title={displayName || email}
     style={{ backgroundImage: `url(${photoURL})` }}
-  />
+  >
+    {!photoURL && <i className="fa fa-user" />}
+  </div>
 )
 
 UserBadge.propTypes = propTypes
