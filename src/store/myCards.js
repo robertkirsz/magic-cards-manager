@@ -17,6 +17,7 @@ const LOAD_MY_CARDS_REQUEST = 'LOAD_MY_CARDS_REQUEST'
 const LOAD_MY_CARDS_SUCCESS = 'LOAD_MY_CARDS_SUCCESS'
 const FILTER_MY_CARDS = 'FILTER_MY_CARDS'
 const LOCK_MY_CARDS = 'LOCK_MY_CARDS'
+const SIGN_OUT_SUCCESS = 'SIGN_OUT_SUCCESS'
 
 // ------------------------------------
 // Actions
@@ -197,7 +198,8 @@ const ACTION_HANDLERS = {
     ...state,
     filteredCards: state.cards.filter(filterFunction)
   }),
-  [LOCK_MY_CARDS]: state => ({ ...state, locked: !state.locked })
+  [LOCK_MY_CARDS]: state => ({ ...state, locked: !state.locked }),
+  [SIGN_OUT_SUCCESS]: () => initialState
 }
 
 // ------------------------------------

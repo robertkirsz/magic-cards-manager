@@ -62,7 +62,6 @@ export const signInWithProvider = (providerName) => {
     if (firebaseSignInResponse.error) dispatch(authError(firebaseSignInResponse.error))
   }
 }
-
 export const authRequest = () => ({ type: AUTH_REQUEST })
 export const authSuccess = user => ({ type: AUTH_SUCCESS, user })
 export const authError = error => ({ type: AUTH_ERROR, error })
