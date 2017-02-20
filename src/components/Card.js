@@ -48,8 +48,10 @@ class Card extends Component {
   }
 
   onCardClick = () => {
-    this.processExit()
-    this.props.onClick(this.props.variantCard || this.props.mainCard)
+    if (this.props.onClick) {
+      this.processExit()
+      this.props.onClick(this.props.variantCard || this.props.mainCard)
+    }
   }
 
   addCard = () => {
@@ -203,6 +205,7 @@ class Card extends Component {
           onMouseMove={hoverAnimation && this.processMovement}
           onMouseEnter={hoverAnimation && this.processEnter}
           onMouseLeave={hoverAnimation && this.processExit}
+          style={this.props.onClick && { cursor: 'pointer' }}
           ref="cardElement"
       >
           <div
