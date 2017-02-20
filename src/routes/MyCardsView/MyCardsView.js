@@ -21,14 +21,16 @@ export class MyCardsView extends Component {
 
     if (!user.signedIn) {
       return (
-        <div style={{ marginTop: '25vh' }}>
-          <h1>Log in to be able to save your collection</h1>
+        <div className="my-cards-view">
+          <h1 className="my-cards-view__login-prompt">
+            Log in to be able to save your collection
+          </h1>
         </div>
       )
     }
 
     return (
-      <div className="all-cards-view">
+      <div className="my-cards-view">
         {children}
         <CardsSearchList
           path="my-cards"

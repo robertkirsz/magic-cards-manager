@@ -1,0 +1,7 @@
+.loading-screen {
+  @include flex(column, nowrap, center, center);
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
+  z-index: 10;
+}

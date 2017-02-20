@@ -98,9 +98,22 @@ export const firebaseProviderSignIn = (providerName) => (
     .catch(response => ({ error: response.message }))
 )
 
+// ---------- PROFILE ----------
+
+export const updateProfile = userProfile => (
+  auth.currentUser.updateProfile({
+    displayName: userProfile.displayName,
+    photoURL: userProfile.photoURL
+  }).then(function () {
+    // Update successful.
+  }, function (error) {
+    // An error happened.
+  })
+)
+
 // ---------- USER DATA UPDATING ----------
 
-export const updateUserData = user => firebaseUpdateData('Users', user.id, user)
+export const updateUserData = user => firebaseUpdateData('Users', user.uid, user)
 
 export const saveCollection = collection => {
   const reducedCollection = {}

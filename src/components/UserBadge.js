@@ -1,26 +1,18 @@
-import React, { Component, PropTypes } from 'react'
+import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 
 const mapStateToProps = ({ user }) => ({ user })
 
-class UserBadge extends Component {
-  static propTypes = {
-    user: PropTypes.object
-  }
+const propTypes = { user: PropTypes.object }
 
-  render () {
-    const { name, email, picture } = this.props.user
+const UserBadge = ({ user: { displayName, email, photoURL } }) => (
+  <div
+    className="user-badge"
+    title={displayName || email}
+    style={{ backgroundImage: `url(${photoURL})` }}
+  />
+)
 
-    return (
-      <div className="user-badge">
-        <div
-          className="user-badge__picture"
-          style={{ backgroundImage: `url(${picture})` }}
-          title={name || email}
-        />
-      </div>
-    )
-  }
-}
+UserBadge.propTypes = propTypes
 
 export default connect(mapStateToProps)(UserBadge)

@@ -76,7 +76,7 @@ class AuthModal extends Component {
 
     return (
       <Modal
-        className="authentication-modal"
+        className="auth-modal"
         show={showModal}
         onHide={closeModal}
         bsSize="small"

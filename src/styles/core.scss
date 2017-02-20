@@ -1,17 +1,43 @@
 @import "base";
 
+html { box-sizing: border-box; }
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  color: $text-color;
+  background: white;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+  outline: none;
+}
+
+a { cursor: pointer; }
+
+#root,
+#app { height: 100%; }
+
+#app {
+  @include flex(column);
+  padding: $navbarHeight $horizontalPadding 0;
+}
+
+.no-scroll { overflow-y: hidden; }
+
 .alert {
   margin-top: 1vh;
 }
 
 // MAIN LAYOUT COMPONENTS
-
-.loading-screen {
-  @include flex(column, nowrap, center, center);
-  width: 100vw; height: 100vh;
-  background-color: white;
-  z-index: 10;
-}
 
 .app-buttons {
   flex: none;
@@ -31,136 +57,6 @@
   .dropdown-toggle {
     padding-top: 5px;
     padding-bottom: 5px;
-  }
-}
-
-@import "search-module";
-
-$cardWidth: 223;
-$cardHeight: 311;
-$cardRatio: $cardHeight / $cardWidth;
-$cardMargin: 5px;
-$mainMargin: 30px;
-
-.cards-search-list {
-  @include flex(row, wrap, center, flex-start);
-}
-
-// TODO: fix margin issue with edge elements
-
-.card {
-  $cardsInRow: 2;
-  $width: calc((100vw - #{$mainMargin}) / #{$cardsInRow} - 5px);
-  position: relative;
-  width: $width; height: calc(#{$width} * #{$cardRatio});
-  max-width: $cardWidth + 0px; max-height: $cardHeight + 0px;
-  margin: 0 5px 1vw 0;
-  background-repeat: no-repeat;
-  background-position: 0 0;
-  background-size: cover;
-  border-radius: 4%;
-  &__content {
-    height: 100%;
-    z-index: 2;
-    &:hover {
-      .card__add-remove-buttons { opacity: 1; }
-    }
-  }
-  &__set-icon {
-    position: absolute;
-    bottom: 30px; left: 50%;
-    padding: 3px;
-    background: white;
-    border-radius: 20%;
-    font-size: 1.8em;
-    transform: translateX(-50%);
-  }
-  &__count {
-    position: absolute;
-    bottom: 5px; left: 10px;
-    font-size: 1.5em;
-    font-weight: bold;
-    color: #8cf54c;
-  }
-  &__add-remove-buttons {
-    @include flex(row, nowrap, space-around, center);
-    position: absolute;
-    top: 50%; right: 0; left: 0;
-    transform: translateY(-50%);
-    opacity: 0;
-    transition: opacity 0.1s;
-    button {
-      background: none;
-      border: none;
-      outline: none;
-      transition: transform 0.1s;
-      &:active { transform: scale(0.9); }
-    }
-    .fa {
-      font-size: 2em;
-      color: white;
-      text-shadow: 1px 1px 2px black;
-    }
-  }
-  &__count-animation {
-    @include flex(column, nowrap, center, center);
-    position: absolute;
-    top: 0; right: 0; bottom: 0; left: 0;
-    font-size: 2em;
-    font-weight: bold;
-    animation: fly 1s ease-out 1 forwards;
-    pointer-events: none;
-    &.card__count-animation--add { color: #8cf54c; }
-    &.card__count-animation--remove { color: #f14621; }
-  }
-  @include MQ(S) {
-    $cardsInRow: 4;
-    $width: calc((100vw - #{$mainMargin}) / #{$cardsInRow} - 5px);
-    width: $width; height: calc(#{$width} * #{$cardRatio});
-    &.small {
-      width: calc(#{$width} * 0.6); height: calc(#{$width} * #{$cardRatio} * 0.6);
-    }
-  };
-  @include MQ(M) {
-    $cardsInRow: 5;
-    $width: calc((100vw - #{$mainMargin}) / #{$cardsInRow} - 5px);
-    width: $width; height: calc(#{$width} * #{$cardRatio});
-    &.small {
-      width: calc(#{$width} * 0.6); height: calc(#{$width} * #{$cardRatio} * 0.6);
-    }
-  };
-  @include MQ(L) {
-    $cardsInRow: 6;
-    $width: calc((100vw - #{$mainMargin}) / #{$cardsInRow} - 5px);
-    width: $width; height: calc(#{$width} * #{$cardRatio});
-    &.small {
-      width: calc(#{$width} * 0.6); height: calc(#{$width} * #{$cardRatio} * 0.6);
-    }
-  };
-  @include MQ(XL) {
-    $cardsInRow: 7;
-    $width: calc((100vw - #{$mainMargin}) / #{$cardsInRow} - 5px);
-    width: $width; height: calc(#{$width} * #{$cardRatio});
-    &.small {
-      width: calc(#{$width} * 0.6); height: calc(#{$width} * #{$cardRatio} * 0.6);
-    }
-  };
-}
-
-// VIEW
-
-.all-cards-view {}
-
-@import "card-view";
-
-.user-badge {
-  &__picture {
-    width: 40px; height: 40px;
-    border-radius: 50%;
-    background-color: grey;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
   }
 }
 
@@ -221,8 +117,6 @@ $mainMargin: 30px;
     pointer-events: none;
   }
 }
-
-@import "authentication-modal";
 
 .error-modal {
   background: rgba(200, 0, 0, 0.5);

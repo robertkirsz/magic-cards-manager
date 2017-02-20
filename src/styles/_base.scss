@@ -1,40 +1,15 @@
-@import './vendor/keyrune';
-@import './vendor/mana';
-// @import './vendor/normalize';
-// @import './vendor/skeleton';
-@import './variables';
-@import './mixins';
-@import './media-queries';
+@import "vendor/keyrune";
 
-html { box-sizing: border-box; }
+@import "vendor/mana";
 
-html,
-body {
-  margin: 0; padding: 0;
-  height: 100%;
-}
+@import "variables";
 
-body {
-  padding-top: 70px; // Used for fixed navbar
-  color: $text-color;
-  background: white;
-}
+@import "mixins";
 
-*,
-*::before,
-*::after {
-  box-sizing: inherit;
-  outline: none;
-}
+@import "media-queries";
 
-a { cursor: pointer; }
+@import "containers/index";
 
-#root,
-#app { height: 100%; }
+@import "components/index";
 
-#app {
-  @include flex(column);
-  padding: 0 $horizontal-padding;
-}
-
-.no-scroll { overflow-y: hidden; }
+@import "routes/index";

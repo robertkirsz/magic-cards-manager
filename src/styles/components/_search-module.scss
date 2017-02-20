@@ -2,8 +2,10 @@
   @include flex(column, nowrap, center);
   flex: none;
   position: relative;
-  width: 40px; height: 40px;
-  margin: 0 auto; padding: $horizontal-padding;
+  width: 40px;
+  height: 40px;
+  margin: 0 auto;
+  padding: $horizontalPadding;
   background-color: rgba(white, 0.95);
   border-radius: 50%;
   transition: all 0.3s ease;
@@ -12,8 +14,9 @@
   .search-form {
     @include flex(column, nowrap, center);
     position: absolute;
-    left: $horizontal-padding;
-    width: 385px; height: 177px;
+    left: $horizontalPadding;
+    width: 385px;
+    height: 177px;
     transform: scale(0);
     transform-origin: left center;
     opacity: 0;
@@ -58,7 +61,8 @@
   }
   .search-button {
     @extend %layer;
-    width: 100%; height: 100%;
+    width: 100%;
+    height: 100%;
     background: none;
     border: none;
     font-size: 1.5em;
@@ -66,7 +70,8 @@
     transition: all 0.3s ease;
   }
   &:hover {
-    width: 415px; height: 207px;
+    width: 415px;
+    height: 207px;
     padding: 0;
     border-radius: 10px;
     .search-button {

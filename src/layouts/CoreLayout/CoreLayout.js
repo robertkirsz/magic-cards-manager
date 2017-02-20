@@ -4,6 +4,7 @@ import { saveHeaderHeight, closeModal } from 'store/layout'
 import { loadMyCards } from 'store/myCards'
 import { authSuccess, signOutSuccess } from 'store/user'
 import { auth, firebaseGetData } from 'utils/firebase'
+import { AuthModal, ErrorModal } from 'containers'
 import { Header, SearchModule, LoadingScreen } from 'components'
 import 'styles/core.scss'
 
@@ -53,19 +54,21 @@ export class CoreLayout extends Component {
     auth.onAuthStateChanged(async firebaseUser => {
       // If he's logged in...
       if (firebaseUser) {
-        if (debug) console.info('User logged in as', firebaseUser.displayName || firebaseUser.email)
+        const { uid, displayName, email, photoURL } = firebaseUser
+
+        if (debug) console.info('User logged in as', displayName || email)
         // Get currect time
         const now = Date.now()
         // Gather user's data from Firebase authentication
         const userData = {
-          id: firebaseUser.uid,
-          name: firebaseUser.displayName,
-          email: firebaseUser.email,
-          picture: firebaseUser.photoURL,
+          uid,
+          displayName,
+          email,
+          photoURL,
           lastLogin: now
         }
         // Get user's data from database
-        const firebaseResponse = await firebaseGetData('Users', firebaseUser.uid)
+        const firebaseResponse = await firebaseGetData('Users', uid)
         // Set 'createdOn' property if user's date doesn't exist yet
         if (firebaseResponse.error === 'No data found')
           userData.createdOn = now
@@ -84,19 +87,20 @@ export class CoreLayout extends Component {
   }
 
   render () {
-    const app = (
+    // TODO: add fadeOut effect when page loads
+    if (this.props.allCards.fetching) return <LoadingScreen />
+
+    return (
       <div id="app">
         <Header />
         {this.props.children}
         <div className="app-buttons">
           <SearchModule />
         </div>
+        <AuthModal />
+        <ErrorModal />
       </div>
     )
-
-    return this.props.allCards.fetching
-      ? <LoadingScreen />
-      : app
   }
 }
 

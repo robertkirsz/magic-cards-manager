@@ -1,8 +1,9 @@
-.authentication-modal {
+.auth-modal {
   .form-group { position: relative; }
   .fa-eye {
     position: absolute;
-    top: 5px; right: 5px;
+    top: 5px;
+    right: 5px;
     padding: 5px;
     cursor: pointer;
     opacity: 0.5;
@@ -16,7 +17,10 @@
       min-height: 34px;
       text-transform: capitalize;
       &:not(:first-of-type) { margin-left: 0.4em; }
-      svg { width: 1.2em; height: 1.2em; }
+      svg {
+        width: 1.2em;
+        height: 1.2em;
+      }
     }
   }
 }
