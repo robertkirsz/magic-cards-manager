@@ -31,7 +31,7 @@ export const manaLettersToIcons = string => {
     return `<i class="${className}"></i>`
   })
   // Add space between concurrent mana icons
-  return htmlString.replace('</i><i', '</i> <i')
+  return htmlString.replace(/<\/i><i/g, '</i> <i')
 }
 
 // Converts '{2}{R}' to ['ms ms-cost ms-2', 'ms ms-cost ms-r']
