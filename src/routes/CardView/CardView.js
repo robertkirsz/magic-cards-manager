@@ -64,7 +64,10 @@ class CardView extends Component {
           <Row>
             <Col xs={4}>
               <div className="card-picture">
-                <Card mainCard={card} hoverAnimation />
+                <Card
+                  mainCard={card}
+                  hoverAnimation
+                />
                 {this.isCollectionPage && <span>&nbsp;(Total: {card.cardsInCollection})</span>}
               </div>
             </Col>

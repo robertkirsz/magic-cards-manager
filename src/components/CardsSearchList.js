@@ -10,6 +10,7 @@ const CardsSearchList = props => (
           key={card.id}
           mainCard={card}
           hoverAnimation
+          detailsPopup
           onClick={() => { browserHistory.push(`/${props.path}/${card.cardUrl}`) }}
         />
       ))

@@ -188,11 +188,15 @@ class Card extends Component {
 
     return (
       <div>
-        <CardDetailsPopup
-          cardData={cardData}
-          show={detailsPopupShow}
-          coordinates={detailsPopupCoordinates}
-        />
+        {
+          detailsPopup && (
+            <CardDetailsPopup
+              cardData={cardData}
+              show={detailsPopupShow}
+              coordinates={detailsPopupCoordinates}
+            />
+          )
+        }
         <div
           className={cn('card atvImg', className)}
           onClick={this.onCardClick}
