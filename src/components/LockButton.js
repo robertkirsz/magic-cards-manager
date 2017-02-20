@@ -7,17 +7,23 @@ const mapStateToProps = ({ myCards }) => ({ myCardsLocked: myCards.locked })
 
 const mapDispatchToProps = { toggleLockMyCards }
 
+const propTypes = {
+  myCardsLocked: PropTypes.bool,
+  toggleLockMyCards: PropTypes.func
+}
+
 const LockButton = ({ myCardsLocked, toggleLockMyCards }) => {
   return (
-    <button onClick={toggleLockMyCards}>
+    <button
+      type="button"
+      className="lock-button navbar-btn"
+      onClick={toggleLockMyCards}
+    >
       <i className={cn('fa', { 'fa-lock': myCardsLocked, 'fa-unlock-alt': !myCardsLocked })} />
     </button>
   )
 }
 
-LockButton.propTypes = {
-  myCardsLocked: PropTypes.bool,
-  toggleLockMyCards: PropTypes.func
-}
+LockButton.propTypes = propTypes
 
 export default connect(mapStateToProps, mapDispatchToProps)(LockButton)
