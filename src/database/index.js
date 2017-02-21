@@ -1,5 +1,12 @@
+import axios from 'axios'
+
+export const fetchCards = () => {
+  if (__DEV__) return axios('./AllSets.json')
+  if (__PROD__) return axios('https://mtgjson.com/json/AllSets.json')
+}
+
 let cardsDatabase = []
 
-const saveCardsDatabase = database => { cardsDatabase = database }
+export const saveCardsDatabase = database => { cardsDatabase = database }
 
-export { cardsDatabase, saveCardsDatabase }
+export { cardsDatabase }

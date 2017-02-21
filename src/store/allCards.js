@@ -5,9 +5,10 @@ import _reject from 'lodash/reject'
 import _filter from 'lodash/filter'
 import _get from 'lodash/get'
 import moment from 'moment'
-import { fetchAllSets } from 'api'
 import { Card } from 'classes'
-import { cardsDatabase, saveCardsDatabase } from 'database'
+import { cardsDatabase, saveCardsDatabase, fetchCards } from 'database'
+import { formattedError } from 'utils'
+import { openModal } from 'store/layout'
 
 // TODO: Sort all cards by name perhaps?
 
@@ -31,27 +32,17 @@ export const getCards = () => {
     if (getState().allCards.fetching) return
     // Dispatch action so we can show spinner
     dispatch(sendRequest())
-    // Send and return API request
-    fetchAllSets()
-      .then((response) => {
-        // Throw error if something's wrong
-        if (!response.ok) throw new Error(`${response.status} ${response.statusText}`)
-        // Otherwise return response in JSON format
-        return response.json()
+    // Send API request
+    fetchCards()
+      .then(response => dispatch(responseSuccess(response.data)))
+      .catch(error => {
+        const errorMessage = formattedError(error)
+        dispatch(responseError(errorMessage))
+        dispatch(openModal('error', { message: errorMessage }))
       })
-      .then(allSets => dispatch(responseSuccess(allSets))) // Get the response and return all Magic sets
-      .catch(error => dispatch(responseError(error))) // Catch any errors
   }
 }
 export const filterAllCards = filterFunction => ({ type: FILTER_ALL_CARDS, filterFunction })
-
-export const actions = {
-  sendRequest,
-  responseSuccess,
-  responseError,
-  getCards,
-  filterAllCards
-}
 
 // ------------------------------------
 // Action Handlers
