@@ -1,7 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import ReactTimeout from 'react-timeout' // Prevents errors when updating unmounted component
-// TODO: maybe I can just clear timeout on willUnmount and do not update stat if timeout is null
 import _includes from 'lodash/includes'
 import _findIndex from 'lodash/findIndex'
 import { addCard, removeCard } from 'store/myCards'
@@ -27,7 +25,6 @@ class Card extends Component {
     addCard: PropTypes.func,
     removeCard: PropTypes.func,
     onClick: PropTypes.func,
-    setTimeout: PropTypes.func,
     className: PropTypes.string,
     hoverAnimation: PropTypes.bool,
     detailsPopup: PropTypes.bool
@@ -39,12 +36,19 @@ class Card extends Component {
     detailsPopupCoordinates: {}
   }
 
+  animationTimeout = null
+
   componentDidMount () {
     bd = document.getElementsByTagName('body')[0]
     htm = document.getElementsByTagName('html')[0]
 
     const w = this.refs.cardElement.clientWidth || this.refs.cardElement.offsetWidth || this.refs.cardElement.scrollWidth
     this.refs.cardElement.style.transform = 'perspective(' + w * 3 + 'px)'
+  }
+
+  componentWillUnmount () {
+    clearTimeout(this.animationTimeout)
+    this.animationTimeout = null
   }
 
   onCardClick = () => {
@@ -84,7 +88,7 @@ class Card extends Component {
 
     this.setState({ animations })
 
-    this.props.setTimeout(() => {
+    this.animationTimeout = setTimeout(() => {
       let animations = [...this.state.animations]
       const index = _findIndex(animations, { id })
 
@@ -93,7 +97,7 @@ class Card extends Component {
         ...animations.slice(index + 1)
       ]
 
-      this.setState({ animations })
+      if (this.animationTimeout) this.setState({ animations })
     }, 1000)
   }
 
@@ -243,4 +247,4 @@ class Card extends Component {
   }
 }
 
-export default ReactTimeout(connect(mapStateToProps, mapDispatchToProps)(Card))
+export default connect(mapStateToProps, mapDispatchToProps)(Card)
