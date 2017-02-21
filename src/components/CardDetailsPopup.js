@@ -1,13 +1,18 @@
 import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
 import { CardDetails } from 'components'
 
-// TODO: popup is not positionen properly on lower cards when window is scolled down
+const mapStateToProps = ({ settings }) => ({
+  cardDetailsPopupDelay: settings.cardDetailsPopupDelay
+})
 
+// TODO: popup is not positioned properly on lower cards when window is scolled down
 class CardDetailsPopup extends Component {
   static propTypes = {
     cardData: PropTypes.object,
     show: PropTypes.bool,
-    coordinates: PropTypes.object
+    coordinates: PropTypes.object,
+    cardDetailsPopupDelay: PropTypes.number
   }
 
   state = {
@@ -18,6 +23,8 @@ class CardDetailsPopup extends Component {
   timeout = null
 
   componentWillReceiveProps (nextProps) {
+    if (nextProps.cardDetailsPopupDelay === false) return
+
     if (this.props.show && !nextProps.show) {
       this.hideDetailsPopup()
       return
@@ -35,7 +42,7 @@ class CardDetailsPopup extends Component {
         // Show it
         this.timeout = setTimeout(() => {
           this.showDetailsPopup()
-        }, 1000)
+        }, this.props.cardDetailsPopupDelay)
       }
     }
   }
@@ -72,10 +79,10 @@ class CardDetailsPopup extends Component {
   }
 
   render () {
-    const { cardData } = this.props
+    const { cardData, cardDetailsPopupDelay } = this.props
     const { popupPosition, popupVisible } = this.state
 
-    if (!popupVisible) return null
+    if (!cardDetailsPopupDelay || !popupVisible) return null
 
     return (
       <div
@@ -89,4 +96,4 @@ class CardDetailsPopup extends Component {
   }
 }
 
-export default CardDetailsPopup
+export default connect(mapStateToProps)(CardDetailsPopup)
