@@ -10,7 +10,7 @@ const CardDetails = ({ card }) => {
       <ul>
         <li>{card.name} {<ManaBadge manaCost={card.manaCost} />}</li>
         <li>{card.type}</li>
-        <li className="card-details__text" dangerouslySetInnerHTML={{ __html: manaLettersToIcons(card.text) }} />
+        {card.text && <li className="card-details__text" dangerouslySetInnerHTML={{ __html: manaLettersToIcons(card.text) }} />}
         {card.power && card.toughness && <li>{card.power} / {card.toughness}</li>}
       </ul>
     </div>
