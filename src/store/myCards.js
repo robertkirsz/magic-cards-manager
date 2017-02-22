@@ -8,24 +8,12 @@ import { cardsDatabase } from 'database'
 const debug = false
 
 // ------------------------------------
-// Constants
-// ------------------------------------
-const ADD_CARD = 'ADD_CARD'
-const REMOVE_CARD = 'REMOVE_CARD'
-const CLEAR_MY_CARDS = 'CLEAR_MY_CARDS'
-const LOAD_MY_CARDS_REQUEST = 'LOAD_MY_CARDS_REQUEST'
-const LOAD_MY_CARDS_SUCCESS = 'LOAD_MY_CARDS_SUCCESS'
-const FILTER_MY_CARDS = 'FILTER_MY_CARDS'
-const LOCK_MY_CARDS = 'LOCK_MY_CARDS'
-const SIGN_OUT_SUCCESS = 'SIGN_OUT_SUCCESS'
-
-// ------------------------------------
 // Actions
 // ------------------------------------
-export const addCard = (card, variant) => ({ type: ADD_CARD, card, variant })
-export const removeCard = (card, variant) => ({ type: REMOVE_CARD, card, variant })
-export const clearMyCards = () => ({ type: CLEAR_MY_CARDS })
-export const filterMyCards = filterFunction => ({ type: FILTER_MY_CARDS, filterFunction })
+export const addCard = (card, variant) => ({ type: 'ADD_CARD', card, variant })
+export const removeCard = (card, variant) => ({ type: 'REMOVE_CARD', card, variant })
+export const clearMyCards = () => ({ type: 'CLEAR_MY_CARDS' })
+export const filterMyCards = filterFunction => ({ type: 'FILTER_MY_CARDS', filterFunction })
 export const loadMyCards = () => {
   return async (dispatch, getState) => {
     if (getState().myCards.loading || !cardsDatabase.length) return
@@ -55,15 +43,15 @@ export const loadMyCards = () => {
     dispatch(loadMyCardsSuccess(retrievedCollection))
   }
 }
-export const loadMyCardsRequest = () => ({ type: LOAD_MY_CARDS_REQUEST, loading: true })
-export const loadMyCardsSuccess = cards => ({ type: LOAD_MY_CARDS_SUCCESS, cards, loading: false })
-export const toggleLockMyCards = () => ({ type: LOCK_MY_CARDS })
+export const loadMyCardsRequest = () => ({ type: 'LOAD_MY_CARDS_REQUEST', loading: true })
+export const loadMyCardsSuccess = cards => ({ type: 'LOAD_MY_CARDS_SUCCESS', cards, loading: false })
+export const toggleLockMyCards = () => ({ type: 'LOCK_MY_CARDS' })
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [ADD_CARD]: (state, { card, variant }) => {
+  ADD_CARD: (state, { card, variant }) => {
     if (debug) console.log('%cADD_CARD', 'color: #A1C659;', variant.name)
     // Make copies of both main card and its chosen variant
     let cardCopy = card.copy()
@@ -127,7 +115,7 @@ const ACTION_HANDLERS = {
       cards: cardsCollection
     }
   },
-  [REMOVE_CARD]: (state, { card, variant }) => {
+  REMOVE_CARD: (state, { card, variant }) => {
     if (debug) console.log('%cREMOVE_CARD payload', 'color: #A1C659;', variant.name)
     // Copy card collection from store
     let cardsCollection = [...state.cards]
@@ -191,15 +179,15 @@ const ACTION_HANDLERS = {
       cards: cardsCollection
     }
   },
-  [CLEAR_MY_CARDS]: () => initialState,
-  [LOAD_MY_CARDS_REQUEST]: state => ({ ...state, loading: true }),
-  [LOAD_MY_CARDS_SUCCESS]: (state, { cards }) => ({ ...state, loading: false, cards }),
-  [FILTER_MY_CARDS]: (state, { filterFunction }) => ({
+  CLEAR_MY_CARDS: () => initialState,
+  LOAD_MY_CARDS_REQUEST: state => ({ ...state, loading: true }),
+  LOAD_MY_CARDS_SUCCESS: (state, { cards }) => ({ ...state, loading: false, cards }),
+  FILTER_MY_CARDS: (state, { filterFunction }) => ({
     ...state,
     filteredCards: state.cards.filter(filterFunction)
   }),
-  [LOCK_MY_CARDS]: state => ({ ...state, locked: !state.locked }),
-  [SIGN_OUT_SUCCESS]: () => initialState
+  LOCK_MY_CARDS: state => ({ ...state, locked: !state.locked }),
+  SIGN_OUT_SUCCESS: () => initialState
 }
 
 // ------------------------------------
