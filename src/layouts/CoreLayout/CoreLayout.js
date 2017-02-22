@@ -79,7 +79,10 @@ export class CoreLayout extends Component {
         // Get user's data from database
         const usersDataFromDatabase = await firebaseGetData('Users', uid)
         // Set 'createdOn' property if user's date doesn't exist yet
-        if (usersDataFromDatabase.error === 'No data found') userData.createdOn = now
+        if (!usersDataFromDatabase.success) userData.createdOn = now
+        // Check if user is an admin
+        const userIsAdmin = await firebaseGetData('Admins', uid)
+        if (userIsAdmin.success) userData.admin = true
         // Save user's data in Fireabse and in store
         this.props.authSuccess(userData)
         // Close any sign in or sign up modals

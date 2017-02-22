@@ -12,6 +12,7 @@ const ProfileView = ({ user }) => (
           <div
             style={{ backgroundImage: `url(${user.photoURL})`, height: 200 }}
           />
+          {user.admin && <h3>ADMIN</h3>}
         </Col>
         <Col md={5}>
           <Form horizontal>

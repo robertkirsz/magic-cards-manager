@@ -75,7 +75,17 @@ const ACTION_HANDLERS = {
   [AUTH_REQUEST]: state => ({ ...state, authPending: true, error: null }),
   [AUTH_SUCCESS]: (state, { user }) => {
     updateUserData(user)
-    return { ...state, ...user, authPending: false, signedIn: true }
+
+    const newState = {
+      ...state,
+      ...user,
+      authPending: false,
+      signedIn: true
+    }
+
+    if (user.admin) newState.admin = true
+
+    return newState
   },
   [AUTH_ERROR]: (state, { error }) => ({ ...state, authPending: false, error }),
   [SIGN_OUT_SUCCESS]: () => initialState,
