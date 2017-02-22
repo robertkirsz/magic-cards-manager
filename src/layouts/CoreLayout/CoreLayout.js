@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
+import _find from 'lodash/find'
 
 import { closeModal } from 'store/layout'
 import { loadMyCards } from 'store/myCards'
@@ -41,7 +42,8 @@ export class CoreLayout extends Component {
     authSuccess: PropTypes.func.isRequired,
     signOutSuccess: PropTypes.func.isRequired,
     closeModal: PropTypes.func.isRequired,
-    loadInitialSettings: PropTypes.func.isRequired
+    loadInitialSettings: PropTypes.func.isRequired,
+    routes: PropTypes.array
   }
 
   constructor () {
@@ -98,13 +100,17 @@ export class CoreLayout extends Component {
     // TODO: add fadeOut effect when page loads
     if (this.props.allCards.fetching) return <LoadingScreen />
 
+    const showAppButtons = _find(this.props.routes, 'showAppButtons')
+
     return (
       <div id="app">
         <Header />
         {this.props.children}
-        <div className="app-buttons">
-          <SearchModule />
-        </div>
+        {showAppButtons && (
+          <div className="app-buttons">
+            <SearchModule />
+          </div>
+        )}
         <AuthModal />
         <ErrorModal />
       </div>

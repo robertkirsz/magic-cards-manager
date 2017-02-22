@@ -17,6 +17,7 @@ export const createRoutes = (store) => ({
     {
       path: 'all-cards',
       component: AllCardsView,
+      showAppButtons: true,
       childRoutes: [
         { path: '/all-cards/:cardUrl', component : CardView }
       ]
@@ -24,6 +25,7 @@ export const createRoutes = (store) => ({
     {
       path: 'my-cards',
       component: MyCardsView,
+      showAppButtons: true,
       childRoutes: [
         { path: '/my-cards/:cardUrl', component : CardView }
       ]
