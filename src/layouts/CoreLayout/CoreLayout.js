@@ -1,11 +1,16 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
+
 import { closeModal } from 'store/layout'
 import { loadMyCards } from 'store/myCards'
 import { authSuccess, signOutSuccess } from 'store/user'
+import { loadInitialSettings } from 'store/settings'
+
 import { auth, firebaseGetData } from 'utils/firebase'
+
 import { AuthModal, ErrorModal } from 'containers'
 import { Header, SearchModule, LoadingScreen } from 'components'
+
 import 'styles/core.scss'
 
 const debug = true
@@ -21,20 +26,22 @@ const mapDispatchToProps = {
   loadMyCards,
   authSuccess,
   signOutSuccess,
-  closeModal
+  closeModal,
+  loadInitialSettings
 }
 
 export class CoreLayout extends Component {
   static propTypes = {
     children: PropTypes.element.isRequired,
-    loadMyCards: PropTypes.func,
-    allCards: PropTypes.object,
-    myCards: PropTypes.object,
-    user: PropTypes.object,
+    allCards: PropTypes.object.isRequired,
+    myCards: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired,
     authModalOpened: PropTypes.bool,
-    authSuccess: PropTypes.func,
-    signOutSuccess: PropTypes.func,
-    closeModal: PropTypes.func
+    loadMyCards: PropTypes.func.isRequired,
+    authSuccess: PropTypes.func.isRequired,
+    signOutSuccess: PropTypes.func.isRequired,
+    closeModal: PropTypes.func.isRequired,
+    loadInitialSettings: PropTypes.func.isRequired
   }
 
   constructor () {
@@ -47,6 +54,8 @@ export class CoreLayout extends Component {
     this.listenToAuthChange(this.props)
   }
 
+  // TODO: this needs to be refactored, if "usersDataFromDatabase" returns data,
+  // then there's no need to create "userData", we can use existing values
   listenToAuthChange () {
     // When user's authentication status changes...
     auth.onAuthStateChanged(async firebaseUser => {
@@ -66,16 +75,17 @@ export class CoreLayout extends Component {
           lastLogin: now
         }
         // Get user's data from database
-        const firebaseResponse = await firebaseGetData('Users', uid)
+        const usersDataFromDatabase = await firebaseGetData('Users', uid)
         // Set 'createdOn' property if user's date doesn't exist yet
-        if (firebaseResponse.error === 'No data found')
-          userData.createdOn = now
+        if (usersDataFromDatabase.error === 'No data found') userData.createdOn = now
         // Save user's data in Fireabse and in store
         this.props.authSuccess(userData)
         // Close any sign in or sign up modals
         if (this.props.authModalOpened) this.props.closeModal()
         // Load user's collection
         this.props.loadMyCards()
+        // Apply user's setting if he has any stored
+        usersDataFromDatabase.data.settings && this.props.loadInitialSettings(usersDataFromDatabase.data.settings)
       // If user's not logged in or logged out...
       } else {
         // Log that into console

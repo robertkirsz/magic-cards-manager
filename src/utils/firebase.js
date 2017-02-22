@@ -125,6 +125,8 @@ export const updateEmail = email => (
 
 export const updateUserData = user => firebaseUpdateData('Users', user.uid, user)
 
+export const updateUserSettings = settings => firebaseUpdateData('Users', auth.currentUser.uid, { settings })
+
 export const saveCollection = collection => {
   const reducedCollection = {}
   _forEach(collection, singleCard => { reducedCollection[singleCard.id] = singleCard.formatForFirebase() })

@@ -55,31 +55,22 @@ class SettingsView extends Component {
 
     return (
       <div>
-        <h1>SettingsView</h1>
-        <form>
-          <FormGroup>
-            <ControlLabel>Card modal animation</ControlLabel>
-            <Checkbox
-              checked={cardModalAnimation}
-              onChange={e => { this.props.toggleSetting('cardModalAnimation', e.target.value) }}
-            />
-          </FormGroup>
-          <FormGroup>
-            <ControlLabel>Card hover animation</ControlLabel>
-            <Checkbox
-              checked={cardHoverAnimation}
-              onChange={e => { this.props.toggleSetting('cardHoverAnimation', e.target.value) }}
-            />
-          </FormGroup>
-          {this.renderCardDetailsPopupDelaySettings()}
-        </form>
+        <Checkbox
+          checked={cardModalAnimation}
+          onChange={e => { this.props.toggleSetting('cardModalAnimation', e.target.checked) }}
+        >
+          Card modal animation
+        </Checkbox>
+        <Checkbox
+          checked={cardHoverAnimation}
+          onChange={e => { this.props.toggleSetting('cardHoverAnimation', e.target.checked) }}
+        >
+          3D card animation
+        </Checkbox>
+        {this.renderCardDetailsPopupDelaySettings()}
       </div>
     )
   }
 }
-
-// TODO:
-// * option to turn off hover effects
-// * option to turn modal animations
 
 export default connect(mapStateToProps, mapDispatchToProps)(SettingsView)

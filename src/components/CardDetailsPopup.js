@@ -12,7 +12,10 @@ class CardDetailsPopup extends Component {
     cardData: PropTypes.object,
     show: PropTypes.bool,
     coordinates: PropTypes.object,
-    cardDetailsPopupDelay: PropTypes.number
+    cardDetailsPopupDelay: PropTypes.oneOfType([
+      PropTypes.bool,
+      PropTypes.number
+    ])
   }
 
   state = {
