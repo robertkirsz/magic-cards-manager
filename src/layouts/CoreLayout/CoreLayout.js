@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
+import _get from 'lodash/get'
 import _find from 'lodash/find'
 
 import { closeModal } from 'store/layout'
@@ -58,6 +59,7 @@ export class CoreLayout extends Component {
 
   // TODO: this needs to be refactored, if "usersDataFromDatabase" returns data,
   // then there's no need to create "userData", we can use existing values
+  // TODO: do not hide main spinner until user settings are loaded
   listenToAuthChange () {
     // When user's authentication status changes...
     auth.onAuthStateChanged(async firebaseUser => {
@@ -90,7 +92,7 @@ export class CoreLayout extends Component {
         // Load user's collection
         this.props.loadMyCards()
         // Apply user's setting if he has any stored
-        usersDataFromDatabase.data.settings && this.props.loadInitialSettings(usersDataFromDatabase.data.settings)
+        _get(usersDataFromDatabase, 'data.settings') && this.props.loadInitialSettings(usersDataFromDatabase.data.settings)
       // If user's not logged in or logged out...
       } else {
         // Log that into console

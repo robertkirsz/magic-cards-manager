@@ -1,47 +1,41 @@
-import { updateUserSettings } from 'utils/firebase'
-
-// ------------------------------------
-// Constants
-// ------------------------------------
-const TOGGLE_SETTING = 'TOGGLE_SETTING'
-const CARD_DETAILS_POPUP_DELAY = 'CARD_DETAILS_POPUP_DELAY'
-const LOAD_INITIAL_SETTINGS = 'LOAD_INITIAL_SETTINGS'
+import { updateAndReturnUserSettings } from 'utils/firebase'
 
 // ------------------------------------
 // Actions
 // ------------------------------------
 export const toggleSetting = (property, value) => ({
-  type: TOGGLE_SETTING,
+  type: 'TOGGLE_SETTING',
   property,
   value
 })
 export const changeCardDetailsPopupDelay = delayValue => ({
-  type: CARD_DETAILS_POPUP_DELAY,
+  type: 'CARD_DETAILS_POPUP_DELAY',
   delayValue
 })
 export const loadInitialSettings = settings => ({
-  type: LOAD_INITIAL_SETTINGS,
+  type: 'LOAD_INITIAL_SETTINGS',
   settings
+})
+export const restoreDefaultSettings = () => ({
+  type: 'RESTORE_DEFAULT_SETTINGS'
 })
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [TOGGLE_SETTING]: (state, { property, value }) => {
-    const newState = { ...state, [property]: value }
-    updateUserSettings(newState)
-    return newState
-  },
-  [CARD_DETAILS_POPUP_DELAY]: (state, { delayValue }) => {
+  'TOGGLE_SETTING': (state, { property, value }) => (
+    updateAndReturnUserSettings({ ...state, [property]: value })
+  ),
+  'CARD_DETAILS_POPUP_DELAY': (state, { delayValue }) => {
     const _delayValue = delayValue === 'false'
       ? false
       : parseInt(delayValue, 10)
-    const newState = { ...state, cardDetailsPopupDelay: _delayValue }
-    updateUserSettings(newState)
-    return newState
+    return updateAndReturnUserSettings({ ...state, cardDetailsPopupDelay: _delayValue })
   },
-  [LOAD_INITIAL_SETTINGS]: (state, { settings }) => settings
+  'LOAD_INITIAL_SETTINGS': (state, { settings }) => settings,
+  'SIGN_OUT_SUCCESS': () => initialState,
+  'RESTORE_DEFAULT_SETTINGS': () => updateAndReturnUserSettings(initialState)
 }
 
 // ------------------------------------

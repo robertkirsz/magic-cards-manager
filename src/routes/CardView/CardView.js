@@ -6,8 +6,9 @@ import _find from 'lodash/find'
 import { Card, CardDetails } from 'components'
 import { cardsDatabase } from 'database'
 
-const mapStateToProps = ({ allCards, myCards }, ownProps) => ({
+const mapStateToProps = ({ allCards, myCards, settings }, ownProps) => ({
   myCardsLocked: myCards.locked,
+  cardModalAnimation: settings.cardModalAnimation,
   // Find card by its name from the URL in all the cards or cards
   // from user's collection based of what page we are on
   card: _find(
@@ -24,17 +25,20 @@ class CardView extends Component {
     routes: PropTypes.array,
     routeParams: PropTypes.object,
     addCard: PropTypes.func,
-    myCardsLocked: PropTypes.bool
+    myCardsLocked: PropTypes.bool,
+    cardModalAnimation: PropTypes.bool
   }
 
-  state = {
-    modalOpened: true
-  }
+  state = { modalOpened: true }
 
   isCollectionPage = this.props.routes[1].path === 'my-cards'
 
   closeModal = () => {
+    // Hide modal
     this.setState({ modalOpened: false })
+    // Go back, if animation is disabled (because normally we go back
+    // when exit animation finishes)
+    if (!this.props.cardModalAnimation) this.goBack()
   }
 
   goBack = () => {
@@ -42,7 +46,7 @@ class CardView extends Component {
   }
 
   render () {
-    const { card, routes, myCardsLocked } = this.props
+    const { card, routes, myCardsLocked, cardModalAnimation } = this.props
     const { modalOpened } = this.state
 
     if (!card) return null
@@ -52,10 +56,11 @@ class CardView extends Component {
     return (
       <Modal
         className="card-view"
-        show={modalOpened}
+        animation={cardModalAnimation}
+        show={modalOpened} // Value is from state and is "true" by default
         bsSize="large"
-        onExited={this.goBack}
-        onHide={this.closeModal}
+        onExited={this.goBack} // Go back when exit animation finishes
+        onHide={this.closeModal} // Close modal on clicking "X" icon or clicking on backdrop
       >
         <Modal.Header closeButton>
           <Modal.Title>{card.name}</Modal.Title>

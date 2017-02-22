@@ -1,20 +1,22 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { FormGroup, Radio, ControlLabel, Checkbox } from 'react-bootstrap'
-import { toggleSetting, changeCardDetailsPopupDelay } from 'store/settings'
+import { FormGroup, Radio, ControlLabel, Checkbox, Button } from 'react-bootstrap'
+import { toggleSetting, changeCardDetailsPopupDelay, restoreDefaultSettings } from 'store/settings'
 
 const mapStateToProps = ({ settings }) => ({ settings })
 
 const mapDispatchToProps = {
   toggleSetting,
-  changeCardDetailsPopupDelay
+  changeCardDetailsPopupDelay,
+  restoreDefaultSettings
 }
 
 class SettingsView extends Component {
   static propTypes = {
     settings: PropTypes.object.isRequired,
     toggleSetting: PropTypes.func.isRequired,
-    changeCardDetailsPopupDelay: PropTypes.func.isRequired
+    changeCardDetailsPopupDelay: PropTypes.func.isRequired,
+    restoreDefaultSettings: PropTypes.func.isRequired
   }
 
   cardDetailsPopupDelayChange = e => {
@@ -51,23 +53,29 @@ class SettingsView extends Component {
   }
 
   render () {
-    const { cardModalAnimation, cardHoverAnimation } = this.props.settings
+    const { restoreDefaultSettings, toggleSetting, settings } = this.props
+    const { cardModalAnimation, cardHoverAnimation } = settings
 
     return (
       <div>
         <Checkbox
           checked={cardModalAnimation}
-          onChange={e => { this.props.toggleSetting('cardModalAnimation', e.target.checked) }}
+          onChange={e => toggleSetting('cardModalAnimation', e.target.checked)}
         >
           Card modal animation
         </Checkbox>
         <Checkbox
           checked={cardHoverAnimation}
-          onChange={e => { this.props.toggleSetting('cardHoverAnimation', e.target.checked) }}
+          onChange={e => toggleSetting('cardHoverAnimation', e.target.checked)}
         >
           3D card animation
         </Checkbox>
         {this.renderCardDetailsPopupDelaySettings()}
+        <div>
+          <Button onClick={restoreDefaultSettings}>
+            Default settings
+          </Button>
+        </div>
       </div>
     )
   }

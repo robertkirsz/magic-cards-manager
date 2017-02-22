@@ -10,7 +10,9 @@ import cn from 'classnames'
 let bd
 let htm
 
-const mapStateToProps = () => ({})
+const mapStateToProps = ({ settings }) => ({
+  cardHoverAnimation: settings.cardHoverAnimation
+})
 
 const mapDispatchToProps = { addCard, removeCard }
 
@@ -26,8 +28,9 @@ class Card extends Component {
     removeCard: PropTypes.func,
     onClick: PropTypes.func,
     className: PropTypes.string,
-    hoverAnimation: PropTypes.bool,
-    detailsPopup: PropTypes.bool
+    detailsPopup: PropTypes.bool,
+    hoverAnimation: PropTypes.bool, // TODO: Refactor this - This is from props (route based)
+    cardHoverAnimation: PropTypes.bool.isRequired // TODO: Refactor this - This is from settings
   }
 
   state = {
@@ -171,7 +174,7 @@ class Card extends Component {
   render () {
     const {
       mainCard, variantCard, setIcon, showCount, showAdd, showRemove,
-      className, hoverAnimation, detailsPopup
+      className, hoverAnimation, detailsPopup, cardHoverAnimation
     } = this.props
     const { animations, detailsPopupShow, detailsPopupCoordinates } = this.state
 
@@ -206,9 +209,9 @@ class Card extends Component {
         <div
           className={cn('card atvImg', className)}
           onClick={this.onCardClick}
-          onMouseMove={hoverAnimation && this.processMovement}
-          onMouseEnter={hoverAnimation && this.processEnter}
-          onMouseLeave={hoverAnimation && this.processExit}
+          onMouseMove={cardHoverAnimation && hoverAnimation && this.processMovement}
+          onMouseEnter={cardHoverAnimation && hoverAnimation && this.processEnter}
+          onMouseLeave={cardHoverAnimation && hoverAnimation && this.processExit}
           style={this.props.onClick && { cursor: 'pointer' }}
           ref="cardElement"
       >

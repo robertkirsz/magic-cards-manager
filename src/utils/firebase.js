@@ -125,7 +125,10 @@ export const updateEmail = email => (
 
 export const updateUserData = user => firebaseUpdateData('Users', user.uid, user)
 
-export const updateUserSettings = settings => firebaseUpdateData('Users', auth.currentUser.uid, { settings })
+export const updateAndReturnUserSettings = settings => {
+  firebaseUpdateData('Users', auth.currentUser.uid, { settings })
+  return settings
+}
 
 export const saveCollection = collection => {
   const reducedCollection = {}
