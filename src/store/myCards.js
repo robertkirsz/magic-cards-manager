@@ -16,7 +16,7 @@ export const clearMyCards = () => ({ type: 'CLEAR_MY_CARDS' })
 export const filterMyCards = filterFunction => ({ type: 'FILTER_MY_CARDS', filterFunction })
 export const loadMyCards = () => {
   return async (dispatch, getState) => {
-    if (getState().myCards.loading || !cardsDatabase.length) return
+    if (!cardsDatabase.length) return
 
     dispatch(loadMyCardsRequest())
 
@@ -196,7 +196,7 @@ const ACTION_HANDLERS = {
 const initialState = {
   cards: [],
   locked: true,
-  loading: false,
+  loading: true,
   filteredCards: null
 }
 

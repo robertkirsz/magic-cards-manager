@@ -1,12 +1,13 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
+import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
 import _get from 'lodash/get'
 import _find from 'lodash/find'
 
-import { closeModal } from 'store/layout'
-import { loadMyCards } from 'store/myCards'
-import { authSuccess, signOutSuccess } from 'store/user'
+import { authRequest, authSuccess, signOutSuccess } from 'store/user'
 import { loadInitialSettings } from 'store/settings'
+import { loadMyCards } from 'store/myCards'
+import { closeModal } from 'store/layout'
 
 import { auth, firebaseGetData } from 'utils/firebase'
 
@@ -18,56 +19,53 @@ import 'styles/core.scss'
 const debug = true
 
 const mapStateToProps = ({ layout, allCards, myCards, user }) => ({
-  authModalOpened: layout.modal.name === 'sign in' || layout.modal.name === 'sign up',
-  allCards,
-  myCards,
-  user
+  authModalOpened:  layout.modal.name === 'sign in' || layout.modal.name === 'sign up',
+  allCardsFetching: allCards.fetching,
+  myCardsLoading:   myCards.loading,
+  userAuthPending:  user.authPending
 })
 
 const mapDispatchToProps = {
-  loadMyCards,
+  authRequest,
   authSuccess,
   signOutSuccess,
-  closeModal,
-  loadInitialSettings
+  loadInitialSettings,
+  loadMyCards,
+  closeModal
 }
 
-export class CoreLayout extends Component {
+class CoreLayout extends Component {
   static propTypes = {
-    children: PropTypes.element.isRequired,
-    allCards: PropTypes.object.isRequired,
-    myCards: PropTypes.object.isRequired,
-    user: PropTypes.object.isRequired,
-    authModalOpened: PropTypes.bool,
-    loadMyCards: PropTypes.func.isRequired,
-    authSuccess: PropTypes.func.isRequired,
-    signOutSuccess: PropTypes.func.isRequired,
-    closeModal: PropTypes.func.isRequired,
-    loadInitialSettings: PropTypes.func.isRequired,
-    routes: PropTypes.array
-  }
-
-  constructor () {
-    super()
-
-    this.listenToAuthChange = this.listenToAuthChange.bind(this)
+    children:            PropTypes.element.isRequired,
+    routes:              PropTypes.array.isRequired,
+    allCardsFetching:    PropTypes.bool.isRequired,
+    myCardsLoading:      PropTypes.bool.isRequired,
+    userAuthPending:     PropTypes.bool.isRequired,
+    authModalOpened:     PropTypes.bool.isRequired,
+    loadMyCards:         PropTypes.func.isRequired,
+    authRequest:         PropTypes.func.isRequired,
+    authSuccess:         PropTypes.func.isRequired,
+    signOutSuccess:      PropTypes.func.isRequired,
+    closeModal:          PropTypes.func.isRequired,
+    loadInitialSettings: PropTypes.func.isRequired
   }
 
   componentWillMount () {
     this.listenToAuthChange(this.props)
   }
 
-  // TODO: this needs to be refactored, if "usersDataFromDatabase" returns data,
-  // then there's no need to create "userData", we can use existing values
   // TODO: do not hide main spinner until user settings are loaded
-  listenToAuthChange () {
+  listenToAuthChange = () => {
     // When user's authentication status changes...
     auth.onAuthStateChanged(async firebaseUser => {
       // If he's logged in...
       if (firebaseUser) {
+        const { authRequest, authSuccess, authModalOpened, closeModal, loadMyCards, loadInitialSettings } = this.props
+        // Get user's from Firebase auth object
         const { uid, displayName, email, photoURL } = firebaseUser
-
         if (debug) console.info('User logged in as', displayName || email)
+        // Show loading message
+        authRequest()
         // Get currect time
         const now = Date.now()
         // Gather user's data from Firebase authentication
@@ -85,16 +83,17 @@ export class CoreLayout extends Component {
         // Check if user is an admin
         const userIsAdmin = await firebaseGetData('Admins', uid)
         if (userIsAdmin.success) userData.admin = true
-        // Save user's data in Fireabse and in store
-        this.props.authSuccess(userData)
+        // Save user's data in Firebase and in store
+        authSuccess(userData)
         // Close any sign in or sign up modals
-        if (this.props.authModalOpened) this.props.closeModal()
+        if (authModalOpened) closeModal()
         // Load user's collection
-        this.props.loadMyCards()
+        loadMyCards()
         // Apply user's setting if he has any stored
-        _get(usersDataFromDatabase, 'data.settings') && this.props.loadInitialSettings(usersDataFromDatabase.data.settings)
+        _get(usersDataFromDatabase, 'data.settings') && loadInitialSettings(usersDataFromDatabase.data.settings)
       // If user's not logged in or logged out...
       } else {
+        authSuccess({})
         // Log that into console
         if (debug) console.warn('No user')
       }
@@ -102,23 +101,42 @@ export class CoreLayout extends Component {
   }
 
   render () {
-    // TODO: add fadeOut effect when page loads
-    if (this.props.allCards.fetching) return <LoadingScreen />
+    const { routes, children, allCardsFetching, myCardsLoading, userAuthPending } = this.props
 
-    const showAppButtons = _find(this.props.routes, 'showAppButtons')
+    // Show button at the bottom of the screen on routes that have 'showAppButtons' prop
+    const showAppButtons = _find(routes, 'showAppButtons')
 
     return (
-      <div id="app">
-        <Header />
-        {this.props.children}
-        {showAppButtons && (
-          <div className="app-buttons">
-            <SearchModule />
-          </div>
-        )}
-        <AuthModal />
-        <ErrorModal />
-      </div>
+      <ReactCSSTransitionGroup
+        transitionName="example"
+        transitionEnterTimeout={3000}
+        transitionLeaveTimeout={3000}
+      >
+        {
+          true || allCardsFetching || myCardsLoading || userAuthPending
+            ? (
+              <LoadingScreen
+                key="a"
+                allCardsFetching={allCardsFetching}
+                myCardsLoading={myCardsLoading}
+                userAuthPending={userAuthPending}
+              />
+            )
+            : (
+              <div id="app" key="b">
+                <Header />
+                {children}
+                {showAppButtons && (
+                  <div className="app-buttons">
+                    <SearchModule />
+                  </div>
+                )}
+                <AuthModal />
+                <ErrorModal />
+              </div>
+            )
+        }
+      </ReactCSSTransitionGroup>
     )
   }
 }

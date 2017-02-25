@@ -1,7 +1,45 @@
-.loading-screen {
+.LoadingScreen {
   @include flex(column, nowrap, center, center);
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
   background-color: white;
-  z-index: 10;
+  z-index: 2000;
+}
+
+.LoadingScreen__Spinner {}
+
+.LoadingScreen__Checks {
+  @include flex();
+}
+
+.LoadingScreen__Check {
+  margin: 10px;
+  font-size: 1.5em;
+  color: grey;
+  &.loaded {
+    color: lime;
+  }
+}
+
+.example-enter {
+  opacity: 0;
+}
+
+.example-enter.example-enter-active {
+  opacity: 1;
+  transition: opacity 3s ease;
+}
+
+.example-leave {
+  opacity: 1;
+}
+
+.example-leave.example-leave-active {
+  opacity: 0;
+  transition: opacity 3s ease;
 }

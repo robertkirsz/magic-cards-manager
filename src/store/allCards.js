@@ -28,8 +28,6 @@ export const responseSuccess = allSets => ({ type: ALL_CARDS_SUCCESS, allSets })
 export const responseError = error => ({ type: ALL_CARDS_ERROR, error })
 export const getCards = () => {
   return (dispatch, getState) => {
-    // Return if request is pending
-    if (getState().allCards.fetching) return
     // Dispatch action so we can show spinner
     dispatch(sendRequest())
     // Send API request
@@ -110,7 +108,7 @@ const ACTION_HANDLERS = {
 // Reducer
 // ------------------------------------
 const initialState = {
-  fetching: false,
+  fetching: true,
   error: null,
   cardsNumber: 0,
   latestSet: {},

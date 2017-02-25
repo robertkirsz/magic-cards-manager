@@ -96,7 +96,7 @@ const ACTION_HANDLERS = {
 // Reducer
 // ------------------------------------
 const initialState = {
-  authPending: false,
+  authPending: true,
   signedIn: false,
   error: null,
   name: '',
