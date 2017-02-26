@@ -5,11 +5,21 @@ import { UserBadge, LockButton } from 'components'
 import { signOut } from 'store/user'
 import { openModal } from 'store/layout'
 
-const mapStateToProps = ({ user }) => ({ user })
+const mapStateToProps = ({ user, location }) => ({
+  user,
+  pathname: location.pathname
+})
 
 const mapDispatchToProps = { signOut, openModal }
 
-export const Header = ({ user, signOut, openModal }) => {
+const propTypes = {
+  user: PropTypes.object.isRequired,
+  pathname: PropTypes.string.isRequired,
+  openModal: PropTypes.func.isRequired,
+  signOut: PropTypes.func.isRequired
+}
+
+export const Header = ({ user, signOut, openModal, pathname }) => {
   const { signedIn } = user
 
   // Brand and toggle get grouped for better mobile display
@@ -27,8 +37,16 @@ export const Header = ({ user, signOut, openModal }) => {
 
   const navigationLinks = (
     <ul className="route-navigation nav navbar-nav">
-      <li><Link to="all-cards" activeClassName="active">All cards</Link></li>
-      <li><Link to="my-cards" activeClassName="active">My cards</Link></li>
+      <li>
+        <Link to="all-cards" className={pathname === 'all-cards' ? 'active' : ''}>
+          All cards
+        </Link>
+      </li>
+      <li>
+        <Link to="my-cards" className={pathname === 'my-cards' ? 'active' : ''}>
+          My cards
+        </Link>
+      </li>
     </ul>
   )
 
@@ -78,10 +96,6 @@ export const Header = ({ user, signOut, openModal }) => {
   )
 }
 
-Header.propTypes = {
-  user: PropTypes.object.isRequired,
-  openModal: PropTypes.func.isRequired,
-  signOut: PropTypes.func.isRequired
-}
+Header.propTypes = propTypes
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header)
