@@ -4,6 +4,7 @@ import _map from 'lodash/map'
 import _reject from 'lodash/reject'
 import _filter from 'lodash/filter'
 import _get from 'lodash/get'
+import _sortBy from 'lodash/sortBy'
 import moment from 'moment'
 import { Card } from 'classes'
 import { cardsDatabase, saveCardsDatabase, fetchCards } from 'database'
@@ -54,13 +55,15 @@ const ACTION_HANDLERS = {
   [ALL_CARDS_SUCCESS]: (state, { allSets }) => {
     const allCards = [] // Will contain every single Magic card
     const uniqueCards = {} // Will contain unique cards
+    const cardSets = []
     // Compares release dates and chooses the latest one
     const latestSet = _reduce(allSets, (result, value, key) => {
       if (!result.releaseDate) return value
       return moment(value.releaseDate).isAfter(result.releaseDate) ? value : result
     }, {})
     // For each set...
-    _forEach(allSets, (set) => {
+    _forEach(allSets, set => {
+      cardSets.push({ name: set.name, code: set.code.toLowerCase() })
       // Save its code inside its cards objects
       const cardsFromThisSet = set.cards.map(card => {
         card.setCode = set.code.toLowerCase()
@@ -70,16 +73,16 @@ const ACTION_HANDLERS = {
       allCards.push(..._filter(cardsFromThisSet, 'multiverseid'))
     })
     // Group them by name and put reprints into an array: { 'Naturalize': { (...), variants: [{...}, {...}] } }
-    _forEach(allCards, (card) => {
+    _forEach(allCards, card => {
       uniqueCards[card.name] = {
         ...card,
         variants: uniqueCards[card.name] ? [...uniqueCards[card.name].variants, new Card(card)] : [new Card(card)]
       }
     })
     // Convert object to an array
-    let arrayOfCards = _map(uniqueCards, (card) => new Card(card))
+    let arrayOfCards = _map(uniqueCards, card => new Card(card))
     // Hide basic lands
-    arrayOfCards = _reject(arrayOfCards, (card) => _get(card, 'supertypes[0]') === 'Basic')
+    arrayOfCards = _reject(arrayOfCards, card => _get(card, 'supertypes[0]') === 'Basic')
     // Remove tokens
     arrayOfCards = _reject(arrayOfCards, { layout: 'token' })
 
@@ -90,7 +93,8 @@ const ACTION_HANDLERS = {
       fetching: false,
       error: null,
       cardsNumber: arrayOfCards.length,
-      latestSet
+      latestSet,
+      cardSets: _sortBy(cardSets, 'name')
     }
   },
   [ALL_CARDS_ERROR]: (state, { error }) => ({
@@ -112,6 +116,7 @@ const initialState = {
   error: null,
   cardsNumber: 0,
   latestSet: {},
+  cardSets: [],
   filteredCards: null
 }
 

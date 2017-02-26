@@ -16,6 +16,7 @@ const clearState = {
   cmcType: 'minimum', // 'minimum' || 'exactly' || 'maximum'
   monocoloredOnly: false,
   multicoloredOnly: false,
+  cardSet: 'all-sets',
   colors: {
     White: true,
     Blue: true,
@@ -26,8 +27,9 @@ const clearState = {
   }
 }
 
-const mapStateToProps = ({ location }) => ({
-  pathname: location.pathname
+const mapStateToProps = ({ location, allCards }) => ({
+  pathname: location.pathname,
+  cardSets: allCards.cardSets
 })
 
 const mapDispatchToProps = { filterAllCards, filterMyCards }
@@ -35,6 +37,7 @@ const mapDispatchToProps = { filterAllCards, filterMyCards }
 class SearchModule extends Component {
   static propTypes = {
     pathname: PropTypes.string.isRequired,
+    cardSets: PropTypes.array.isRequired,
     filterAllCards: PropTypes.func.isRequired,
     filterMyCards: PropTypes.func.isRequired
   }
@@ -123,18 +126,22 @@ class SearchModule extends Component {
     return card => {
       // Hide cards with no text when text is specified
       if (queryText && !card.text) return false
-      // Checking card name
+      // Checking name
       const nameOk = card.name.toLowerCase().indexOf(queryName) > -1
-      // Checking card types
+      // Checking types
       const typeOk = queryTypes.length
         ? _every(queryTypes, qt => (
             _find(card.types, ct => ct.toLowerCase().indexOf(qt) > -1) ||
             _find(card.subtypes, cst => cst.toLowerCase().indexOf(qt) > -1)
           ))
         : true
-      // Checking card types
+      // Checking text
       const textOk = card.text
         ? card.text.toLowerCase().indexOf(queryText) > -1
+        : true
+      // Checking set
+      const setOK = state.cardSet !== 'all-sets'
+        ? card.setCode === state.cardSet
         : true
       // Checking card colors
       const colorsOk = card.colors
@@ -152,7 +159,7 @@ class SearchModule extends Component {
       if (state.cmcType === 'exactly' && (card.cmc || 0) === state.cmcValue) cmcOk = true
       if (state.cmcType === 'maximum' && (card.cmc || 0) <= state.cmcValue) cmcOk = true
 
-      return nameOk && typeOk && textOk && colorsOk && cmcOk && monoOk && multiOk
+      return nameOk && typeOk && textOk && setOK && colorsOk && cmcOk && monoOk && multiOk
     }
   }
 
@@ -167,6 +174,7 @@ class SearchModule extends Component {
   }
 
   render () {
+    const { cardSets } = this.props
     const {
       queryName, queryTypes, queryText, colors,
       monocoloredOnly, multicoloredOnly, cmcValue, cmcType
@@ -205,6 +213,16 @@ class SearchModule extends Component {
             value={queryText}
             onChange={e => this.updateQuery('queryText', e.target.value)}
           />
+        </div>
+        <div className="form-group">
+          <select
+            className="form-control"
+            value={this.state.cardSet}
+            onChange={e => this.updateQuery('cardSet', e.target.value)}
+          >
+            <option value="all-sets">All sets</option>
+            {cardSets.map(set => <option key={set.code} value={set.code}>{set.name}</option>)}
+          </select>
         </div>
         <div className="color-filter-group form-group">
           <ColorFilter

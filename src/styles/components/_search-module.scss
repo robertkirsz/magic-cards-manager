@@ -16,7 +16,6 @@
     position: absolute;
     left: $horizontalPadding;
     width: 385px;
-    height: 177px;
     transform: scale(0);
     transform-origin: left center;
     opacity: 0;
@@ -71,7 +70,7 @@
   }
   &:hover {
     width: 415px;
-    height: 207px;
+    height: 254px;
     padding: 0;
     border-radius: 10px;
     .search-button {
