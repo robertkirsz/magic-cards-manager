@@ -141,7 +141,7 @@ class SearchModule extends Component {
         : true
       // Checking set
       const setOK = state.cardSet !== 'all-sets'
-        ? card.setCode === state.cardSet
+        ? _find(card.variants, { setCode: state.cardSet })
         : true
       // Checking card colors
       const colorsOk = card.colors

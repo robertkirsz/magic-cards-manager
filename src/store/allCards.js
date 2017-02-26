@@ -4,6 +4,7 @@ import _map from 'lodash/map'
 import _reject from 'lodash/reject'
 import _filter from 'lodash/filter'
 import _get from 'lodash/get'
+import _find from 'lodash/find'
 import _sortBy from 'lodash/sortBy'
 import moment from 'moment'
 import { Card } from 'classes'
@@ -63,14 +64,19 @@ const ACTION_HANDLERS = {
     }, {})
     // For each set...
     _forEach(allSets, set => {
-      cardSets.push({ name: set.name, code: set.code.toLowerCase() })
       // Save its code inside its cards objects
       const cardsFromThisSet = set.cards.map(card => {
         card.setCode = set.code.toLowerCase()
         return card
       })
       // Remove cards that don't have Multiverse ID
-      allCards.push(..._filter(cardsFromThisSet, 'multiverseid'))
+      const cardWithMultiverseId = _filter(cardsFromThisSet, 'multiverseid')
+      // Add set to sets array if it has any valid vards
+      if (cardWithMultiverseId.length) {
+        cardSets.push({ name: set.name, code: set.code.toLowerCase() })
+      }
+      // Add cards with Multiverse ID to the cards array
+      allCards.push(...cardWithMultiverseId)
     })
     // Group them by name and put reprints into an array: { 'Naturalize': { (...), variants: [{...}, {...}] } }
     _forEach(allCards, card => {
