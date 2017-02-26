@@ -1,5 +1,6 @@
 import Card             from 'components/Card'
 import Header           from 'components/Header'
+import Spinner          from 'components/Spinner'
 import CmcFilter        from 'components/CmcFilter'
 import UserBadge        from 'components/UserBadge'
 import LatestSet        from 'components/LatestSet'
@@ -18,6 +19,7 @@ import CardDetailsPopup from 'components/CardDetailsPopup'
 export {
   Card,
   Header,
+  Spinner,
   CmcFilter,
   UserBadge,
   LatestSet,

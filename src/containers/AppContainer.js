@@ -10,7 +10,6 @@ class AppContainer extends Component {
   }
 
   componentWillMount () {
-    // TODO: add error handler when server is not available
     this.props.store.dispatch(getCards())
   }
 

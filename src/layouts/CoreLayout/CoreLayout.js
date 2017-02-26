@@ -54,7 +54,6 @@ class CoreLayout extends Component {
     this.listenToAuthChange(this.props)
   }
 
-  // TODO: do not hide main spinner until user settings are loaded
   listenToAuthChange = () => {
     // When user's authentication status changes...
     auth.onAuthStateChanged(async firebaseUser => {
@@ -108,12 +107,12 @@ class CoreLayout extends Component {
 
     return (
       <ReactCSSTransitionGroup
-        transitionName="example"
-        transitionEnterTimeout={3000}
-        transitionLeaveTimeout={3000}
+        transitionName="fadeOut"
+        transitionEnter={false}
+        transitionLeaveTimeout={500}
       >
         {
-          true || allCardsFetching || myCardsLoading || userAuthPending
+           allCardsFetching || myCardsLoading || userAuthPending
             ? (
               <LoadingScreen
                 key="a"
