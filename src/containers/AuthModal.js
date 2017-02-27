@@ -24,40 +24,31 @@ class AuthModal extends Component {
     clearAuthErrors: PropTypes.func.isRequired
   }
 
-  constructor () {
-    super()
-
-    this.togglePassword = this.togglePassword.bind(this)
-    this.updateForm = this.updateForm.bind(this)
-    this.submitForm = this.submitForm.bind(this)
-    this.onExited = this.onExited.bind(this)
-
-    this.initialState = {
-      email: '',
-      password: '',
-      showPassword: false
-    }
-
-    this.state = this.initialState
+  initialState = {
+    email: '',
+    password: '',
+    showPassword: false
   }
 
-  togglePassword () {
+  state = this.initialState
+
+  togglePassword = () => {
     this.setState({ showPassword: !this.state.showPassword })
   }
 
   // Called when modal disappears
-  onExited () {
+  onExited = () => {
     // Clear modal's state
     this.setState(this.initialState)
     // Clear any authentication errors
     if (this.props.user.error) this.props.clearAuthErrors()
   }
 
-  updateForm (property, value) {
+  updateForm = (property, value) => {
     this.setState({ [property]: value })
   }
 
-  submitForm (e) {
+  submitForm = e => {
     e.preventDefault()
 
     const { modalName, signIn, signUp } = this.props

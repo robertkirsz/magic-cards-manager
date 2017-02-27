@@ -6,7 +6,7 @@ import { AuthModal, ErrorModal } from 'containers'
 import { Header, SearchModule, LoadingScreen } from 'components'
 import 'styles/core.scss'
 
-const debug = true
+const debug = false
 
 const mapStateToProps = ({ layout, allCards, myCards, user }) => ({
   allCardsFetching: allCards.fetching,

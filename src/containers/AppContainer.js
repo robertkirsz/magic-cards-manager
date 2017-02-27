@@ -9,7 +9,7 @@ import { loadInitialSettings } from 'store/settings'
 import { loadMyCards } from 'store/myCards'
 import { closeModal } from 'store/layout'
 
-const debug = true
+const debug = false
 
 class AppContainer extends Component {
   static propTypes = {
@@ -28,12 +28,13 @@ class AppContainer extends Component {
 
   listenToAuthChange = () => {
     const { dispatch } = this.props.store
-    const { layout } = this.props.store.getState()
-    const authModalOpened = layout.modal.name === 'sign in' || layout.modal.name === 'sign up'
 
     // When user's authentication status changes...
     auth.onAuthStateChanged(async firebaseUser => {
       if (debug) console.info('Authentication state has changed')
+
+      const { layout } = this.props.store.getState()
+      const authModalOpened = layout.modal.name === 'sign in' || layout.modal.name === 'sign up'
 
       // Show loading message
       dispatch(authRequest())
@@ -86,7 +87,7 @@ class AppContainer extends Component {
         // Save user's data in Firebase and in store
         dispatch(authSuccess(userData))
         // Close any sign in or sign up modals
-        if (authModalOpened) closeModal()
+        if (authModalOpened) dispatch(closeModal())
       // If user's not logged in or logged out...
       } else {
         dispatch(noUser())
