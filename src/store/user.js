@@ -1,3 +1,4 @@
+import { browserHistory } from 'react-router'
 import { firebaseSignIn, firebaseSignUp, firebaseSignOut, firebaseProviderSignIn, updateUserData } from 'utils/firebase'
 import { openModal } from 'store/layout'
 
@@ -56,7 +57,10 @@ export const signInWithProvider = providerName => {
 export const authRequest = () => ({ type: 'AUTH_REQUEST' })
 export const authSuccess = user => ({ type: 'AUTH_SUCCESS', user })
 export const authError = error => ({ type: 'AUTH_ERROR', error })
-export const signOutSuccess = () => ({ type: 'SIGN_OUT_SUCCESS' })
+export const signOutSuccess = () => {
+  browserHistory.push('all-cards')
+  return { type: 'SIGN_OUT_SUCCESS' }
+}
 export const clearAuthErrors = () => ({ type: 'CLEAR_AUTH_ERROR' })
 export const noUser = () => ({ type: 'NO_USER' })
 
