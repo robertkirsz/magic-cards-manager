@@ -19,7 +19,7 @@ const propTypes = {
   signOut: PropTypes.func.isRequired
 }
 
-export const Header = ({ user, signOut, openModal, pathname }) => {
+const Header = ({ user, signOut, openModal, pathname }) => {
   const { signedIn } = user
 
   // Brand and toggle get grouped for better mobile display
@@ -31,7 +31,7 @@ export const Header = ({ user, signOut, openModal, pathname }) => {
         <span className="icon-bar" />
         <span className="icon-bar" />
       </button>
-      <a className="navbar-brand">Magic Cards Manager</a>
+      <span className="navbar-brand">Magic Cards Manager</span>
     </div>
   )
 
@@ -88,7 +88,7 @@ export const Header = ({ user, signOut, openModal, pathname }) => {
         {brandAndToggle}
         <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           {signedIn && <LockButton />}
-          {navigationLinks}
+          {signedIn && navigationLinks}
           {signedIn ? userDropdown : authenticationLinks}
         </div>
       </div>
