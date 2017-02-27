@@ -14,10 +14,16 @@ const mapStateToProps = ({ layout, allCards, myCards, user }) => ({
   userAuthPending: user.authPending
 })
 
-const mapDispatchToProps = {
-}
-
 class CoreLayout extends Component {
+  state = { showSpinner: true }
+
+  componentWillReceiveProps ({ allCardsFetching, myCardsLoading, userAuthPending }) {
+    if (debug && this.state.showSpinner) console.warn('allCardsFetching:', allCardsFetching, 'myCardsLoading:', myCardsLoading, 'userAuthPending', userAuthPending)
+    if (!allCardsFetching && !myCardsLoading && !userAuthPending && this.state.showSpinner) {
+      setTimeout(() => { this.setState({ showSpinner: false }) }, 1000)
+    }
+  }
+
   static propTypes = {
     children: PropTypes.element.isRequired,
     routes: PropTypes.array.isRequired,
@@ -27,27 +33,19 @@ class CoreLayout extends Component {
   }
 
   render () {
-    const { routes, children, allCardsFetching, myCardsLoading, userAuthPending } = this.props
-    if (debug) console.warn('allCardsFetching:', allCardsFetching, 'myCardsLoading:', myCardsLoading, 'userAuthPending', userAuthPending)
+    const { routes, children } = this.props
     // Show button at the bottom of the screen on routes that have 'showAppButtons' prop
     const showAppButtons = _find(routes, 'showAppButtons')
 
     return (
       <ReactCSSTransitionGroup
         transitionName="fadeOut"
-        transitionEnter={false}
+        transitionEnterTimeout={500}
         transitionLeaveTimeout={500}
       >
         {
-           allCardsFetching || myCardsLoading || userAuthPending
-            ? (
-              <LoadingScreen
-                key="a"
-                allCardsFetching={allCardsFetching}
-                myCardsLoading={myCardsLoading}
-                userAuthPending={userAuthPending}
-              />
-            )
+           this.state.showSpinner
+            ? <LoadingScreen key="a" />
             : (
               <div id="app" key="b">
                 <Header />
@@ -67,4 +65,4 @@ class CoreLayout extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CoreLayout)
+export default connect(mapStateToProps)(CoreLayout)
