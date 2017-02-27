@@ -5,7 +5,7 @@ import { CardsSearchList } from 'components'
 
 class AllCardsView extends Component {
   static propTypes = {
-    allCards: PropTypes.object,
+    allCards: PropTypes.object.isRequired,
     children: PropTypes.element
   }
 

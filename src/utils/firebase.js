@@ -136,7 +136,7 @@ export const updateAndReturnUserSettings = settings => {
 export const saveCollection = collection => {
   const reducedCollection = {}
   _forEach(collection, singleCard => { reducedCollection[singleCard.id] = singleCard.formatForFirebase() })
-  return firebaseSetData('Collections', auth.currentUser.uid, reducedCollection)
+  return firebaseUpdateData('Collections', auth.currentUser.uid, reducedCollection)
 }
 
 export const loadCollection = () => {

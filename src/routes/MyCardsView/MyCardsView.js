@@ -2,31 +2,19 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { CardsSearchList } from 'components'
 
-const mapStateToProps = ({ user, myCards }) => ({ user, myCards })
+const mapStateToProps = ({ myCards }) => ({ myCards })
 
-export class MyCardsView extends Component {
+class MyCardsView extends Component {
   static propTypes = {
-    user: PropTypes.object,
-    myCards: PropTypes.object,
+    myCards: PropTypes.object.isRequired,
     children: PropTypes.element
   }
 
   render () {
     const {
       myCards: { cards, filteredCards },
-      children,
-      user
+      children
     } = this.props
-
-    if (!user.signedIn) {
-      return (
-        <div className="my-cards-view">
-          <h1 className="my-cards-view__login-prompt">
-            Log in to be able to save your collection
-          </h1>
-        </div>
-      )
-    }
 
     if (!cards.length) {
       return (
