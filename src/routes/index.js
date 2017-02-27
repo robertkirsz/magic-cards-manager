@@ -9,7 +9,7 @@ import NotFoundView  from 'routes/NotFoundView'
 
 // TODO: add route names
 
-export const createRoutes = (store) => ({
+export const createRoutes = store => ({
   path: '/',
   component: CoreLayout,
   indexRoute: { component: HomeView },

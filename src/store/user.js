@@ -2,15 +2,6 @@ import { firebaseSignIn, firebaseSignUp, firebaseSignOut, firebaseProviderSignIn
 import { openModal } from 'store/layout'
 
 // ------------------------------------
-// Constants
-// ------------------------------------
-const AUTH_REQUEST = 'AUTH_REQUEST'
-const AUTH_SUCCESS = 'AUTH_SUCCESS'
-const AUTH_ERROR = 'AUTH_ERROR'
-const SIGN_OUT_SUCCESS = 'SIGN_OUT_SUCCESS'
-const CLEAR_AUTH_ERROR = 'CLEAR_AUTH_ERROR'
-
-// ------------------------------------
 // Actions
 // ------------------------------------
 export const signIn = ({ email, password }) => {
@@ -50,7 +41,7 @@ export const signOut = () => {
     else dispatch(signOutSuccess())
   }
 }
-export const signInWithProvider = (providerName) => {
+export const signInWithProvider = providerName => {
   return async (dispatch, getState) => {
     // Return if request is pending
     if (getState().user.authPending) return
@@ -62,18 +53,19 @@ export const signInWithProvider = (providerName) => {
     if (firebaseSignInResponse.error) dispatch(authError(firebaseSignInResponse.error))
   }
 }
-export const authRequest = () => ({ type: AUTH_REQUEST })
-export const authSuccess = user => ({ type: AUTH_SUCCESS, user })
-export const authError = error => ({ type: AUTH_ERROR, error })
-export const signOutSuccess = () => ({ type: SIGN_OUT_SUCCESS })
-export const clearAuthErrors = () => ({ type: CLEAR_AUTH_ERROR })
+export const authRequest = () => ({ type: 'AUTH_REQUEST' })
+export const authSuccess = user => ({ type: 'AUTH_SUCCESS', user })
+export const authError = error => ({ type: 'AUTH_ERROR', error })
+export const signOutSuccess = () => ({ type: 'SIGN_OUT_SUCCESS' })
+export const clearAuthErrors = () => ({ type: 'CLEAR_AUTH_ERROR' })
+export const noUser = () => ({ type: 'NO_USER' })
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [AUTH_REQUEST]: state => ({ ...state, authPending: true, error: null }),
-  [AUTH_SUCCESS]: (state, { user }) => {
+  AUTH_REQUEST: state => ({ ...state, authPending: true, error: null }),
+  AUTH_SUCCESS: (state, { user }) => {
     updateUserData(user)
 
     const newState = {
@@ -87,9 +79,10 @@ const ACTION_HANDLERS = {
 
     return newState
   },
-  [AUTH_ERROR]: (state, { error }) => ({ ...state, authPending: false, error }),
-  [SIGN_OUT_SUCCESS]: () => initialState,
-  [CLEAR_AUTH_ERROR]: state => ({ ...state, error: null })
+  AUTH_ERROR: (state, { error }) => ({ ...state, authPending: false, error }),
+  CLEAR_AUTH_ERROR: state => ({ ...state, error: null }),
+  SIGN_OUT_SUCCESS: () => ({ ...initialState, authPending: false }),
+  NO_USER: () => ({ ...initialState, authPending: false })
 }
 
 // ------------------------------------
