@@ -1,11 +1,13 @@
 import Flex from './Flex'
-import AbsoluteCenter from './AbsoluteCenter'
-import AbsoluteFullSize from './AbsoluteFullSize'
 import ColumnCenter from './ColumnCenter'
+import AbsoluteCenter from './AbsoluteCenter'
+import CollectionStats from './CollectionStats'
+import AbsoluteFullSize from './AbsoluteFullSize'
 
 export {
   Flex,
+  ColumnCenter,
   AbsoluteCenter,
-  AbsoluteFullSize,
-  ColumnCenter
+  CollectionStats,
+  AbsoluteFullSize
 }

@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Grid, Row, Col, Form, FormGroup, FormControl, Checkbox, Button } from 'react-bootstrap'
+import { CollectionStats } from 'components'
 
 const mapStateToProps = ({ user }) => ({ user })
 
@@ -10,7 +11,8 @@ const ProfileView = ({ user }) => (
       <Row>
         <Col md={3}>
           <div
-            style={{ backgroundImage: `url(${user.photoURL})`, height: 200 }}
+            className="profile-view__photo"
+            style={{ backgroundImage: `url(${user.photoURL})` }}
           />
           {user.admin && <h3>ADMIN</h3>}
         </Col>
@@ -66,6 +68,7 @@ const ProfileView = ({ user }) => (
         </Col>
       </Row>
     </Grid>
+    <CollectionStats />
   </div>
 )
 

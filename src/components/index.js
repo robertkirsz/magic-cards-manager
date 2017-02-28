@@ -13,6 +13,7 @@ import SearchModule     from 'components/SearchModule'
 import AllNoneToggle    from 'components/AllNoneToggle'
 import LoadingScreen    from 'components/LoadingScreen'
 import CardsSearchList  from 'components/CardsSearchList'
+import CollectionStats  from 'components/CollectionStats'
 import MonoMultiToggle  from 'components/MonoMultiToggle'
 import CardDetailsPopup from 'components/CardDetailsPopup'
 
@@ -32,6 +33,7 @@ export {
   AllNoneToggle,
   LoadingScreen,
   CardsSearchList,
+  CollectionStats,
   MonoMultiToggle,
   CardDetailsPopup
 }
