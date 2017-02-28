@@ -11,22 +11,14 @@ import { cardsDatabase, saveCardsDatabase, fetchCards } from 'database'
 import { formattedError } from 'utils'
 import { openModal } from 'store/layout'
 
-// TODO: Sort all cards by name perhaps?
-
-// ------------------------------------
-// Constants
-// ------------------------------------
-export const ALL_CARDS_REQUEST = 'ALL_CARDS_REQUEST'
-export const ALL_CARDS_SUCCESS = 'ALL_CARDS_SUCCESS'
-export const ALL_CARDS_ERROR   = 'ALL_CARDS_ERROR'
-export const FILTER_ALL_CARDS  = 'FILTER_ALL_CARDS'
-
 // ------------------------------------
 // Actions
 // ------------------------------------
-export const sendRequest = () => ({ type: ALL_CARDS_REQUEST })
-export const responseSuccess = allSets => ({ type: ALL_CARDS_SUCCESS, allSets })
-export const responseError = error => ({ type: ALL_CARDS_ERROR, error })
+// Indicates that there is "allCards" request pending
+export const sendRequest = () => ({ type: 'ALL_CARDS_REQUEST' })
+export const responseSuccess = allSets => ({ type: 'ALL_CARDS_SUCCESS', allSets })
+export const responseError = error => ({ type: 'ALL_CARDS_ERROR', error })
+// Fetches all cards and passes them further
 export const getCards = () => {
   return (dispatch, getState) => {
     // Dispatch action so we can show spinner
@@ -41,18 +33,18 @@ export const getCards = () => {
       })
   }
 }
-export const filterAllCards = filterFunction => ({ type: FILTER_ALL_CARDS, filterFunction })
+export const filterAllCards = filterFunction => ({ type: 'FILTER_ALL_CARDS', filterFunction })
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [ALL_CARDS_REQUEST]: state => (
+  ALL_CARDS_REQUEST: state => (
     state.fetching
       ? state
       : { ...state, fetching: true, error: null }
   ),
-  [ALL_CARDS_SUCCESS]: (state, { allSets }) => {
+  ALL_CARDS_SUCCESS: (state, { allSets }) => {
     const allCards = [] // Will contain every single Magic card
     const uniqueCards = {} // Will contain unique cards
     const cardSets = []
@@ -77,6 +69,7 @@ const ACTION_HANDLERS = {
       // Add cards with Multiverse ID to the cards array
       allCards.push(...cardWithMultiverseId)
     })
+
     // Group them by name and put reprints into an array: { 'Naturalize': { (...), variants: [{...}, {...}] } }
     _forEach(allCards, card => {
       uniqueCards[card.name] = {
@@ -84,12 +77,15 @@ const ACTION_HANDLERS = {
         variants: uniqueCards[card.name] ? [...uniqueCards[card.name].variants, new Card(card)] : [new Card(card)]
       }
     })
-    // Convert object to an array
+
+    // Convert object to an array of cards
     let arrayOfCards = _map(uniqueCards, card => new Card(card))
     // Hide basic lands
     arrayOfCards = _reject(arrayOfCards, card => _get(card, 'supertypes[0]') === 'Basic')
     // Remove tokens
     arrayOfCards = _reject(arrayOfCards, { layout: 'token' })
+    // Sort cards by name
+    arrayOfCards = _sortBy(arrayOfCards, 'name')
 
     saveCardsDatabase(arrayOfCards)
 
@@ -102,12 +98,12 @@ const ACTION_HANDLERS = {
       cardSets: _sortBy(cardSets, 'name')
     }
   },
-  [ALL_CARDS_ERROR]: (state, { error }) => ({
+  ALL_CARDS_ERROR: (state, { error }) => ({
     ...state,
     fetching: false,
     error
   }),
-  [FILTER_ALL_CARDS]: (state, { filterFunction }) => ({
+  FILTER_ALL_CARDS: (state, { filterFunction }) => ({
     ...state,
     filteredCards: cardsDatabase.filter(filterFunction)
   })
