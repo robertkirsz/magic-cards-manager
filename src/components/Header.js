@@ -9,7 +9,8 @@ import _reduce from 'lodash/reduce'
 const mapStateToProps = ({ user, location, myCards }) => ({
   user,
   pathname: location.pathname,
-  numberOfCards: _reduce(myCards.cards, (sum, card) => sum + card.cardsInCollection, 0)
+  numberOfTotalCards: _reduce(myCards.cards, (sum, card) => sum + card.cardsInCollection, 0),
+  numberOfUniqueCards: myCards.cards.length
 })
 
 const mapDispatchToProps = { signOut, openModal }
@@ -19,10 +20,11 @@ const propTypes = {
   pathname: PropTypes.string.isRequired,
   openModal: PropTypes.func.isRequired,
   signOut: PropTypes.func.isRequired,
-  numberOfCards: PropTypes.number
+  numberOfTotalCards: PropTypes.number,
+  numberOfUniqueCards: PropTypes.number
 }
 
-const Header = ({ user, signOut, openModal, pathname, numberOfCards }) => {
+const Header = ({ user, signOut, openModal, pathname, numberOfTotalCards, numberOfUniqueCards }) => {
   const { signedIn } = user
 
   // Brand and toggle get grouped for better mobile display
@@ -47,11 +49,8 @@ const Header = ({ user, signOut, openModal, pathname, numberOfCards }) => {
       </li>
       <li>
         <Link to="my-cards" className={pathname === 'my-cards' ? 'active' : ''}>
-          My cards
+          My cards {numberOfTotalCards} ({numberOfUniqueCards})
         </Link>
-      </li>
-      <li>
-        <a>{numberOfCards}</a>
       </li>
     </ul>
   )
