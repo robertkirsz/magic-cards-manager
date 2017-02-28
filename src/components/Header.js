@@ -4,10 +4,12 @@ import { Link } from 'react-router'
 import { UserBadge, LockButton } from 'components'
 import { signOut } from 'store/user'
 import { openModal } from 'store/layout'
+import _reduce from 'lodash/reduce'
 
-const mapStateToProps = ({ user, location }) => ({
+const mapStateToProps = ({ user, location, myCards }) => ({
   user,
-  pathname: location.pathname
+  pathname: location.pathname,
+  numberOfCards: _reduce(myCards.cards, (sum, card) => sum + card.cardsInCollection, 0)
 })
 
 const mapDispatchToProps = { signOut, openModal }
@@ -16,10 +18,11 @@ const propTypes = {
   user: PropTypes.object.isRequired,
   pathname: PropTypes.string.isRequired,
   openModal: PropTypes.func.isRequired,
-  signOut: PropTypes.func.isRequired
+  signOut: PropTypes.func.isRequired,
+  numberOfCards: PropTypes.number
 }
 
-const Header = ({ user, signOut, openModal, pathname }) => {
+const Header = ({ user, signOut, openModal, pathname, numberOfCards }) => {
   const { signedIn } = user
 
   // Brand and toggle get grouped for better mobile display
@@ -46,6 +49,9 @@ const Header = ({ user, signOut, openModal, pathname }) => {
         <Link to="my-cards" className={pathname === 'my-cards' ? 'active' : ''}>
           My cards
         </Link>
+      </li>
+      <li>
+        <a>{numberOfCards}</a>
       </li>
     </ul>
   )

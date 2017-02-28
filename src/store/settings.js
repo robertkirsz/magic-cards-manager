@@ -25,7 +25,12 @@ export const restoreDefaultSettings = () => ({
 // ------------------------------------
 const ACTION_HANDLERS = {
   TOGGLE_SETTING: (state, { property, value }) => (
-    updateAndReturnUserSettings({ ...state, [property]: value })
+    updateAndReturnUserSettings({
+      ...state,
+      [property]: typeof value === 'boolean'
+        ? value
+        : !state[property]
+    })
   ),
   CARD_DETAILS_POPUP_DELAY: (state, { delayValue }) => {
     const _delayValue = delayValue === 'false'
@@ -33,7 +38,7 @@ const ACTION_HANDLERS = {
       : parseInt(delayValue, 10)
     return updateAndReturnUserSettings({ ...state, cardDetailsPopupDelay: _delayValue })
   },
-  LOAD_INITIAL_SETTINGS: (state, { settings }) => settings,
+  LOAD_INITIAL_SETTINGS: (state, { settings }) => ({ ...state, ...settings }),
   SIGN_OUT_SUCCESS: () => initialState,
   RESTORE_DEFAULT_SETTINGS: () => updateAndReturnUserSettings(initialState)
 }
@@ -42,6 +47,7 @@ const ACTION_HANDLERS = {
 // Reducer
 // ------------------------------------
 const initialState = {
+  myCardsLocked: true,
   cardDetailsPopupDelay: 1000,
   cardModalAnimation: true,
   cardHoverAnimation: true

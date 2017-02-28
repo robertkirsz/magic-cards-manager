@@ -45,7 +45,6 @@ export const loadMyCards = () => {
 }
 export const loadMyCardsRequest = () => ({ type: 'LOAD_MY_CARDS_REQUEST', loading: true })
 export const loadMyCardsSuccess = cards => ({ type: 'LOAD_MY_CARDS_SUCCESS', cards, loading: false })
-export const toggleLockMyCards = () => ({ type: 'LOCK_MY_CARDS' })
 export const noCards = () => ({ type: 'NO_CARDS' })
 
 // ------------------------------------
@@ -187,7 +186,6 @@ const ACTION_HANDLERS = {
     ...state,
     filteredCards: state.cards.filter(filterFunction)
   }),
-  LOCK_MY_CARDS: state => ({ ...state, locked: !state.locked }),
   SIGN_OUT_SUCCESS: () => ({ ...initialState, loading: false }),
   NO_USER: () => ({ ...initialState, loading: false })
 }
@@ -197,7 +195,6 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 const initialState = {
   cards: [],
-  locked: true,
   loading: true,
   filteredCards: null
 }

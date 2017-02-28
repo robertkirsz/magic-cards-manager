@@ -1,23 +1,25 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { toggleLockMyCards } from 'store/myCards'
+import { toggleSetting } from 'store/settings'
 import cn from 'classnames'
 
-const mapStateToProps = ({ myCards }) => ({ myCardsLocked: myCards.locked })
+const mapStateToProps = ({ settings }) => ({ myCardsLocked: settings.myCardsLocked })
 
-const mapDispatchToProps = { toggleLockMyCards }
+const mapDispatchToProps = {
+  toggleSetting
+}
 
 const propTypes = {
   myCardsLocked: PropTypes.bool,
-  toggleLockMyCards: PropTypes.func
+  toggleSetting: PropTypes.func
 }
 
-const LockButton = ({ myCardsLocked, toggleLockMyCards }) => {
+const LockButton = ({ myCardsLocked, toggleSetting }) => {
   return (
     <button
       type="button"
       className="lock-button navbar-btn"
-      onClick={toggleLockMyCards}
+      onClick={() => { toggleSetting('myCardsLocked') }}
     >
       <i className={cn('fa', { 'fa-lock': myCardsLocked, 'fa-unlock-alt': !myCardsLocked })} />
     </button>

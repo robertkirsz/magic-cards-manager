@@ -7,7 +7,7 @@ import { Card, CardDetails } from 'components'
 import { cardsDatabase } from 'database'
 
 const mapStateToProps = ({ allCards, myCards, settings }, ownProps) => ({
-  myCardsLocked: myCards.locked,
+  myCardsLocked: settings.myCardsLocked,
   cardModalAnimation: settings.cardModalAnimation,
   // Find card by its name from the URL in all the cards or cards
   // from user's collection based of what page we are on
