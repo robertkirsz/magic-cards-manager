@@ -53,6 +53,7 @@ class CardsSearchList extends Component {
           this.shouldShowButton() && (
             <div className="cards-search-list__show-more-button card" onClick={this.showMoreCards}>
               <i className="fa fa-search-plus" />
+              <span className="cardsNumber">{cardsLimit} / {cards.length}</span>
             </div>
           )
         }
