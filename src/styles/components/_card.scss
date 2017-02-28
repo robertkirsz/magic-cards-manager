@@ -38,11 +38,18 @@ $mainMargin: 30px;
   }
   &__count {
     position: absolute;
-    bottom: 5px;
-    left: 10px;
-    font-size: 1.5em;
-    font-weight: bold;
-    color: #8cf54c;
+    bottom: 4px;
+    left: 4px;
+    width: 1.4em;
+    height: 1.4em;
+    background: white;
+    border: 1px solid black;
+    border-radius: 0.3em;
+    color: black;
+    font-size: 1.3em;
+    line-height: 1.4em;
+    font-weight: 700;
+    text-align: center;
   }
   &__add-remove-buttons {
     @include flex(row, nowrap, space-around, center);

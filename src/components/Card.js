@@ -21,7 +21,7 @@ class Card extends Component {
     mainCard: PropTypes.object,
     variantCard: PropTypes.object,
     setIcon: PropTypes.bool,
-    showCount: PropTypes.bool,
+    numberOfCards: PropTypes.number,
     showAdd: PropTypes.bool,
     showRemove: PropTypes.bool,
     addCard: PropTypes.func,
@@ -71,11 +71,11 @@ class Card extends Component {
     this.animate('remove')
   }
 
-  showDetailsPopup () {
+  showDetailsPopup = () => {
     this.setState({ detailsPopupShow: true })
   }
 
-  hideDetailsPopup () {
+  hideDetailsPopup = () => {
     this.setState({ detailsPopupShow: false })
   }
 
@@ -173,13 +173,12 @@ class Card extends Component {
 
   render () {
     const {
-      mainCard, variantCard, setIcon, showCount, showAdd, showRemove,
+      mainCard, variantCard, setIcon, numberOfCards, showAdd, showRemove,
       className, hoverAnimation, detailsPopup, cardHoverAnimation
     } = this.props
     const { animations, detailsPopupShow, detailsPopupCoordinates } = this.state
 
     const cardData = variantCard || mainCard
-    const numberOfCards = <span className="card__count">{cardData.cardsInCollection}</span>
     const addRemoveControls = (
       <div className="card__add-remove-buttons">
         {showAdd &&
@@ -215,10 +214,7 @@ class Card extends Component {
           style={this.props.onClick && { cursor: 'pointer' }}
           ref="cardElement"
       >
-          <div
-            className="atvImg-container"
-            ref="cardContainer"
-        >
+          <div className="atvImg-container" ref="cardContainer">
             <div className="atvImg-shadow" />
             <div className="atvImg-layers">
               <div
@@ -226,12 +222,9 @@ class Card extends Component {
                 style={{ backgroundImage: `url(${cardData.image}), url(${cardBack})` }}
                 ref="cardElementLayer1"
              />
-              <div className="atvImg-rendered-layer card__content"
-                ref="cardElementLayer2"
-
-              >
+              <div className="atvImg-rendered-layer card__content" ref="cardElementLayer2">
                 {setIcon && <span className={cn('card__set-icon', cardData.setIcon)} />}
-                {showCount && numberOfCards}
+                {numberOfCards > 0 && <span className="card__count">{numberOfCards}</span>}
                 {(showAdd || showRemove) && addRemoveControls}
                 {
                 animations.map(a => (

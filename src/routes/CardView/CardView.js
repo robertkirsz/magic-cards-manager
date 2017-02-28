@@ -16,7 +16,8 @@ const mapStateToProps = ({ allCards, myCards, settings }, ownProps) => ({
       ? myCards.cards
       : cardsDatabase,
     { cardUrl: ownProps.routeParams.cardUrl }
-  )
+  ),
+  myCards: myCards.cards
 })
 
 class CardView extends Component {
@@ -26,7 +27,8 @@ class CardView extends Component {
     routeParams: PropTypes.object,
     addCard: PropTypes.func,
     myCardsLocked: PropTypes.bool,
-    cardModalAnimation: PropTypes.bool
+    cardModalAnimation: PropTypes.bool,
+    myCards: PropTypes.array
   }
 
   state = { modalOpened: true }
@@ -43,6 +45,22 @@ class CardView extends Component {
 
   goBack = () => {
     browserHistory.push(`/${this.props.routes[1].path}`)
+  }
+
+  getNumberOfCards = variantCard => {
+    // If this card has its number (is a card from collection), return it
+    if (variantCard.cardsInCollection) return variantCard.cardsInCollection
+    // If its a card from the "allCards" page, we'll look for it in the collection
+    // First, search for the main card of the chosen variant
+    const mainCardFromCollection = _find(this.props.myCards, { id: this.props.card.id })
+    // If there is no such card in the collection, return 0
+    if (!mainCardFromCollection) return 0
+    // Second, look for a particular variant
+    const variantCardFromTheCollection = _find(mainCardFromCollection.variants, { id: variantCard.id })
+    // If there is no such card in the collection, return 0
+    if (!variantCardFromTheCollection) return 0
+    // If we found that card, return its count
+    return variantCardFromTheCollection.cardsInCollection
   }
 
   render () {
@@ -82,18 +100,22 @@ class CardView extends Component {
           </Row>
           <div className="card-variants-list">
             {
-              card.variants.map(variantCard => (
-                <Card
-                  className="small"
-                  key={variantCard.id}
-                  mainCard={card}
-                  variantCard={variantCard}
-                  setIcon
-                  showCount={this.isCollectionPage}
-                  showAdd={!myCardsLocked}
-                  showRemove={!myCardsLocked && isMyCardsPage}
-                />
-              ))
+              card.variants.map(variantCard => {
+                const numberOfCards = this.getNumberOfCards(variantCard)
+
+                return (
+                  <Card
+                    className="small"
+                    key={variantCard.id}
+                    mainCard={card}
+                    variantCard={variantCard}
+                    setIcon
+                    numberOfCards={numberOfCards}
+                    showAdd={!myCardsLocked}
+                    showRemove={!myCardsLocked && numberOfCards > 0}
+                  />
+                )
+              })
             }
           </div>
         </Modal.Body>
