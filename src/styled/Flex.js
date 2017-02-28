@@ -12,7 +12,7 @@ export const flex = (direction, wrap, justifyContent, alignItems, alignContent) 
 
 // Standalone flex styled-component
 const Flex = styled.div`
-  display: flex;
+  display: ${props => props.inline ? 'inline-flex' : 'flex'};
   flex-direction: ${props => {
     if (props.rowReverse) return 'rowReverse'
     if (props.column) return 'column'

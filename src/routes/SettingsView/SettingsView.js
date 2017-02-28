@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { FormGroup, Radio, ControlLabel, Checkbox, Button } from 'react-bootstrap'
 import { toggleSetting, changeCardDetailsPopupDelay, restoreDefaultSettings } from 'store/settings'
+import { Flex } from 'styled'
 
 const mapStateToProps = ({ settings }) => ({ settings })
 
@@ -57,26 +58,52 @@ class SettingsView extends Component {
     const { cardModalAnimation, cardHoverAnimation } = settings
 
     return (
-      <div>
-        <Checkbox
-          checked={cardModalAnimation}
-          onChange={e => toggleSetting('cardModalAnimation', e.target.checked)}
-        >
-          Card modal animation
-        </Checkbox>
-        <Checkbox
-          checked={cardHoverAnimation}
-          onChange={e => toggleSetting('cardHoverAnimation', e.target.checked)}
-        >
-          3D card animation
-        </Checkbox>
-        {this.renderCardDetailsPopupDelaySettings()}
-        <div>
-          <Button onClick={restoreDefaultSettings}>
-            Default settings
-          </Button>
-        </div>
-      </div>
+      <Flex column alignItems="center">
+        <Flex column>
+          <FormGroup>
+            <ControlLabel>Animations and transitions</ControlLabel>
+            <Checkbox
+              checked={cardModalAnimation}
+              onChange={e => toggleSetting('cardModalAnimation', e.target.checked)}
+            >
+              Card modal animation
+            </Checkbox>
+            <Checkbox
+              checked={cardHoverAnimation}
+              onChange={e => toggleSetting('cardHoverAnimation', e.target.checked)}
+            >
+              3D card animation
+            </Checkbox>
+          </FormGroup>
+          <FormGroup>
+            <ControlLabel>Collection lock status</ControlLabel>
+            <Checkbox
+              checked={cardModalAnimation}
+              onChange={e => toggleSetting('cardModalAnimation', e.target.checked)}
+            >
+              Locked at start
+            </Checkbox>
+            <Checkbox
+              checked={cardHoverAnimation}
+              onChange={e => toggleSetting('cardHoverAnimation', e.target.checked)}
+            >
+              Unlocked at start
+            </Checkbox>
+            <Checkbox
+              checked={cardHoverAnimation}
+              onChange={e => toggleSetting('cardHoverAnimation', e.target.checked)}
+            >
+              As I left it
+            </Checkbox>
+          </FormGroup>
+          {this.renderCardDetailsPopupDelaySettings()}
+          <Flex justifyContent="flex-end">
+            <Button onClick={restoreDefaultSettings}>
+              Default settings
+            </Button>
+          </Flex>
+        </Flex>
+      </Flex>
     )
   }
 }
