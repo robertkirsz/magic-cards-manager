@@ -3,12 +3,14 @@
   &__show-more-button {
     @extend %flex-center;
     border: 2px dashed;
-    font-size: 4em;
     color: #bbb;
     cursor: pointer;
     transition: color 0.3s;
-    &:hover {
-      color: #555;
+    &:hover { color: #555; }
+    .fa { font-size: 4em; }
+    .cardsNumber {
+      font-size: 1.5em;
+      margin-top: 0.5em;
     }
   }
 }
