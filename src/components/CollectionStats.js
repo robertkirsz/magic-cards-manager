@@ -16,8 +16,10 @@ class CollectionStats extends Component {
   }
 
   state = {
-    cardsColorsCount: {},
-    setNamesCount: {}
+    cardColorsCount: {},
+    setNamesCount: {},
+    cardTypesCount: {},
+    creatureTypesCount: {}
   }
 
   componentWillMount () {
@@ -31,41 +33,64 @@ class CollectionStats extends Component {
   prepareStats = collection => {
     if (!collection.length) return
 
-    this.createSetsChartData(collection)
-
-    const cardsColorsCount = this.createColorsChartData(collection)
+    const cardColorsCount = this.createColorsChartData(collection)
     const setNamesCount = this.createSetsChartData(collection)
+    const cardTypesCount = this.createTypesChartData(collection)
+    const creatureTypesCount = this.createCreatureTypesChartData(collection)
 
-    this.setState({ cardsColorsCount, setNamesCount })
+    this.setState({ cardColorsCount, setNamesCount, cardTypesCount, creatureTypesCount })
   }
 
+  // Prepares data for colors pie chart
   createColorsChartData = collection => {
     // Create an array of colors for each individual card from the collection
     const colorsOfEachCard = _.flatMap(collection, card => _.times(card.cardsInCollection, () => card.colors))
-    // Put them in an object and sort by color
+    // Put them in an object and count by color
     return _.countBy(colorsOfEachCard)
   }
 
+  // Prepares data for sets bar chart
   createSetsChartData = collection => {
     // Create an array of sets for each individual card from the collection
     const setCodesOfEachCard = _.flatMapDeep(collection, card => (
       _.map(card.variants, card => _.times(card.cardsInCollection, () => card.setCode))
     ))
-    // Put them in an object and sort by color
+    // Put them in an object and count by color
     const setCodesCount = _.countBy(setCodesOfEachCard)
+    // Convert set codes to set names
     const setNamesCount = {}
     _.forEach(setCodesCount, (count, code) => {
       const setName = _.find(this.props.cardSets, { code }).name
       setNamesCount[setName] = count
     })
-    console.warn('setCodesCount', setCodesCount, 'setNamesCount', setNamesCount)
     return setNamesCount
   }
 
-  initCharts = () => {
-    const { cardsColorsCount: { White, Blue, Black, Red, Green, undefined } } = this.state
+  // Prepares data for types bar chart
+  createTypesChartData = collection => {
+    // Create an array of types for each individual card from the collection
+    const typesOfEachCard = _.flatMapDeep(collection, card => (
+      _.map(card.variants, card => _.times(card.cardsInCollection, () => card.types))
+    ))
+    // Put them in an object and count by type
+    return _.countBy(typesOfEachCard)
+  }
 
-    const cardsColorsChart = new Chart('cardsColorsChart', { // eslint-disable-line
+  // Prepares data for subtypes bar chart
+  createCreatureTypesChartData = collection => {
+    // Create an array of subtypes for each individual card from the collection
+    const creatures = _.filter(collection, card => _.includes(card.types, 'Creature'))
+    const creatureTypes = _.flatMapDeep(creatures, card => (
+      _.map(card.variants, card => _.times(card.cardsInCollection, () => card.subtypes))
+    ))
+    // Put them in an object and count by subtype
+    return _.countBy(creatureTypes)
+  }
+
+  initCharts = () => {
+    const { cardColorsCount: { White, Blue, Black, Red, Green, undefined } } = this.state
+
+    const cardColorsChart = new Chart('cardColorsChart', { // eslint-disable-line
       type: 'pie',
       data: {
         labels: ['White', 'Blue', 'Black', 'Red', 'Green', 'Colorless'],
@@ -75,7 +100,7 @@ class CollectionStats extends Component {
         }]
       },
       options: {
-        responsive: false,
+        responsive: true,
         legend: {
           display: false
         }
@@ -83,33 +108,98 @@ class CollectionStats extends Component {
     })
 
     const { setNamesCount } = this.state
-    const cardsSetsChartLabels = []
-    const cardsSetsChartData = []
+    const cardSetsChartLabels = []
+    const cardSetsChartData = []
     _.forEach(setNamesCount, (count, name) => {
-      cardsSetsChartLabels.push(name)
-      cardsSetsChartData.push(count)
+      cardSetsChartLabels.push(name)
+      cardSetsChartData.push(count)
     })
 
-    const cardsSetsChart = new Chart('cardsSetsChart', { // eslint-disable-line
+    const cardSetsChart = new Chart('cardSetsChart', { // eslint-disable-line
       type: 'bar',
       data: {
-        labels: cardsSetsChartLabels,
+        labels: cardSetsChartLabels,
         datasets: [
           {
-            data: cardsSetsChartData
+            data: cardSetsChartData
           }
         ]
       },
       options: {
-        responsive: false,
+        responsive: true,
         legend: {
           display: false
         },
         scales: {
           yAxes: [{
             ticks: {
-              beginAtZero: true,
-              stepSize: 1
+              beginAtZero: true
+            }
+          }]
+        }
+      }
+    })
+
+    const { cardTypesCount } = this.state
+    const cardTypesChartLabels = []
+    const cardTypesChartData = []
+    _.forEach(cardTypesCount, (count, type) => {
+      cardTypesChartLabels.push(type)
+      cardTypesChartData.push(count)
+    })
+
+    const cardTypesChart = new Chart('cardTypesChart', { // eslint-disable-line
+      type: 'bar',
+      data: {
+        labels: cardTypesChartLabels,
+        datasets: [
+          {
+            data: cardTypesChartData
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        legend: {
+          display: false
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        }
+      }
+    })
+
+    const { creatureTypesCount } = this.state
+    const creatureTypesChartLabels = []
+    const creatureTypesChartData = []
+    _.forEach(creatureTypesCount, (count, type) => {
+      creatureTypesChartLabels.push(type)
+      creatureTypesChartData.push(count)
+    })
+
+    const creatureTypesChart = new Chart('creatureTypesChart', { // eslint-disable-line
+      type: 'bar',
+      data: {
+        labels: creatureTypesChartLabels,
+        datasets: [
+          {
+            data: creatureTypesChartData
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        legend: {
+          display: false
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
             }
           }]
         }
@@ -125,11 +215,17 @@ class CollectionStats extends Component {
         <h3>Collection Stats</h3>
         <Flex column>
           <figure>
-            <canvas id="cardsColorsChart" width="150" height="150" />
+            <canvas id="cardColorsChart" />
             {/* <figcaption>Multicolored cards will make total number of above data bigger then the total number of cards</figcaption> */}
           </figure>
           <figure>
-            <canvas id="cardsSetsChart" width="500" height="250" />
+            <canvas id="cardSetsChart" />
+          </figure>
+          <figure>
+            <canvas id="cardTypesChart" />
+          </figure>
+          <figure>
+            <canvas id="creatureTypesChart" />
           </figure>
         </Flex>
       </StyledCollectionStats>
