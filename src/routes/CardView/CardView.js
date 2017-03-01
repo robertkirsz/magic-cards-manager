@@ -64,12 +64,10 @@ class CardView extends Component {
   }
 
   render () {
-    const { card, routes, myCardsLocked, cardModalAnimation } = this.props
+    const { card, myCardsLocked, cardModalAnimation } = this.props
     const { modalOpened } = this.state
 
     if (!card) return null
-
-    const isMyCardsPage = routes[1].path === 'my-cards'
 
     return (
       <Modal
