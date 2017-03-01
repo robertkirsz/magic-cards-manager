@@ -40,8 +40,8 @@ export const createRoutes = () => ({
     },
     {
       path: 'settings',
-      component: SettingsView,
-      onEnter: requireAuth
+      component: SettingsView
+      // onEnter: requireAuth
     },
     {
       path: 'profile',

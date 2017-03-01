@@ -20,8 +20,31 @@ class SettingsView extends Component {
     restoreDefaultSettings: PropTypes.func.isRequired
   }
 
-  cardDetailsPopupDelayChange = e => {
-    this.props.changeCardDetailsPopupDelay(e.target.value)
+  renderCollectionLockBehaviourSettings = () => {
+    const options = [
+      { id: 0, value: 'lockedAtStart', title: 'Locked at start' },
+      { id: 1, value: 'unlockedAtStart', title: 'Unlocked at start' },
+      { id: 2, value: 'asLeft', title: 'As I left it' }
+    ]
+
+    return (
+      <FormGroup>
+        <ControlLabel>Collection lock status</ControlLabel>
+        {
+          options.map(({ id, value, title }) => (
+            <Radio
+              key={id}
+              name="collectionLockBehaviour"
+              value={value}
+              checked={this.props.settings.collectionLockBehaviour === value}
+              onChange={() => this.props.toggleSetting('collectionLockBehaviour', value)}
+            >
+              {title}
+            </Radio>
+          ))
+        }
+      </FormGroup>
+    )
   }
 
   renderCardDetailsPopupDelaySettings = () => {
@@ -43,7 +66,7 @@ class SettingsView extends Component {
               name="cardDetailsPopupDelay"
               value={value}
               checked={this.props.settings.cardDetailsPopupDelay === value}
-              onChange={this.cardDetailsPopupDelayChange}
+              onChange={e => { this.props.changeCardDetailsPopupDelay(e.target.value) }}
             >
               {title}
             </Radio>
@@ -75,27 +98,7 @@ class SettingsView extends Component {
               3D card animation
             </Checkbox>
           </FormGroup>
-          <FormGroup>
-            <ControlLabel>Collection lock status</ControlLabel>
-            <Checkbox
-              checked={cardModalAnimation}
-              onChange={e => toggleSetting('cardModalAnimation', e.target.checked)}
-            >
-              Locked at start
-            </Checkbox>
-            <Checkbox
-              checked={cardHoverAnimation}
-              onChange={e => toggleSetting('cardHoverAnimation', e.target.checked)}
-            >
-              Unlocked at start
-            </Checkbox>
-            <Checkbox
-              checked={cardHoverAnimation}
-              onChange={e => toggleSetting('cardHoverAnimation', e.target.checked)}
-            >
-              As I left it
-            </Checkbox>
-          </FormGroup>
+          {this.renderCollectionLockBehaviourSettings()}
           {this.renderCardDetailsPopupDelaySettings()}
           <Flex justifyContent="flex-end">
             <Button onClick={restoreDefaultSettings}>

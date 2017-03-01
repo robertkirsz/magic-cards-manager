@@ -27,7 +27,7 @@ const ACTION_HANDLERS = {
   TOGGLE_SETTING: (state, { property, value }) => (
     updateAndReturnUserSettings({
       ...state,
-      [property]: typeof value === 'boolean'
+      [property]: value !== undefined
         ? value
         : !state[property]
     })
@@ -38,7 +38,17 @@ const ACTION_HANDLERS = {
       : parseInt(delayValue, 10)
     return updateAndReturnUserSettings({ ...state, cardDetailsPopupDelay: _delayValue })
   },
-  LOAD_INITIAL_SETTINGS: (state, { settings }) => ({ ...state, ...settings }),
+  LOAD_INITIAL_SETTINGS: (state, { settings }) => {
+    const newState = {
+      ...state,
+      ...settings
+    }
+
+    if (settings.collectionLockBehaviour === 'lockedAtStart') newState.myCardsLocked = true
+    if (settings.collectionLockBehaviour === 'unlockedAtStart') newState.myCardsLocked = false
+
+    return newState
+  },
   SIGN_OUT_SUCCESS: () => initialState,
   RESTORE_DEFAULT_SETTINGS: () => updateAndReturnUserSettings(initialState)
 }
@@ -50,7 +60,8 @@ const initialState = {
   myCardsLocked: true,
   cardDetailsPopupDelay: 1000,
   cardModalAnimation: true,
-  cardHoverAnimation: true
+  cardHoverAnimation: true,
+  collectionLockBehaviour: 'lockedAtStart' // 'unlockedAtStart' || 'asLeft'
 }
 
 export default function settingsReducer (state = initialState, action) {
