@@ -78,7 +78,7 @@ const Header = ({ user, signOut, openModal, pathname, numberOfTotalCards, number
           <UserBadge />
         </a>
         <ul className="dropdown-menu">
-          <li><Link to="profile">Profile</Link></li>
+          {/* <li><Link to="profile">Profile</Link></li> */}
           <li><Link to="collection-stats">Collection Stats</Link></li>
           <li><Link to="settings">Settings</Link></li>
           <li role="separator" className="divider" />

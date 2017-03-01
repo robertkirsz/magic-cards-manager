@@ -13,13 +13,6 @@ const initialCardsNumber = 20
 class CardsSearchList extends Component {
   state = { cardsLimit: initialCardsNumber }
 
-  componentWillReceiveProps (nextProps) {
-    // TODO: Do this only when route changes from 'allCards' to 'myCards'
-    if (nextProps.cards !== this.props.cards) {
-      this.setState({ cardsLimit: initialCardsNumber })
-    }
-  }
-
   shouldShowButton = () => {
     return this.props.cards.length > this.state.cardsLimit
   }

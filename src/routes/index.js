@@ -3,7 +3,7 @@ import CoreLayout    from 'layouts/CoreLayout'
 import AllCardsView  from 'routes/AllCardsView'
 import MyCardsView   from 'routes/MyCardsView'
 import CardView      from 'routes/CardView'
-import ProfileView   from 'routes/ProfileView'
+// import ProfileView   from 'routes/ProfileView'
 import SettingsView  from 'routes/SettingsView'
 import CollectionStatsView  from 'routes/CollectionStatsView'
 import NotFoundView  from 'routes/NotFoundView'
@@ -43,11 +43,11 @@ export const createRoutes = () => ({
       component: SettingsView
       // onEnter: requireAuth
     },
-    {
-      path: 'profile',
-      component: ProfileView
+    // {
+      // path: 'profile',
+      // component: ProfileView
       // onEnter: requireAuth
-    },
+    // },
     {
       path: 'collection-stats',
       component: CollectionStatsView
