@@ -23,6 +23,7 @@ const initialState = {
 
 export default function keyboardReducer (state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type]
+  handler && console.info(action.type)
 
   return handler ? handler(state, action) : state
 }

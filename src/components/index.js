@@ -10,6 +10,7 @@ import ColorFilter      from 'components/ColorFilter'
 import CardDetails      from 'components/CardDetails'
 import ColorButtons     from 'components/ColorButtons'
 import SearchModule     from 'components/SearchModule'
+import KeyboardModeButton     from 'components/KeyboardModeButton'
 import AllNoneToggle    from 'components/AllNoneToggle'
 import LoadingScreen    from 'components/LoadingScreen'
 import CardsSearchList  from 'components/CardsSearchList'
@@ -30,6 +31,7 @@ export {
   CardDetails,
   ColorButtons,
   SearchModule,
+  KeyboardModeButton,
   AllNoneToggle,
   LoadingScreen,
   CardsSearchList,

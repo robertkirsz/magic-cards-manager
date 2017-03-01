@@ -42,6 +42,7 @@ a { cursor: pointer; }
 // MAIN LAYOUT COMPONENTS
 
 .app-buttons {
+  @include flex(row, nowrap, space-around, center);
   flex: none;
   position: fixed;
   bottom: 20px;

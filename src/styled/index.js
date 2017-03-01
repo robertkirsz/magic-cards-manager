@@ -4,6 +4,7 @@ import ColumnCenter from './ColumnCenter'
 import AbsoluteCenter from './AbsoluteCenter'
 import CollectionStats from './CollectionStats'
 import AbsoluteFullSize from './AbsoluteFullSize'
+import BottomRoundButton from './BottomRoundButton'
 
 export {
   Flex,
@@ -11,5 +12,6 @@ export {
   ColumnCenter,
   AbsoluteCenter,
   CollectionStats,
-  AbsoluteFullSize
+  AbsoluteFullSize,
+  BottomRoundButton
 }
