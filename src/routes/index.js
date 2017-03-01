@@ -5,6 +5,7 @@ import MyCardsView   from 'routes/MyCardsView'
 import CardView      from 'routes/CardView'
 import ProfileView   from 'routes/ProfileView'
 import SettingsView  from 'routes/SettingsView'
+import CollectionStatsView  from 'routes/CollectionStatsView'
 import NotFoundView  from 'routes/NotFoundView'
 
 // Redirects unathorized users
@@ -45,6 +46,11 @@ export const createRoutes = () => ({
     {
       path: 'profile',
       component: ProfileView
+      // onEnter: requireAuth
+    },
+    {
+      path: 'collection-stats',
+      component: CollectionStatsView
       // onEnter: requireAuth
     },
     {

@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Grid, Row, Col, Form, FormGroup, FormControl, Checkbox, Button } from 'react-bootstrap'
-import { CollectionStats } from 'components'
 
 const mapStateToProps = ({ user }) => ({ user })
 
@@ -68,7 +67,6 @@ const ProfileView = ({ user }) => (
         </Col>
       </Row>
     </Grid>
-    <CollectionStats />
   </div>
 )
 
