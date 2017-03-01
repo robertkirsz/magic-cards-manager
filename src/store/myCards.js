@@ -89,7 +89,7 @@ const ACTION_HANDLERS = {
         cardCopy,
         ...cardsCollection.slice(cardIndex + 1)
       ]
-      // Save changes to Local Storage
+      // Save changes to the database
       saveCollection(cardsCollection)
       // Update the store
       return {
@@ -107,7 +107,7 @@ const ACTION_HANDLERS = {
     cardCopy.variants = [variantCopy]
     // Add the main card to the collection
     cardsCollection.push(cardCopy)
-    // Save changes to Local Storage
+    // Save changes to the database
     saveCollection(cardsCollection)
     // Update the store
     return {
@@ -171,7 +171,7 @@ const ACTION_HANDLERS = {
       ]
     }
 
-    // Save changes to Local Storage
+    // Save changes to the database
     saveCollection(cardsCollection)
     // Update the store
     return {
