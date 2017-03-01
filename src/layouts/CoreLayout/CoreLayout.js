@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
 import _find from 'lodash/find'
-import { AuthModal, ErrorModal } from 'containers'
+import { AuthModal, ErrorModal, KeyboardNavigation } from 'containers'
 import { Header, SearchModule, LoadingScreen } from 'components'
 import 'styles/core.scss'
 
@@ -57,6 +57,7 @@ class CoreLayout extends Component {
                 }
                 <AuthModal />
                 <ErrorModal />
+                <KeyboardNavigation />
               </div>
             )
         }
