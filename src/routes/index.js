@@ -44,8 +44,8 @@ export const createRoutes = () => ({
     },
     {
       path: 'profile',
-      component: ProfileView,
-      onEnter: requireAuth
+      component: ProfileView
+      // onEnter: requireAuth
     },
     {
       path: '*',
