@@ -195,7 +195,7 @@ class Card extends Component {
     )
 
     return (
-      <div>
+      <div className="card-wrapper">
         {
           detailsPopup && (
             <CardDetailsPopup

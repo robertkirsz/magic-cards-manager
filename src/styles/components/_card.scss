@@ -19,6 +19,11 @@ $mainMargin: 30px;
   background-position: 0 0;
   background-size: cover;
   border-radius: 4%;
+  &__wrapper {
+    &:focus {
+      border: 3px solid lime;
+    }
+  }
   &__content {
     height: 100%;
     z-index: 2;
