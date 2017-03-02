@@ -105,6 +105,7 @@ class Card extends Component {
   }
 
   processMovement = e => {
+    if (!this.props.cardHoverAnimation || !this.props.hoverAnimation) return
     // This covers situation where "mouseMove" happens without "mouseEnter"
     if (!_includes(this.refs.cardContainer.className, ' over')) this.processEnter()
 
@@ -151,12 +152,14 @@ class Card extends Component {
 
   processEnter = () => {
     this.showDetailsPopup()
+    if (!this.props.cardHoverAnimation || !this.props.hoverAnimation) return
 
     this.refs.cardContainer.className += ' over'
   }
 
   processExit = () => {
     this.hideDetailsPopup()
+    if (!this.props.cardHoverAnimation || !this.props.hoverAnimation) return
 
     const layers = [this.refs.cardElementLayer1, this.refs.cardElementLayer2]
     const totalLayers = 2
@@ -174,21 +177,22 @@ class Card extends Component {
   render () {
     const {
       mainCard, variantCard, setIcon, numberOfCards, showAdd, showRemove,
-      className, hoverAnimation, detailsPopup, cardHoverAnimation
+      className, detailsPopup
     } = this.props
     const { animations, detailsPopupShow, detailsPopupCoordinates } = this.state
 
     const cardData = variantCard || mainCard
+
     const addRemoveControls = (
       <div className="card__add-remove-buttons">
-        {showAdd &&
-          <button onClick={this.addCard}>
-            <span className="fa fa-plus-circle" />
+        {showRemove &&
+          <button className="remove-button" onClick={this.removeCard}>
+            <span className="fa fa-minus-circle" />
           </button>
         }
-        {showRemove &&
-          <button onClick={this.removeCard}>
-            <span className="fa fa-minus-circle" />
+        {showAdd &&
+          <button className="add-button" onClick={this.addCard}>
+            <span className="fa fa-plus-circle" />
           </button>
         }
       </div>
@@ -208,9 +212,9 @@ class Card extends Component {
         <div
           className={cn('card atvImg', className)}
           onClick={this.onCardClick}
-          onMouseMove={cardHoverAnimation && hoverAnimation && this.processMovement}
-          onMouseEnter={cardHoverAnimation && hoverAnimation && this.processEnter}
-          onMouseLeave={cardHoverAnimation && hoverAnimation && this.processExit}
+          onMouseMove={this.processMovement}
+          onMouseEnter={this.processEnter}
+          onMouseLeave={this.processExit}
           style={this.props.onClick && { cursor: 'pointer' }}
           ref="cardElement"
       >

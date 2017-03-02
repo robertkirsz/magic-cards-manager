@@ -38,8 +38,10 @@ class CardDetailsPopup extends Component {
       clearTimeout(this.timeout)
       // If popup is visible
       if (this.state.popupVisible) {
-        // Hide it
-        this.hideDetailsPopup()
+        if (this.props.cardDetailsPopupDelay > 0) {
+          // Hide it
+          this.hideDetailsPopup()
+        }
       // If popup is hidden
       } else if (nextProps.show) {
         // Show it
@@ -85,7 +87,7 @@ class CardDetailsPopup extends Component {
     const { cardData, cardDetailsPopupDelay } = this.props
     const { popupPosition, popupVisible } = this.state
 
-    if (!cardDetailsPopupDelay || !popupVisible) return null
+    if (cardDetailsPopupDelay === false || !popupVisible) return null
 
     return (
       <div
