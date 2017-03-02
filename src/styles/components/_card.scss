@@ -57,11 +57,11 @@ $mainMargin: 30px;
     text-align: center;
   }
   &__add-remove-buttons {
-    @include flex(row, nowrap, space-around, center);
+    @include flex();
     position: absolute;
     top: 50%;
-    right: 0;
-    left: 0;
+    right: 15%;
+    left: 15%;
     transform: translateY(-50%);
     opacity: 0;
     transition: opacity 0.1s;
@@ -71,6 +71,8 @@ $mainMargin: 30px;
       outline: none;
       transition: transform 0.1s;
       &:active { transform: scale(0.9); }
+      &.remove-button { margin-right: auto; }
+      &.add-button { margin-left: auto; }
     }
     .fa {
       font-size: 2em;
