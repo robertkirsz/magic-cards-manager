@@ -49,7 +49,7 @@ class SearchModule extends Component {
       : 'myCards'
   }
 
-  debouncedFilter = _debounce(state => { this.filter(state) }, 300, { leading: true })
+  debouncedFilter = _debounce(state => { this.filter(state) }, 300)
 
   componentWillReceiveProps ({ pathname }) {
     // When route changes and only if it's one of the card list pages...
