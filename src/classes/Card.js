@@ -6,6 +6,7 @@ export default class Card {
   constructor (card) {
     this.update(card)
     this.image = `http://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid=${this.multiverseid}`
+    // this.image = `http://magiccards.info/scans/en/${card.setCode}/${card.number}.jpg`
     this.setIcon = `ss ss-${card.setCode} ss-${card.rarity.toLowerCase()}`
     if (!this.cardUrl) this.cardUrl = _kebabCase(this.imageName)
   }
