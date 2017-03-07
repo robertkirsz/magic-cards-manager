@@ -139,6 +139,14 @@ export const saveCollection = collection => {
   return firebaseUpdateData('Collections', auth.currentUser.uid, reducedCollection)
 }
 
+export const updateCardInDatabase = card => {
+  return firebaseUpdateData('Collections', `${auth.currentUser.uid}/${card.id}`, card.formatForFirebase())
+}
+
+export const removeCardFromDatabase = card => {
+  return firebaseSetData('Collections', `${auth.currentUser.uid}/${card.id}`, null)
+}
+
 export const loadCollection = () => {
   return firebaseGetData('Collections', auth.currentUser.uid)
 }

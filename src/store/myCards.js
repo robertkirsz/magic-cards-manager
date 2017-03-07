@@ -2,7 +2,7 @@ import _map from 'lodash/map'
 import _find from 'lodash/find'
 import _findIndex from 'lodash/findIndex'
 import { Card } from 'classes'
-import { saveCollection, loadCollection } from 'utils/firebase'
+import { updateCardInDatabase, removeCardFromDatabase, loadCollection } from 'utils/firebase'
 import { cardsDatabase } from 'database'
 
 const debug = false
@@ -90,7 +90,7 @@ const ACTION_HANDLERS = {
         ...cardsCollection.slice(cardIndex + 1)
       ]
       // Save changes to the database
-      saveCollection(cardsCollection)
+      updateCardInDatabase(cardCopy)
       // Update the store
       return {
         ...state,
@@ -108,7 +108,7 @@ const ACTION_HANDLERS = {
     // Add the main card to the collection
     cardsCollection.push(cardCopy)
     // Save changes to the database
-    saveCollection(cardsCollection)
+    updateCardInDatabase(cardCopy)
     // Update the store
     return {
       ...state,
@@ -134,6 +134,8 @@ const ACTION_HANDLERS = {
         ...cardsCollection.slice(0, cardIndex),
         ...cardsCollection.slice(cardIndex + 1)
       ]
+
+      removeCardFromDatabase(cardCopy)
     }
 
     // If there are more copies of the main card...
@@ -169,10 +171,11 @@ const ACTION_HANDLERS = {
         cardCopy,
         ...cardsCollection.slice(cardIndex + 1)
       ]
+
+      // Save changes to the database
+      updateCardInDatabase(cardCopy)
     }
 
-    // Save changes to the database
-    saveCollection(cardsCollection)
     // Update the store
     return {
       ...state,
