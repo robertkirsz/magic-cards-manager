@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
+import cn from 'classnames'
 import _debounce from 'lodash/debounce'
 import _every from 'lodash/every'
 import _find from 'lodash/find'
@@ -44,12 +45,36 @@ class SearchModule extends Component {
 
   state = {
     ...clearState,
+    showSearchForm: false,
     whereToSearch: this.props.pathname === '/all-cards'
       ? 'allCards'
       : 'myCards'
   }
 
   debouncedFilter = _debounce(state => { this.filter(state) }, 300)
+
+  componentDidMount () {
+    window.addEventListener('keydown', this.onKeyDown)
+  }
+
+  componentWillUnmount () {
+    window.removeEventListener('keydown', this.onKeyDown)
+  }
+
+  onKeyDown = e => {
+    // Do nothing if an some input is already focused
+    if (document.activeElement.tagName === 'INPUT') return
+    // Don't do anything on routes other than these two
+    if (this.props.pathname !== '/all-cards' && this.props.pathname !== '/my-cards') return
+    // If a letter, a space or a backspace was pressed...
+    if (
+      (e.keyCode >= 65 && e.keyCode <= 90) ||
+      (e.keyCode >= 97 && e.keyCode <= 122) ||
+      e.keyCode === 32 || e.keyCode === 8
+    ) {
+      this.setState({ showSearchForm: true }, this.focusNameInput)
+    }
+  }
 
   componentWillReceiveProps ({ pathname }) {
     // When route changes and only if it's one of the card list pages...
@@ -170,13 +195,29 @@ class SearchModule extends Component {
   }
 
   focusNameInput = () => {
+    if (document.activeElement.tagName === 'INPUT') return
+
+    this.refs.nameInput.focus()
+  }
+
+  selectNameInput = () => {
+    if (document.activeElement.tagName === 'INPUT') return
+
     this.refs.nameInput.select()
+  }
+
+  searchModuleMouseLeave = () => {
+    if (document.activeElement.tagName === 'INPUT') {
+      document.activeElement.blur()
+    }
+
+    this.setState({ showSearchForm: false })
   }
 
   render () {
     const { cardSets } = this.props
     const {
-      queryName, queryTypes, queryText, colors,
+      queryName, queryTypes, queryText, colors, showSearchForm,
       monocoloredOnly, multicoloredOnly, cmcValue, cmcType
     } = this.state
 
@@ -198,6 +239,7 @@ class SearchModule extends Component {
             placeholder="Name"
             value={queryName}
             onChange={e => this.updateQuery('queryName', e.target.value)}
+            onBlur={() => { this.setState({ showSearchForm: false }) }}
           />
           <input
             type="text"
@@ -252,7 +294,10 @@ class SearchModule extends Component {
     )
 
     return (
-      <div className="search-module">
+      <div
+        className={cn('search-module', { 'form-visible': showSearchForm })}
+        onMouseLeave={this.searchModuleMouseLeave}
+      >
         {searchButton}
         {searchForm}
       </div>

@@ -67,6 +67,7 @@
     opacity: 1;
     transition: all 0.3s ease;
   }
+  &.form-visible,
   &:hover {
     width: 415px;
     height: 254px;
