@@ -6,7 +6,7 @@ import { AuthModal, ErrorModal, KeyboardNavigation } from 'containers'
 import { Header, SearchModule, KeyboardModeButton, LoadingScreen } from 'components'
 import 'styles/core.scss'
 
-const debug = false
+const debug = true
 
 const mapStateToProps = ({ layout, allCards, myCards, user }) => ({
   allCardsFetching: allCards.fetching,
@@ -18,7 +18,8 @@ class CoreLayout extends Component {
   state = { showSpinner: true }
 
   componentWillReceiveProps ({ allCardsFetching, myCardsLoading, userAuthPending }) {
-    if (debug && this.state.showSpinner) console.warn('allCardsFetching:', allCardsFetching, 'myCardsLoading:', myCardsLoading, 'userAuthPending', userAuthPending)
+    if (debug && this.state.showSpinner) console.info('allCardsFetching:', allCardsFetching, 'myCardsLoading:', myCardsLoading, 'userAuthPending', userAuthPending)
+
     if (!allCardsFetching && !myCardsLoading && !userAuthPending && this.state.showSpinner) {
       setTimeout(() => { this.setState({ showSpinner: false }) }, 1000)
     }
