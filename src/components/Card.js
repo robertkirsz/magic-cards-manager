@@ -199,7 +199,7 @@ class Card extends Component {
     )
 
     return (
-      <div className="card-wrapper">
+      <div className="card-wrapper" tabIndex="1">
         {
           detailsPopup && (
             <CardDetailsPopup
@@ -210,13 +210,13 @@ class Card extends Component {
           )
         }
         <div
+          ref="cardElement"
           className={cn('card atvImg', className)}
+          style={this.props.onClick && { cursor: 'pointer' }}
           onClick={this.onCardClick}
           onMouseMove={this.processMovement}
           onMouseEnter={this.processEnter}
           onMouseLeave={this.processExit}
-          style={this.props.onClick && { cursor: 'pointer' }}
-          ref="cardElement"
       >
           <div className="atvImg-container" ref="cardContainer">
             <div className="atvImg-shadow" />

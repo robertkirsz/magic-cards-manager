@@ -72,7 +72,7 @@ class SearchModule extends Component {
       (e.keyCode >= 97 && e.keyCode <= 122) ||
       e.keyCode === 32 || e.keyCode === 8
     ) {
-      this.setState({ showSearchForm: true }, this.focusNameInput)
+      this.setState({ showSearchForm: true }, this.selectNameInput)
     }
   }
 
