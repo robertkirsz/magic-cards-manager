@@ -1,4 +1,4 @@
-import { auth }      from 'utils/firebase'
+// import { auth }      from 'utils/firebase'
 import CoreLayout    from 'layouts/CoreLayout'
 import AllCardsView  from 'routes/AllCardsView'
 import MyCardsView   from 'routes/MyCardsView'
@@ -9,9 +9,9 @@ import CollectionStatsView  from 'routes/CollectionStatsView'
 import NotFoundView  from 'routes/NotFoundView'
 
 // Redirects unathorized users
-const requireAuth = (nextState, replace) => {
-  if (!auth.currentUser) replace('all-cards')
-}
+// const requireAuth = (nextState, replace) => {
+//   if (!auth.currentUser) replace('all-cards')
+// }
 
 export const createRoutes = () => ({
   path: '/',
@@ -33,7 +33,7 @@ export const createRoutes = () => ({
       path: 'my-cards',
       component: MyCardsView,
       showAppButtons: true,
-      onEnter: requireAuth,
+      // onEnter: requireAuth,
       childRoutes: [
         { path: '/my-cards/:cardUrl', component: CardView }
       ]

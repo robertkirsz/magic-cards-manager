@@ -35,6 +35,12 @@ class CardView extends Component {
 
   isCollectionPage = this.props.routes[1].path === 'my-cards'
 
+  componentWillReceiveProps (nextProps) {
+    if (this.props.card && !nextProps.card) {
+      this.goBack()
+    }
+  }
+
   closeModal = () => {
     // Hide modal
     this.setState({ modalOpened: false })

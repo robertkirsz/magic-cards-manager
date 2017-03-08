@@ -19,6 +19,7 @@ class MyCardsView extends Component {
     if (!cards.length) {
       return (
         <div className="my-cards-view">
+          {children}
           <h1 className="my-cards-view__login-prompt">
             No cards in collection
           </h1>

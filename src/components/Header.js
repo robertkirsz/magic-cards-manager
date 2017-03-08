@@ -43,12 +43,12 @@ const Header = ({ user, signOut, openModal, pathname, numberOfTotalCards, number
   const navigationLinks = (
     <ul className="route-navigation nav navbar-nav">
       <li>
-        <Link to="all-cards" className={pathname === 'all-cards' ? 'active' : ''}>
+        <Link to="/all-cards" className={pathname === '/all-cards' ? 'active' : ''}>
           All cards
         </Link>
       </li>
       <li>
-        <Link to="my-cards" className={pathname === 'my-cards' ? 'active' : ''}>
+        <Link to="/my-cards" className={pathname === '/my-cards' ? 'active' : ''}>
           My cards {numberOfTotalCards} ({numberOfUniqueCards})
         </Link>
       </li>
