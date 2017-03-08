@@ -2,7 +2,7 @@ import _map from 'lodash/map'
 import _find from 'lodash/find'
 import _findIndex from 'lodash/findIndex'
 import { Card } from 'classes'
-import { updateCardInDatabase, removeCardFromDatabase, loadCollection } from 'utils/firebase'
+import { updateCardInDatabase, loadCollection } from 'utils/firebase'
 import { cardsDatabase } from 'database'
 
 const debug = false
@@ -129,13 +129,15 @@ const ACTION_HANDLERS = {
     // If there is only one main card...
     if (cardCopy.cardsInCollection === 1) {
       if (debug) console.log('%c   only one main card - removing it', 'color: #A1C659;')
+      // Decrement the main card
+      cardCopy.cardsInCollection--
       // Remove it from the collection
       cardsCollection = [
         ...cardsCollection.slice(0, cardIndex),
         ...cardsCollection.slice(cardIndex + 1)
       ]
-
-      removeCardFromDatabase(cardCopy)
+      // Save changes to the database
+      updateCardInDatabase(cardCopy)
     }
 
     // If there are more copies of the main card...

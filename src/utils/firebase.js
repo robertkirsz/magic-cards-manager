@@ -1,5 +1,6 @@
 import firebase from 'firebase'
 import _forEach from 'lodash/forEach'
+import _debounce from 'lodash/debounce'
 
 // Firebase configuration
 const config = {
@@ -139,13 +140,14 @@ export const saveCollection = collection => {
   return firebaseUpdateData('Collections', auth.currentUser.uid, reducedCollection)
 }
 
-export const updateCardInDatabase = card => {
-  return firebaseUpdateData('Collections', `${auth.currentUser.uid}/${card.id}`, card.formatForFirebase())
-}
-
-export const removeCardFromDatabase = card => {
+export const updateCardInDatabase = _debounce(card => {
+  // Update card it total numer is more then 0
+  if (card.cardsInCollection > 0) {
+    return firebaseUpdateData('Collections', `${auth.currentUser.uid}/${card.id}`, card.formatForFirebase())
+  }
+  // In other case, remove the card completelly
   return firebaseSetData('Collections', `${auth.currentUser.uid}/${card.id}`, null)
-}
+}, 1000)
 
 export const loadCollection = () => {
   return firebaseGetData('Collections', auth.currentUser.uid)
