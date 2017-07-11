@@ -93,9 +93,20 @@ export default class KeyboardNavigation extends Component {
 
     key.bind('enter', e => {
       e.preventDefault()
-      if (document.activeElement.getAttribute('class') === 'card atvImg') {
-        document.activeElement.click()
-      }
+      const activeCard = document.querySelector('.card:focus')
+      if (activeCard) document.activeElement.click()
+    })
+
+    key.bind(['=', 'num+'], e => {
+      e.preventDefault()
+      const addButton = document.querySelector('.card:focus .card__add-remove-buttons .add-button')
+      if (addButton) addButton.click()
+    })
+
+    key.bind(['-', 'num-'], e => {
+      e.preventDefault()
+      const removeButton = document.querySelector('.card:focus .card__add-remove-buttons .remove-button')
+      if (removeButton) removeButton.click()
     })
   }
 
