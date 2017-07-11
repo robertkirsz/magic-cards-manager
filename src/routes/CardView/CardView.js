@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'proptypes'
 import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { Row, Col, Modal } from 'react-bootstrap'

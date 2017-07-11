@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'proptypes'
 
 const MonoMultiToggle = ({
   monocoloredOnly, multicoloredOnly, handleChangeMonocolored, handleChangeMulticolored

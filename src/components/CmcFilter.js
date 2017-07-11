@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'proptypes'
 import cn from 'classnames'
 
 const CmcTypeButton = ({ thisType, activeType, onChange, label }) => (

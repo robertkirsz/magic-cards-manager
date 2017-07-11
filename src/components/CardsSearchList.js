@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'proptypes'
 import { browserHistory } from 'react-router'
 import _slice from 'lodash/slice'
 import { Card } from 'components'

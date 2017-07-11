@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'proptypes'
 import { connect } from 'react-redux'
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
 import _find from 'lodash/find'

@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'proptypes'
 import { connect } from 'react-redux'
 import _includes from 'lodash/includes'
 import _findIndex from 'lodash/findIndex'
