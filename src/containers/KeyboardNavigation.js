@@ -68,23 +68,29 @@ class KeyboardNavigation extends Component {
 
     // Update focus state on search list's cards
     if (this.props.onCardsListPage && this.state.mainCardIndex !== prevState.mainCardIndex) {
-      const cards = document.querySelectorAll('.cards-search-list .card')
+      const cards = this.getCards()
       cards[this.state.mainCardIndex] && cards[this.state.mainCardIndex].focus()
     }
 
     // Update focus state on card details page cards
     if (this.props.onCardDetailsPage && this.state.variantCardIndex !== prevState.variantCardIndex) {
-      const variants = document.querySelectorAll('.card-variants-list .card')
+      const variants = this.getVariants()
       variants[this.state.variantCardIndex] && variants[this.state.variantCardIndex].focus()
     }
   }
+
+  getCards = () => document.querySelectorAll('.cards-search-list .card')
+  getCardWrappers = () => document.querySelectorAll('.cards-search-list .card-wrapper')
+
+  getVariants = () => document.querySelectorAll('.card-variants-list .card')
+  getVariantWrappers = () => document.querySelectorAll('.card-variants-list .card-wrapper')
 
   initMouseEvents = () => {
     key.bind('up', e => {
       e.preventDefault()
 
       if (this.props.onCardsListPage) {
-        const cards = document.querySelectorAll('.cards-search-list .card')
+        const cards = this.getCardWrappers()
         const singleCard = cards[0]
 
         if (singleCard) {
@@ -94,6 +100,52 @@ class KeyboardNavigation extends Component {
 
           if (this.state.mainCardIndex + 1 <= ratio) return
           else this.setState({ mainCardIndex: this.state.mainCardIndex - ratio })
+        }
+      }
+
+      if (this.props.onCardDetailsPage) {
+        const variants = this.getVariantWrappers()
+        const singleVariant = variants[0]
+
+        if (singleVariant) {
+          const variantCardWidth = singleVariant.getBoundingClientRect().width
+          const parentWidth = document.querySelector('.card-variants-list').getBoundingClientRect().width
+          const ratio = Math.floor(parentWidth / variantCardWidth)
+
+          if (this.state.variantCardIndex + 1 <= ratio) return
+          else this.setState({ variantCardIndex: this.state.variantCardIndex - ratio })
+        }
+      }
+    })
+
+    key.bind('down', e => {
+      e.preventDefault()
+
+      if (this.props.onCardsListPage) {
+        const cards = this.getCardWrappers()
+        const singleCard = cards[0]
+
+        if (singleCard) {
+          const cardWidth = singleCard.getBoundingClientRect().width
+          const windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
+          const ratio = Math.floor(windowWidth / cardWidth)
+
+          if (this.state.mainCardIndex >= cards.length - ratio) this.setState({ mainCardIndex: cards.length - 1 })
+          else this.setState({ mainCardIndex: this.state.mainCardIndex + ratio })
+        }
+      }
+
+      if (this.props.onCardDetailsPage) {
+        const variants = this.getVariantWrappers()
+        const singleVariant = variants[0]
+
+        if (singleVariant) {
+          const variantCardWidth = singleVariant.getBoundingClientRect().width
+          const parentWidth = document.querySelector('.card-variants-list').getBoundingClientRect().width
+          const ratio = Math.floor(parentWidth / variantCardWidth)
+
+          if (this.state.variantCardIndex >= variants.length - ratio) this.setState({ variantCardIndex: variants.length - 1 })
+          else this.setState({ variantCardIndex: this.state.variantCardIndex + ratio })
         }
       }
     })
@@ -128,7 +180,7 @@ class KeyboardNavigation extends Component {
           return
         }
 
-        const cards = document.querySelectorAll('.cards-search-list .card')
+        const cards = this.getCardWrappers()
 
         if (this.state.mainCardIndex < cards.length - 1) { this.setState({ mainCardIndex: this.state.mainCardIndex + 1 }) }
       }
@@ -139,27 +191,9 @@ class KeyboardNavigation extends Component {
           return
         }
 
-        const variants = document.querySelectorAll('.card-variants-list .card')
+        const variants = this.getVariantWrappers()
 
         if (this.state.variantCardIndex < variants.length - 1) { this.setState({ variantCardIndex: this.state.variantCardIndex + 1 }) }
-      }
-    })
-
-    key.bind('down', e => {
-      e.preventDefault()
-
-      if (this.props.onCardsListPage) {
-        const cards = document.querySelectorAll('.cards-search-list .card')
-        const singleCard = cards[0]
-
-        if (singleCard) {
-          const cardWidth = singleCard.getBoundingClientRect().width
-          const windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
-          const ratio = Math.floor(windowWidth / cardWidth)
-
-          if (this.state.mainCardIndex >= cards.length - ratio) return
-          else this.setState({ mainCardIndex: this.state.mainCardIndex + ratio })
-        }
       }
     })
 
