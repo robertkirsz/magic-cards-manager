@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'proptypes'
 import { connect } from 'react-redux'
-import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
+// TODO: switch to https://github.com/reactjs/react-transition-group
+import Transition from 'react/lib/ReactCSSTransitionGroup'
 import _find from 'lodash/find'
 import { AuthModal, ErrorModal, KeyboardNavigation } from 'containers'
-import { Header, SearchModule, LoadingScreen } from 'components'
+import { Header, SearchModule } from 'components'
 import 'styles/core.scss'
-
-const debug = true
 
 const mapStateToProps = ({ layout, allCards, myCards, user }) => ({
   allCardsFetching: allCards.fetching,
@@ -16,16 +15,6 @@ const mapStateToProps = ({ layout, allCards, myCards, user }) => ({
 })
 
 class CoreLayout extends Component {
-  state = { showSpinner: true }
-
-  componentWillReceiveProps ({ allCardsFetching, myCardsLoading, userAuthPending }) {
-    if (debug && this.state.showSpinner) console.info('allCardsFetching:', allCardsFetching, 'myCardsLoading:', myCardsLoading, 'userAuthPending', userAuthPending)
-
-    if (!allCardsFetching && !myCardsLoading && !userAuthPending && this.state.showSpinner) {
-      setTimeout(() => { this.setState({ showSpinner: false }) }, 1000)
-    }
-  }
-
   static propTypes = {
     children: PropTypes.element.isRequired,
     params: PropTypes.object.isRequired,
@@ -35,40 +24,56 @@ class CoreLayout extends Component {
     userAuthPending: PropTypes.bool.isRequired
   }
 
+  state = { showSpinner: true }
+
+  componentWillReceiveProps ({ allCardsFetching, myCardsLoading, userAuthPending }) {
+    if (__DEV__ && this.state.showSpinner) {
+      console.info(
+        'allCardsFetching:',
+        allCardsFetching,
+        'myCardsLoading:',
+        myCardsLoading,
+        'userAuthPending',
+        userAuthPending
+      )
+    }
+
+    if (!allCardsFetching && !myCardsLoading && !userAuthPending && this.state.showSpinner) {
+      this.setState({ showSpinner: false })
+    }
+  }
+
   render () {
     const { routes, children } = this.props
+    const { showSpinner } = this.state
     // Show button at the bottom of the screen on routes that have 'showAppButtons' prop
     const showAppButtons = _find(routes, 'showAppButtons')
     const topRoute = this.props.routes[this.props.routes.length - 1].path
 
     return (
-      <ReactCSSTransitionGroup
-        transitionName="fadeOut"
-        transitionEnterTimeout={500}
-        transitionLeaveTimeout={500}
-      >
-        {
-           this.state.showSpinner
-            ? <LoadingScreen key="a" />
-            : (
-              <div id="app" key="b">
-                <Header />
-                {children}
-                {showAppButtons &&
-                  <div className="app-buttons">
-                    <SearchModule />
-                  </div>
-                }
-                <AuthModal />
-                <ErrorModal />
-                <KeyboardNavigation
-                  onCardsListPage={topRoute === 'all-cards' || topRoute === 'my-cards'}
-                  onCardDetailsPage={this.props.params.cardUrl !== undefined}
-                />
-              </div>
-            )
-        }
-      </ReactCSSTransitionGroup>
+      <div id="app">
+        <Header />
+        {children}
+        <Transition
+          transitionName="fade"
+          transitionAppear
+          transitionAppearTimeout={300}
+          transitionEnterTimeout={300}
+          transitionLeaveTimeout={300}
+        >
+          {showAppButtons &&
+            !showSpinner &&
+            <div className="app-buttons">
+              <SearchModule />
+            </div>}
+        </Transition>
+        <AuthModal />
+        <ErrorModal />
+        <KeyboardNavigation
+          onCardsListPage={topRoute === 'all-cards' || topRoute === 'my-cards'}
+          onCardDetailsPage={this.props.params.cardUrl !== undefined}
+        />
+      </div>
     )
   }
 }

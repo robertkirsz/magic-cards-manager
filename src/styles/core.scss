@@ -69,11 +69,11 @@ a { cursor: pointer; }
   background: rgba(200, 0, 0, 0.5);
 }
 
-.fadeOut-leave {
+.fade-leave {
   opacity: 1;
 }
 
-.fadeOut-leave.fadeOut-leave-active {
+.fade-leave.fade-leave-active {
   opacity: 0;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.3s ease;
 }

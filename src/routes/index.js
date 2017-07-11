@@ -13,6 +13,8 @@ import NotFoundView  from 'routes/NotFoundView'
 //   if (!auth.currentUser) replace('all-cards')
 // }
 
+// TODO: show spinner when loading stuff on routes like settings and stats
+
 export const createRoutes = () => ({
   path: '/',
   component: CoreLayout,

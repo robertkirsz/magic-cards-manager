@@ -93,11 +93,11 @@ const Header = ({ user, signOut, openModal, pathname, numberOfTotalCards, number
     <nav id="MainHeader" className="navbar navbar-default navbar-fixed-top">
       <div className="container-fluid">
         {brandAndToggle}
-        <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        {!user.authPending && <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           {signedIn && <LockButton />}
           {signedIn && navigationLinks}
           {signedIn ? userDropdown : authenticationLinks}
-        </div>
+        </div>}
       </div>
     </nav>
   )
