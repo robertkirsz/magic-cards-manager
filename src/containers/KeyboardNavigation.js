@@ -1,8 +1,24 @@
 import { Component } from 'react'
 import PropTypes from 'proptypes'
+import { connect } from 'react-redux'
 import key from 'keyboardjs'
+import { setMainCardFocus, resetMainCardFocus, setVariantCardFocus, resetVariantCardFocus } from 'store/keyboard'
 
-export default class KeyboardNavigation extends Component {
+const mapStateToProps = ({ keyboard }) => ({
+  mainCardFocusSetTimestamp: keyboard.mainCardFocusSetTimestamp,
+  mainCardFocusResetTimestamp: keyboard.mainCardFocusResetTimestamp,
+  variantCardFocusSetTimestamp: keyboard.variantCardFocusSetTimestamp,
+  variantCardFocusResetTimestamp: keyboard.variantCardFocusResetTimestamp
+})
+
+const mapDispatchToProps = {
+  setMainCardFocus,
+  resetMainCardFocus,
+  setVariantCardFocus,
+  resetVariantCardFocus
+}
+
+class KeyboardNavigation extends Component {
   static propTypes = {
     onCardsListPage: PropTypes.bool.isRequired,
     onCardDetailsPage: PropTypes.bool.isRequired
@@ -40,14 +56,14 @@ export default class KeyboardNavigation extends Component {
     if (this.props.onCardsListPage && this.state.cardIndex !== prevState.cardIndex) {
       const cards = document.querySelectorAll('.cards-search-list .card')
       if (__DEV__) console.log('cards', this.state.cardIndex + 1, 'of', cards.length)
-      if (this.props.onCardsListPage) cards[this.state.cardIndex].focus()
+      if (this.props.onCardsListPage) cards[this.state.cardIndex] && cards[this.state.cardIndex].focus()
     }
 
     // Update focus state on card details page cards
     if (this.props.onCardDetailsPage && this.state.variants !== prevState.variantIndex) {
       const variants = document.querySelectorAll('.card-variants-list .card')
       if (__DEV__) console.log('variants', this.state.variantIndex + 1, 'of', variants.length)
-      if (this.props.onCardDetailsPage) variants[this.state.variantIndex].focus()
+      if (this.props.onCardDetailsPage) variants[this.state.variantIndex] && variants[this.state.variantIndex].focus()
     }
   }
 
@@ -112,3 +128,5 @@ export default class KeyboardNavigation extends Component {
 
   render = () => null
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(KeyboardNavigation)
