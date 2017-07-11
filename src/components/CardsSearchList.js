@@ -4,11 +4,11 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import _slice from 'lodash/slice'
 import { Card } from 'components'
-import { setMainCardFocus } from 'store/keyboard'
+import { setMainCardFocus, resetMainCardFocus } from 'store/keyboard'
 
 const mapStateToProps = () => ({})
 
-const mapDispatchToProps = { setMainCardFocus }
+const mapDispatchToProps = { setMainCardFocus, resetMainCardFocus }
 
 const initialCardsNumber = 20
 
@@ -16,10 +16,15 @@ class CardsSearchList extends Component {
   static propTypes = {
     cards: PropTypes.array.isRequired,
     path: PropTypes.string.isRequired,
-    setMainCardFocus: PropTypes.func.isRequired
+    setMainCardFocus: PropTypes.func.isRequired,
+    resetMainCardFocus: PropTypes.func.isRequired
   }
 
   state = { cardsLimit: initialCardsNumber }
+
+  componentWillUnmount () {
+    this.props.resetMainCardFocus()
+  }
 
   shouldShowButton = () => {
     return this.props.cards.length > this.state.cardsLimit
