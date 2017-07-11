@@ -69,38 +69,57 @@ class KeyboardNavigation extends Component {
     // Update focus state on search list's cards
     if (this.props.onCardsListPage && this.state.mainCardIndex !== prevState.mainCardIndex) {
       const cards = document.querySelectorAll('.cards-search-list .card')
-      if (__DEV__) console.log('cards', this.state.mainCardIndex + 1, 'of', cards.length)
       cards[this.state.mainCardIndex] && cards[this.state.mainCardIndex].focus()
     }
 
     // Update focus state on card details page cards
     if (this.props.onCardDetailsPage && this.state.variantCardIndex !== prevState.variantCardIndex) {
       const variants = document.querySelectorAll('.card-variants-list .card')
-      if (__DEV__) console.log('variants', this.state.variantCardIndex + 1, 'of', variants.length)
-      console.log(this.state.variants, '=>', prevState.variantCardIndex)
       variants[this.state.variantCardIndex] && variants[this.state.variantCardIndex].focus()
     }
   }
 
   initMouseEvents = () => {
-    key.bind(['up', 'left'], e => {
+    key.bind('up', e => {
+      e.preventDefault()
+
+      if (this.props.onCardsListPage) {
+        const cards = document.querySelectorAll('.cards-search-list .card')
+        const singleCard = cards[0]
+
+        if (singleCard) {
+          const cardWidth = singleCard.getBoundingClientRect().width
+          const windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
+          const ratio = Math.floor(windowWidth / cardWidth)
+
+          if (this.state.mainCardIndex + 1 <= ratio) return
+          else this.setState({ mainCardIndex: this.state.mainCardIndex - ratio })
+        }
+      }
+    })
+
+    key.bind('left', e => {
       e.preventDefault()
 
       if (this.props.onCardsListPage) {
         let mainCardIndex = 0
+
         if (this.state.mainCardIndex === null) mainCardIndex = 0
         else if (this.state.mainCardIndex > 0) mainCardIndex = this.state.mainCardIndex - 1
+
         this.setState({ mainCardIndex })
       }
 
       if (this.props.onCardDetailsPage) {
         let variantCardIndex = 0
+
         if (this.state.variantCardIndex > 0) variantCardIndex = this.state.variantCardIndex - 1
+
         this.setState({ variantCardIndex })
       }
     })
 
-    key.bind(['down', 'right'], e => {
+    key.bind('right', e => {
       e.preventDefault()
 
       if (this.props.onCardsListPage) {
@@ -108,7 +127,9 @@ class KeyboardNavigation extends Component {
           this.setState({ mainCardIndex: 0 })
           return
         }
+
         const cards = document.querySelectorAll('.cards-search-list .card')
+
         if (this.state.mainCardIndex < cards.length - 1) { this.setState({ mainCardIndex: this.state.mainCardIndex + 1 }) }
       }
 
@@ -117,8 +138,28 @@ class KeyboardNavigation extends Component {
           this.setState({ variantCardIndex: 0 })
           return
         }
+
         const variants = document.querySelectorAll('.card-variants-list .card')
+
         if (this.state.variantCardIndex < variants.length - 1) { this.setState({ variantCardIndex: this.state.variantCardIndex + 1 }) }
+      }
+    })
+
+    key.bind('down', e => {
+      e.preventDefault()
+
+      if (this.props.onCardsListPage) {
+        const cards = document.querySelectorAll('.cards-search-list .card')
+        const singleCard = cards[0]
+
+        if (singleCard) {
+          const cardWidth = singleCard.getBoundingClientRect().width
+          const windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
+          const ratio = Math.floor(windowWidth / cardWidth)
+
+          if (this.state.mainCardIndex >= cards.length - ratio) return
+          else this.setState({ mainCardIndex: this.state.mainCardIndex + ratio })
+        }
       }
     })
 
