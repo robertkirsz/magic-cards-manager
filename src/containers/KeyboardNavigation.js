@@ -70,14 +70,15 @@ class KeyboardNavigation extends Component {
     if (this.props.onCardsListPage && this.state.mainCardIndex !== prevState.mainCardIndex) {
       const cards = document.querySelectorAll('.cards-search-list .card')
       if (__DEV__) console.log('cards', this.state.mainCardIndex + 1, 'of', cards.length)
-      if (this.props.onCardsListPage) cards[this.state.mainCardIndex] && cards[this.state.mainCardIndex].focus()
+      cards[this.state.mainCardIndex] && cards[this.state.mainCardIndex].focus()
     }
 
     // Update focus state on card details page cards
-    if (this.props.onCardDetailsPage && this.state.variants !== prevState.variantCardIndex) {
+    if (this.props.onCardDetailsPage && this.state.variantCardIndex !== prevState.variantCardIndex) {
       const variants = document.querySelectorAll('.card-variants-list .card')
       if (__DEV__) console.log('variants', this.state.variantCardIndex + 1, 'of', variants.length)
-      if (this.props.onCardDetailsPage) variants[this.state.variantCardIndex] && variants[this.state.variantCardIndex].focus()
+      console.log(this.state.variants, '=>', prevState.variantCardIndex)
+      variants[this.state.variantCardIndex] && variants[this.state.variantCardIndex].focus()
     }
   }
 
