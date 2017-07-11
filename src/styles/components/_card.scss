@@ -19,11 +19,9 @@ $mainMargin: 30px;
   background-position: 0 0;
   background-size: cover;
   border-radius: 4%;
-  &-wrapper {
-    &:focus {
-      .atvImg-layers {
-        border: 5px solid lime;
-      }
+  &:focus {
+    .atvImg-layers {
+      border: 5px solid lime;
     }
   }
   &__content {

@@ -62,10 +62,12 @@ class SearchModule extends Component {
   }
 
   onKeyDown = e => {
-    // Do nothing if an some input is already focused
+    // Do nothing if some input is already focused
     if (document.activeElement.tagName === 'INPUT') return
     // Don't do anything on routes other than these two
     if (this.props.pathname !== '/all-cards' && this.props.pathname !== '/my-cards') return
+    // Ignore Alt
+    if (e.keyCode === 18) return
     // If a letter, a space or a backspace was pressed...
     if (
       (e.keyCode >= 65 && e.keyCode <= 90) ||

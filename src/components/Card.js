@@ -199,7 +199,7 @@ class Card extends Component {
     )
 
     return (
-      <div className="card-wrapper" tabIndex="1">
+      <div className="card-wrapper">
         {
           detailsPopup && (
             <CardDetailsPopup
@@ -217,6 +217,7 @@ class Card extends Component {
           onMouseMove={this.processMovement}
           onMouseEnter={this.processEnter}
           onMouseLeave={this.processExit}
+          tabIndex="1"
       >
           <div className="atvImg-container" ref="cardContainer">
             <div className="atvImg-shadow" />

@@ -1,4 +1,4 @@
-MTG Collection
+Magic Cards Manager
 =======================
 
 ```shell
