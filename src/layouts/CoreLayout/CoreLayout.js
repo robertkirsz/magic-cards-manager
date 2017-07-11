@@ -27,6 +27,7 @@ class CoreLayout extends Component {
 
   static propTypes = {
     children: PropTypes.element.isRequired,
+    params: PropTypes.object.isRequired,
     routes: PropTypes.array.isRequired,
     allCardsFetching: PropTypes.bool.isRequired,
     myCardsLoading: PropTypes.bool.isRequired,
@@ -37,6 +38,7 @@ class CoreLayout extends Component {
     const { routes, children } = this.props
     // Show button at the bottom of the screen on routes that have 'showAppButtons' prop
     const showAppButtons = _find(routes, 'showAppButtons')
+    const topRoute = this.props.routes[this.props.routes.length - 1].path
 
     return (
       <ReactCSSTransitionGroup
@@ -59,7 +61,10 @@ class CoreLayout extends Component {
                 }
                 <AuthModal />
                 <ErrorModal />
-                <KeyboardNavigation />
+                <KeyboardNavigation
+                  onCardsListPage={topRoute === 'all-cards' || topRoute === 'my-cards'}
+                  onCardDetailsPage={this.props.params.cardUrl !== undefined}
+                />
               </div>
             )
         }

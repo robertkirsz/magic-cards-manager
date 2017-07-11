@@ -11,3 +11,9 @@ $horizontalPadding: 15px;
     opacity: 0;
   }
 }
+
+$cardWidth: 223px;
+$cardHeight: 311px;
+$cardRatio: #{$cardHeight / $cardWidth};
+$cardMargin: 5px;
+$mainMargin: 30px;
