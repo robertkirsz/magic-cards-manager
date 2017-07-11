@@ -1,17 +1,24 @@
 import React, { Component } from 'react'
 import PropTypes from 'proptypes'
+import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import _slice from 'lodash/slice'
 import { Card } from 'components'
+import { setMainCardFocus } from 'store/keyboard'
 
-const propTypes = {
-  cards: PropTypes.array.isRequired,
-  path: PropTypes.string.isRequired
-}
+const mapStateToProps = () => ({})
+
+const mapDispatchToProps = { setMainCardFocus }
 
 const initialCardsNumber = 20
 
 class CardsSearchList extends Component {
+  static propTypes = {
+    cards: PropTypes.array.isRequired,
+    path: PropTypes.string.isRequired,
+    setMainCardFocus: PropTypes.func.isRequired
+  }
+
   state = { cardsLimit: initialCardsNumber }
 
   shouldShowButton = () => {
@@ -22,7 +29,8 @@ class CardsSearchList extends Component {
     this.setState({ cardsLimit: this.state.cardsLimit + initialCardsNumber })
   }
 
-  onCardClick = card => {
+  onCardClick = index => card => {
+    this.props.setMainCardFocus(index)
     browserHistory.push(`/${this.props.path}/${card.cardUrl}`)
   }
 
@@ -33,13 +41,13 @@ class CardsSearchList extends Component {
     return (
       <div className="cards-search-list">
         {
-          _slice(cards, 0, cardsLimit).map(card => (
+          _slice(cards, 0, cardsLimit).map((card, index) => (
             <Card
               key={card.id}
               mainCard={card}
               hoverAnimation
               detailsPopup
-              onClick={this.onCardClick}
+              onClick={this.onCardClick(index)}
             />
           ))
         }
@@ -56,6 +64,4 @@ class CardsSearchList extends Component {
   }
 }
 
-CardsSearchList.propTypes = propTypes
-
-export default CardsSearchList
+export default connect(mapStateToProps, mapDispatchToProps)(CardsSearchList)

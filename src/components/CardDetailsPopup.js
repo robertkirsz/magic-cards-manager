@@ -2,18 +2,10 @@ import React, { Component } from 'react'
 import PropTypes from 'proptypes'
 import { connect } from 'react-redux'
 import { CardDetails } from 'components'
-import { setMainCardFocus, resetMainCardFocus, setVariantCardFocus, resetVariantCardFocus } from 'store/keyboard'
 
 const mapStateToProps = ({ settings }) => ({
   cardDetailsPopupDelay: settings.cardDetailsPopupDelay
 })
-
-const mapDispatchToProps = {
-  setMainCardFocus,
-  resetMainCardFocus,
-  setVariantCardFocus,
-  resetVariantCardFocus
-}
 
 // TODO: popup is not positioned properly on lower cards when window is scolled down
 class CardDetailsPopup extends Component {
@@ -110,4 +102,4 @@ class CardDetailsPopup extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CardDetailsPopup)
+export default connect(mapStateToProps)(CardDetailsPopup)

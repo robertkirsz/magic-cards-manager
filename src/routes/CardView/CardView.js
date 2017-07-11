@@ -6,6 +6,9 @@ import { Row, Col, Modal } from 'react-bootstrap'
 import _find from 'lodash/find'
 import { Card, CardDetails } from 'components'
 import { cardsDatabase } from 'database'
+import { resetVariantCardFocus } from 'store/keyboard'
+
+const mapDispatchToProps = { resetVariantCardFocus }
 
 const mapStateToProps = ({ allCards, myCards, settings }, ownProps) => ({
   myCardsLocked: settings.myCardsLocked,
@@ -25,11 +28,10 @@ class CardView extends Component {
   static propTypes = {
     card: PropTypes.object,
     routes: PropTypes.array,
-    routeParams: PropTypes.object,
-    addCard: PropTypes.func,
     myCardsLocked: PropTypes.bool,
     cardModalAnimation: PropTypes.bool,
-    myCards: PropTypes.array
+    myCards: PropTypes.array,
+    resetVariantCardFocus: PropTypes.func.isRequired
   }
 
   state = { modalOpened: true }
@@ -47,6 +49,7 @@ class CardView extends Component {
     this.setState({ modalOpened: false })
     // Go back, if animation is disabled (because normally we go back
     // when exit animation finishes)
+    this.props.resetVariantCardFocus()
     if (!this.props.cardModalAnimation) this.goBack()
   }
 
@@ -129,4 +132,4 @@ class CardView extends Component {
   }
 }
 
-export default connect(mapStateToProps)(CardView)
+export default connect(mapStateToProps, mapDispatchToProps)(CardView)

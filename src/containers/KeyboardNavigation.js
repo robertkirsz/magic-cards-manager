@@ -21,8 +21,8 @@ class KeyboardNavigation extends Component {
   }
 
   state = {
-    cardIndex: null,
-    variantIndex: null
+    mainCardIndex: null,
+    variantCardIndex: null
   }
 
   componentWillMount () {
@@ -34,39 +34,50 @@ class KeyboardNavigation extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    if (this.props.mainCardFocusSetIndex !== nextProps.mainCardFocusSetIndex) {}
-    if (this.props.mainCardFocusResetIndexTimestamp !== nextProps.mainCardFocusResetIndexTimestamp) {}
-    if (this.props.variantCardFocusSetIndex !== nextProps.variantCardFocusSetIndex) {}
-    if (this.props.variantCardFocusResetIndexTimestamp !== nextProps.variantCardFocusResetIndexTimestamp) {}
+    if (this.props.mainCardFocusSetIndex !== nextProps.mainCardFocusSetIndex) {
+      this.setState({ mainCardIndex: nextProps.mainCardFocusSetIndex })
+    }
+
+    if (this.props.mainCardFocusResetIndexTimestamp !== nextProps.mainCardFocusResetIndexTimestamp) {
+      this.setState({ mainCardIndex: null })
+    }
+
+    if (this.props.variantCardFocusSetIndex !== nextProps.variantCardFocusSetIndex) {
+      this.setState({ variantCardIndex: nextProps.mainCardFocusSetIndex })
+    }
+
+    if (this.props.variantCardFocusResetIndexTimestamp !== nextProps.variantCardFocusResetIndexTimestamp) {
+      this.setState({ variantCardIndex: null })
+    }
   }
 
   componentDidUpdate (prevProps, prevState) {
-    // Blur active card if 'cardIndex' got nullified
-    if (this.props.onCardsListPage && this.state.cardIndex === null && prevState.cardIndex !== null) {
+    // Blur active card if 'mainCardIndex' got nullified
+    if (this.props.onCardsListPage && this.state.mainCardIndex === null && prevState.mainCardIndex !== null) {
       if (document.activeElement.getAttribute('class') === 'card atvImg') {
         document.activeElement.blur()
       }
     }
 
-    // Blur active card if 'variantIndex' got nullified
-    if (this.props.onCardDetailsPage && this.state.variantIndex === null && prevState.variantIndex !== null) {
+    // Blur active card if 'variantCardIndex' got nullified
+    if (this.props.onCardDetailsPage && this.state.variantCardIndex === null && prevState.variantCardIndex !== null) {
       if (document.activeElement.getAttribute('class') === 'card atvImg') {
         document.activeElement.blur()
       }
     }
 
     // Update focus state on search list's cards
-    if (this.props.onCardsListPage && this.state.cardIndex !== prevState.cardIndex) {
+    if (this.props.onCardsListPage && this.state.mainCardIndex !== prevState.mainCardIndex) {
       const cards = document.querySelectorAll('.cards-search-list .card')
-      if (__DEV__) console.log('cards', this.state.cardIndex + 1, 'of', cards.length)
-      if (this.props.onCardsListPage) cards[this.state.cardIndex] && cards[this.state.cardIndex].focus()
+      if (__DEV__) console.log('cards', this.state.mainCardIndex + 1, 'of', cards.length)
+      if (this.props.onCardsListPage) cards[this.state.mainCardIndex] && cards[this.state.mainCardIndex].focus()
     }
 
     // Update focus state on card details page cards
-    if (this.props.onCardDetailsPage && this.state.variants !== prevState.variantIndex) {
+    if (this.props.onCardDetailsPage && this.state.variants !== prevState.variantCardIndex) {
       const variants = document.querySelectorAll('.card-variants-list .card')
-      if (__DEV__) console.log('variants', this.state.variantIndex + 1, 'of', variants.length)
-      if (this.props.onCardDetailsPage) variants[this.state.variantIndex] && variants[this.state.variantIndex].focus()
+      if (__DEV__) console.log('variants', this.state.variantCardIndex + 1, 'of', variants.length)
+      if (this.props.onCardDetailsPage) variants[this.state.variantCardIndex] && variants[this.state.variantCardIndex].focus()
     }
   }
 
@@ -75,16 +86,16 @@ class KeyboardNavigation extends Component {
       e.preventDefault()
 
       if (this.props.onCardsListPage) {
-        let cardIndex = 0
-        if (this.state.cardIndex === null) cardIndex = 0
-        else if (this.state.cardIndex > 0) cardIndex = this.state.cardIndex - 1
-        this.setState({ cardIndex })
+        let mainCardIndex = 0
+        if (this.state.mainCardIndex === null) mainCardIndex = 0
+        else if (this.state.mainCardIndex > 0) mainCardIndex = this.state.mainCardIndex - 1
+        this.setState({ mainCardIndex })
       }
 
       if (this.props.onCardDetailsPage) {
-        let variantIndex = 0
-        if (this.state.variantIndex > 0) variantIndex = this.state.variantIndex - 1
-        this.setState({ variantIndex })
+        let variantCardIndex = 0
+        if (this.state.variantCardIndex > 0) variantCardIndex = this.state.variantCardIndex - 1
+        this.setState({ variantCardIndex })
       }
     })
 
@@ -92,21 +103,21 @@ class KeyboardNavigation extends Component {
       e.preventDefault()
 
       if (this.props.onCardsListPage) {
-        if (this.state.cardIndex === null) {
-          this.setState({ cardIndex: 0 })
+        if (this.state.mainCardIndex === null) {
+          this.setState({ mainCardIndex: 0 })
           return
         }
         const cards = document.querySelectorAll('.cards-search-list .card')
-        if (this.state.cardIndex < cards.length - 1) { this.setState({ cardIndex: this.state.cardIndex + 1 }) }
+        if (this.state.mainCardIndex < cards.length - 1) { this.setState({ mainCardIndex: this.state.mainCardIndex + 1 }) }
       }
 
       if (this.props.onCardDetailsPage) {
-        if (this.state.variantIndex === null) {
-          this.setState({ variantIndex: 0 })
+        if (this.state.variantCardIndex === null) {
+          this.setState({ variantCardIndex: 0 })
           return
         }
         const variants = document.querySelectorAll('.card-variants-list .card')
-        if (this.state.variantIndex < variants.length - 1) { this.setState({ variantIndex: this.state.variantIndex + 1 }) }
+        if (this.state.variantCardIndex < variants.length - 1) { this.setState({ variantCardIndex: this.state.variantCardIndex + 1 }) }
       }
     })
 
