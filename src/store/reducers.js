@@ -6,7 +6,6 @@ import myCards  from './myCards'
 import allCards from './allCards'
 import location from './location'
 import settings from './settings'
-import keyboard from './keyboard'
 
 export const makeRootReducer = (asyncReducers) => {
   return combineReducers({
@@ -16,7 +15,6 @@ export const makeRootReducer = (asyncReducers) => {
     myCards,
     layout,
     settings,
-    keyboard,
     ...asyncReducers
   })
 }

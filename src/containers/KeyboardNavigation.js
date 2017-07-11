@@ -10,7 +10,7 @@ export default class KeyboardNavigation extends Component {
 
   state = {
     cardIndex: null,
-    cardVariantIndex: null
+    variantIndex: null
   }
 
   componentWillMount () {
@@ -23,31 +23,31 @@ export default class KeyboardNavigation extends Component {
 
   componentDidUpdate (prevProps, prevState) {
     // Blur active card if 'cardIndex' got nullified
-    if (this.state.cardIndex === null && prevState.cardIndex !== null) {
+    if (this.props.onCardsListPage && this.state.cardIndex === null && prevState.cardIndex !== null) {
       if (document.activeElement.getAttribute('class') === 'card atvImg') {
         document.activeElement.blur()
       }
     }
 
-    // Blur active card if 'cardVariantIndex' got nullified
-    if (this.state.cardVariantIndex === null && prevState.cardVariantIndex !== null) {
+    // Blur active card if 'variantIndex' got nullified
+    if (this.props.onCardDetailsPage && this.state.variantIndex === null && prevState.variantIndex !== null) {
       if (document.activeElement.getAttribute('class') === 'card atvImg') {
         document.activeElement.blur()
       }
     }
 
     // Update focus state on search list's cards
-    if (this.state.cardIndex !== prevState.cardIndex) {
+    if (this.props.onCardsListPage && this.state.cardIndex !== prevState.cardIndex) {
       const cards = document.querySelectorAll('.cards-search-list .card')
       if (__DEV__) console.log('cards', this.state.cardIndex + 1, 'of', cards.length)
       if (this.props.onCardsListPage) cards[this.state.cardIndex].focus()
     }
 
     // Update focus state on card details page cards
-    if (this.state.variants !== prevState.cardVariantIndex) {
+    if (this.props.onCardDetailsPage && this.state.variants !== prevState.variantIndex) {
       const variants = document.querySelectorAll('.card-variants-list .card')
-      if (__DEV__) console.log('variants', this.state.variants + 1, 'of', variants.length)
-      if (this.props.onCardDetailsPage) variants[this.state.cardVariantIndex].focus()
+      if (__DEV__) console.log('variants', this.state.variantIndex + 1, 'of', variants.length)
+      if (this.props.onCardDetailsPage) variants[this.state.variantIndex].focus()
     }
   }
 
@@ -63,9 +63,9 @@ export default class KeyboardNavigation extends Component {
       }
 
       if (this.props.onCardDetailsPage) {
-        let cardVariantIndex = 0
-        if (this.state.cardVariantIndex > 0) cardVariantIndex = this.state.cardVariantIndex - 1
-        this.setState({ cardVariantIndex })
+        let variantIndex = 0
+        if (this.state.variantIndex > 0) variantIndex = this.state.variantIndex - 1
+        this.setState({ variantIndex })
       }
     })
 
@@ -82,12 +82,12 @@ export default class KeyboardNavigation extends Component {
       }
 
       if (this.props.onCardDetailsPage) {
-        if (this.state.cardVariantIndex === null) {
-          this.setState({ cardVariantIndex: 0 })
+        if (this.state.variantIndex === null) {
+          this.setState({ variantIndex: 0 })
           return
         }
         const variants = document.querySelectorAll('.card-variants-list .card')
-        if (this.state.cardVariantIndex < variants.length - 1) { this.setState({ cardVariantIndex: this.state.cardVariantIndex + 1 }) }
+        if (this.state.variantIndex < variants.length - 1) { this.setState({ variantIndex: this.state.variantIndex + 1 }) }
       }
     })
 

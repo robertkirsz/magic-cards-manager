@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
 import _find from 'lodash/find'
 import { AuthModal, ErrorModal, KeyboardNavigation } from 'containers'
-import { Header, SearchModule, KeyboardModeButton, LoadingScreen } from 'components'
+import { Header, SearchModule, LoadingScreen } from 'components'
 import 'styles/core.scss'
 
 const debug = true
@@ -57,7 +57,6 @@ class CoreLayout extends Component {
                 {showAppButtons &&
                   <div className="app-buttons">
                     <SearchModule />
-                    <KeyboardModeButton />
                   </div>
                 }
                 <AuthModal />
