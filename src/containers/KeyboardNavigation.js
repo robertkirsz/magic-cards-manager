@@ -2,26 +2,22 @@ import { Component } from 'react'
 import PropTypes from 'proptypes'
 import { connect } from 'react-redux'
 import key from 'keyboardjs'
-import { setMainCardFocus, resetMainCardFocus, setVariantCardFocus, resetVariantCardFocus } from 'store/keyboard'
 
 const mapStateToProps = ({ keyboard }) => ({
-  mainCardFocusSetTimestamp: keyboard.mainCardFocusSetTimestamp,
-  mainCardFocusResetTimestamp: keyboard.mainCardFocusResetTimestamp,
-  variantCardFocusSetTimestamp: keyboard.variantCardFocusSetTimestamp,
-  variantCardFocusResetTimestamp: keyboard.variantCardFocusResetTimestamp
+  mainCardFocusSetIndex: keyboard.mainCardFocusSetIndex,
+  mainCardFocusResetIndexTimestamp: keyboard.mainCardFocusResetIndexTimestamp,
+  variantCardFocusSetIndex: keyboard.variantCardFocusSetIndex,
+  variantCardFocusResetIndexTimestamp: keyboard.variantCardFocusResetIndexTimestamp
 })
-
-const mapDispatchToProps = {
-  setMainCardFocus,
-  resetMainCardFocus,
-  setVariantCardFocus,
-  resetVariantCardFocus
-}
 
 class KeyboardNavigation extends Component {
   static propTypes = {
     onCardsListPage: PropTypes.bool.isRequired,
-    onCardDetailsPage: PropTypes.bool.isRequired
+    onCardDetailsPage: PropTypes.bool.isRequired,
+    mainCardFocusSetIndex: PropTypes.number,
+    mainCardFocusResetIndexTimestamp: PropTypes.number.isRequired,
+    variantCardFocusSetIndex: PropTypes.number,
+    variantCardFocusResetIndexTimestamp: PropTypes.number.isRequired
   }
 
   state = {
@@ -35,6 +31,13 @@ class KeyboardNavigation extends Component {
 
   componentWillUnmount () {
     key.reset()
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (this.props.mainCardFocusSetIndex !== nextProps.mainCardFocusSetIndex) {}
+    if (this.props.mainCardFocusResetIndexTimestamp !== nextProps.mainCardFocusResetIndexTimestamp) {}
+    if (this.props.variantCardFocusSetIndex !== nextProps.variantCardFocusSetIndex) {}
+    if (this.props.variantCardFocusResetIndexTimestamp !== nextProps.variantCardFocusResetIndexTimestamp) {}
   }
 
   componentDidUpdate (prevProps, prevState) {
@@ -129,4 +132,4 @@ class KeyboardNavigation extends Component {
   render = () => null
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(KeyboardNavigation)
+export default connect(mapStateToProps)(KeyboardNavigation)
