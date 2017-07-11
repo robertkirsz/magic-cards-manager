@@ -15,7 +15,7 @@
   border-radius: 4%;
   &:focus {
     .atvImg-layers {
-      border: 5px solid lime;
+      transform: scale(1.05);
     }
   }
   &__content {
@@ -167,6 +167,7 @@
     height: 100%;
     border-radius: 4%;
     transform-style: preserve-3d;
+    transition: transform 0.2s;
   }
   &-rendered-layer {
     position: absolute;
