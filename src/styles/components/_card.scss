@@ -15,6 +15,7 @@
   border-radius: 4%;
   &:focus {
     .atvImg-layers {
+      // TODO: fix that, it doesn't scale shine effect layer
       transform: scale(1.05);
     }
   }

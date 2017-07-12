@@ -3,16 +3,9 @@ import PropTypes from 'proptypes'
 import { connect } from 'react-redux'
 import key from 'keyboardjs'
 
-// TODO: on card details page focus on first card by default
-// TODO: add card on enter key
-// TODO: on start (when index is null) "up, right, left" goes to first car, "down" does to last
-// TODO: clear index on Esc
-
 const mapStateToProps = ({ keyboard }) => ({
   mainCardFocusSetIndex: keyboard.mainCardFocusSetIndex,
-  mainCardFocusResetIndexTimestamp: keyboard.mainCardFocusResetIndexTimestamp,
-  variantCardFocusSetIndex: keyboard.variantCardFocusSetIndex,
-  variantCardFocusResetIndexTimestamp: keyboard.variantCardFocusResetIndexTimestamp
+  variantCardFocusSetIndex: keyboard.variantCardFocusSetIndex
 })
 
 class KeyboardNavigation extends Component {
@@ -20,9 +13,7 @@ class KeyboardNavigation extends Component {
     onCardsListPage: PropTypes.bool.isRequired,
     onCardDetailsPage: PropTypes.bool.isRequired,
     mainCardFocusSetIndex: PropTypes.number,
-    mainCardFocusResetIndexTimestamp: PropTypes.number.isRequired,
-    variantCardFocusSetIndex: PropTypes.number,
-    variantCardFocusResetIndexTimestamp: PropTypes.number.isRequired
+    variantCardFocusSetIndex: PropTypes.number
   }
 
   state = {
@@ -43,16 +34,8 @@ class KeyboardNavigation extends Component {
       this.setState({ mainCardIndex: nextProps.mainCardFocusSetIndex })
     }
 
-    if (this.props.mainCardFocusResetIndexTimestamp !== nextProps.mainCardFocusResetIndexTimestamp) {
-      this.setState({ mainCardIndex: null })
-    }
-
     if (this.props.variantCardFocusSetIndex !== nextProps.variantCardFocusSetIndex) {
-      this.setState({ variantCardIndex: nextProps.mainCardFocusSetIndex })
-    }
-
-    if (this.props.variantCardFocusResetIndexTimestamp !== nextProps.variantCardFocusResetIndexTimestamp) {
-      this.setState({ variantCardIndex: null })
+      this.setState({ variantCardIndex: nextProps.variantCardFocusSetIndex })
     }
   }
 
@@ -85,9 +68,11 @@ class KeyboardNavigation extends Component {
   }
 
   getCards = () => document.querySelectorAll('.cards-search-list .card')
+
   getCardWrappers = () => document.querySelectorAll('.cards-search-list .card-wrapper')
 
   getVariants = () => document.querySelectorAll('.card-variants-list .card')
+
   getVariantWrappers = () => document.querySelectorAll('.card-variants-list .card-wrapper')
 
   initMouseEvents = () => {
@@ -95,6 +80,11 @@ class KeyboardNavigation extends Component {
       e.preventDefault()
 
       if (this.props.onCardsListPage) {
+        if (this.state.mainCardIndex === null) {
+          this.setState({ mainCardIndex: 0 })
+          return
+        }
+
         const cards = this.getCardWrappers()
         const singleCard = cards[0]
 
@@ -109,6 +99,11 @@ class KeyboardNavigation extends Component {
       }
 
       if (this.props.onCardDetailsPage) {
+        if (this.state.variantCardIndex === null) {
+          this.setState({ variantCardIndex: 0 })
+          return
+        }
+
         const variants = this.getVariantWrappers()
         const singleVariant = variants[0]
 
@@ -127,6 +122,11 @@ class KeyboardNavigation extends Component {
       e.preventDefault()
 
       if (this.props.onCardsListPage) {
+        if (this.state.mainCardIndex === null) {
+          this.setState({ mainCardIndex: 0 })
+          return
+        }
+
         const cards = this.getCardWrappers()
         const singleCard = cards[0]
 
@@ -141,6 +141,11 @@ class KeyboardNavigation extends Component {
       }
 
       if (this.props.onCardDetailsPage) {
+        if (this.state.variantCardIndex === null) {
+          this.setState({ variantCardIndex: 0 })
+          return
+        }
+
         const variants = this.getVariantWrappers()
         const singleVariant = variants[0]
 
@@ -159,6 +164,11 @@ class KeyboardNavigation extends Component {
       e.preventDefault()
 
       if (this.props.onCardsListPage) {
+        if (this.state.mainCardIndex === null) {
+          this.setState({ mainCardIndex: 0 })
+          return
+        }
+
         let mainCardIndex = 0
 
         if (this.state.mainCardIndex === null) mainCardIndex = 0
@@ -168,6 +178,11 @@ class KeyboardNavigation extends Component {
       }
 
       if (this.props.onCardDetailsPage) {
+        if (this.state.variantCardIndex === null) {
+          this.setState({ variantCardIndex: 0 })
+          return
+        }
+
         let variantCardIndex = 0
 
         if (this.state.variantCardIndex > 0) variantCardIndex = this.state.variantCardIndex - 1
@@ -204,8 +219,21 @@ class KeyboardNavigation extends Component {
 
     key.bind('enter', e => {
       e.preventDefault()
-      const activeCard = document.querySelector('.card:focus')
-      if (activeCard) document.activeElement.click()
+      if (this.props.onCardsListPage) {
+        const activeCard = document.querySelector('.card:focus')
+        if (activeCard) document.activeElement.click()
+        return
+      }
+
+      if (this.props.onCardDetailsPage) {
+        const addButton = document.querySelector('.card:focus .card__add-remove-buttons .add-button')
+        if (addButton) addButton.click()
+      }
+    })
+
+    key.bind('esc', () => {
+      if (this.props.onCardsListPage) this.setState({ mainCardIndex: null })
+      if (this.props.onCardDetailsPage) this.setState({ variantCardIndex: null })
     })
 
     key.bind(['=', 'num+'], e => {

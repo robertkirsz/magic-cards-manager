@@ -6,13 +6,11 @@ import { Row, Col, Modal } from 'react-bootstrap'
 import _find from 'lodash/find'
 import { Card, CardDetails } from 'components'
 import { cardsDatabase } from 'database'
-import { resetVariantCardFocus } from 'store/keyboard'
+import { resetVariantCardFocus, setVariantCardFocus } from 'store/keyboard'
 
-const mapDispatchToProps = { resetVariantCardFocus }
+const mapDispatchToProps = { resetVariantCardFocus, setVariantCardFocus }
 
 const mapStateToProps = ({ allCards, myCards, settings }, ownProps) => ({
-  myCardsLocked: settings.myCardsLocked,
-  cardModalAnimation: settings.cardModalAnimation,
   // Find card by its name from the URL in all the cards or cards
   // from user's collection based of what page we are on
   card: _find(
@@ -21,7 +19,9 @@ const mapStateToProps = ({ allCards, myCards, settings }, ownProps) => ({
       : cardsDatabase,
     { cardUrl: ownProps.routeParams.cardUrl }
   ),
-  myCards: myCards.cards
+  myCards: myCards.cards,
+  myCardsLocked: settings.myCardsLocked,
+  cardModalAnimation: settings.cardModalAnimation
 })
 
 class CardView extends Component {
@@ -31,24 +31,28 @@ class CardView extends Component {
     myCardsLocked: PropTypes.bool,
     cardModalAnimation: PropTypes.bool,
     myCards: PropTypes.array,
-    resetVariantCardFocus: PropTypes.func.isRequired
+    resetVariantCardFocus: PropTypes.func.isRequired,
+    setVariantCardFocus: PropTypes.func.isRequired
   }
 
   state = { modalOpened: true }
 
   isCollectionPage = this.props.routes[1].path === 'my-cards'
 
+  componentDidMount () {
+    console.log('setVariantCardFocus')
+    this.props.setVariantCardFocus(0)
+  }
+
   componentWillReceiveProps (nextProps) {
-    if (this.props.card && !nextProps.card) {
-      this.goBack()
-    }
+    if (this.props.card && !nextProps.card) this.goBack()
   }
 
   closeModal = () => {
     // Hide modal
     this.setState({ modalOpened: false })
-    // Go back, if animation is disabled (because normally we go back
-    // when exit animation finishes)
+    // Go back, if animation is disabled (because normally we go back when exit animation finishes)
+    console.log('resetVariantCardFocus')
     this.props.resetVariantCardFocus()
     if (!this.props.cardModalAnimation) this.goBack()
   }
