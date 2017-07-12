@@ -11,9 +11,9 @@ export const resetVariantCardFocus = () => ({ type: 'RESET_VARIANT_CARD_FOCUS' }
 // ------------------------------------
 const ACTION_HANDLERS = {
   SET_MAIN_CARD_FOCUS: (state, { index }) => ({ ...state, mainCardFocusSetIndex: index }),
-  RESET_MAIN_CARD_FOCUS: state => ({ ...state, mainCardFocusResetIndexTimestamp: Date.now() }),
+  RESET_MAIN_CARD_FOCUS: state => ({ ...state, mainCardFocusSetIndex: null }),
   SET_VARIANT_CARD_FOCUS: (state, { index }) => ({ ...state, variantCardFocusSetIndex: index }),
-  RESET_VARIANT_CARD_FOCUS: state => ({ ...state, variantCardFocusResetIndexTimestamp: Date.now() })
+  RESET_VARIANT_CARD_FOCUS: state => ({ ...state, variantCardFocusSetIndex: null })
 }
 
 // ------------------------------------
@@ -21,9 +21,7 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 const initialState = {
   mainCardFocusSetIndex: null,
-  mainCardFocusResetIndexTimestamp: 0,
-  variantCardFocusSetIndex: null,
-  variantCardFocusResetIndexTimestamp: 0
+  variantCardFocusSetIndex: null
 }
 
 export default (state = initialState, action) => ACTION_HANDLERS[action.type]
