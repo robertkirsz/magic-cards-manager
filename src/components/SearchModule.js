@@ -2,15 +2,25 @@ import React, { Component } from 'react'
 import PropTypes from 'proptypes'
 import { connect } from 'react-redux'
 import cn from 'classnames'
+import _get from 'lodash/get'
 import _debounce from 'lodash/debounce'
 import _every from 'lodash/every'
 import _find from 'lodash/find'
-import _camelCase from 'lodash/camelCase'
 import { filterAllCards } from 'store/allCards'
 import { filterMyCards } from 'store/myCards'
 import { ColorFilter, CmcFilter, ColorButtons } from 'components'
 
-const clearState = {
+// TODO: make filetr query stay between route changes
+// TODO: show idicator that a query is on (a dot in the search icon)
+
+const mapStateToProps = ({ location, allCards }) => ({
+  pathname: location.pathname,
+  cardSets: allCards.cardSets
+})
+
+const mapDispatchToProps = { filterAllCards, filterMyCards }
+
+const initialState = () => ({
   queryName: '',
   queryTypes: '',
   queryText: '',
@@ -27,14 +37,7 @@ const clearState = {
     Green: true,
     Colorless: true
   }
-}
-
-const mapStateToProps = ({ location, allCards }) => ({
-  pathname: location.pathname,
-  cardSets: allCards.cardSets
 })
-
-const mapDispatchToProps = { filterAllCards, filterMyCards }
 
 class SearchModule extends Component {
   static propTypes = {
@@ -45,14 +48,13 @@ class SearchModule extends Component {
   }
 
   state = {
-    ...clearState,
-    showSearchForm: false,
-    whereToSearch: this.props.pathname === '/all-cards'
-      ? 'allCards'
-      : 'myCards'
+    ...initialState(),
+    showSearchForm: false
   }
 
-  debouncedFilter = _debounce(state => { this.filter(state) }, 300)
+  debouncedFilter = _debounce(state => {
+    this.filter(state)
+  }, 300)
 
   componentDidMount () {
     window.addEventListener('keydown', this.onKeyDown)
@@ -67,41 +69,31 @@ class SearchModule extends Component {
     if (document.activeElement.tagName === 'INPUT') return
     // Don't do anything on routes other than these two
     if (this.props.pathname !== '/all-cards' && this.props.pathname !== '/my-cards') return
-    // Ignore Alt
-    if (e.keyCode === 18) return
     // If a letter, a space or a backspace was pressed...
     if (
       (e.keyCode >= 65 && e.keyCode <= 90) ||
       (e.keyCode >= 97 && e.keyCode <= 122) ||
-      e.keyCode === 32 || e.keyCode === 8
+      e.keyCode === 32 ||
+      e.keyCode === 8
     ) {
       this.setState({ showSearchForm: true }, this.selectNameInput)
     }
   }
 
-  componentWillReceiveProps ({ pathname }) {
-    // When route changes and only if it's one of the card list pages...
-    if (this.props.pathname !== pathname && (pathname === 'all-cards' || pathname === 'my-cards')) {
-      // Save information of the collection that will be filtered
-      const whereToSearch = _camelCase(pathname)
-      this.setState({ whereToSearch })
-      // Filter it
-      this.filter({ ...this.state, whereToSearch })
-    }
-  }
-
-  // Reverts to initial state
-  clearState = () => {
-    const newState = { ...clearState }
-    newState.whereToSearch = this.state.whereToSearch
+  // Reverts to the initial state
+  resetState = () => {
+    const newState = { ...initialState() }
     this.setState(newState)
     this.filter(newState)
   }
 
   // Updates various search queries
-  updateQuery = (property, value) => {
-    const newState = { ...this.state }
-    newState[property] = value
+  handleChange = property => value => {
+    console.log(property)
+    const newState = {
+      ...this.state,
+      [property]: _get(value, 'target.value', value)
+    }
     this.setState(newState)
     this.debouncedFilter(newState)
   }
@@ -132,14 +124,16 @@ class SearchModule extends Component {
 
   // Turns on or off all the color buttons
   toggleColors = state => {
-    const newState = { ...this.state }
-    newState.colors = {
-      White: state,
-      Blue: state,
-      Black: state,
-      Red: state,
-      Green: state,
-      Colorless: state
+    const newState = {
+      ...this.state,
+      colors: {
+        White: state,
+        Blue: state,
+        Black: state,
+        Red: state,
+        Green: state,
+        Colorless: state
+      }
     }
     this.setState(newState)
     this.debouncedFilter(newState)
@@ -158,19 +152,18 @@ class SearchModule extends Component {
       const nameOk = card.name.toLowerCase().indexOf(queryName) > -1
       // Checking types
       const typeOk = queryTypes.length
-        ? _every(queryTypes, qt => (
-            _find(card.types, ct => ct.toLowerCase().indexOf(qt) > -1) ||
-            _find(card.subtypes, cst => cst.toLowerCase().indexOf(qt) > -1)
-          ))
+        ? _every(
+            queryTypes,
+            qt =>
+              _find(card.types, ct => ct.toLowerCase().indexOf(qt) > -1) ||
+              _find(card.subtypes, cst => cst.toLowerCase().indexOf(qt) > -1)
+          )
         : true
       // Checking text
-      const textOk = card.text
-        ? card.text.toLowerCase().indexOf(queryText) > -1
-        : true
+      const textOk = card.text ? card.text.toLowerCase().indexOf(queryText) > -1 : true
       // Checking set
-      const setOK = state.cardSet !== 'all-sets'
-        ? _find(card.variants, { setCode: state.cardSet })
-        : true
+      const setOK =
+        state.cardSet !== 'all-sets' ? _find(card.variants, { setCode: state.cardSet }) : true
       // Checking card colors
       const colorsOk = card.colors
         ? _find(card.colors, color => state.colors[color])
@@ -180,7 +173,9 @@ class SearchModule extends Component {
       if (state.monocoloredOnly && card.colors && card.colors.length !== 1) monoOk = false
       // Multicolored only test
       let multiOk = true
-      if (state.multicoloredOnly && (!card.colors || (card.colors && card.colors.length < 2))) multiOk = false
+      if (state.multicoloredOnly && (!card.colors || (card.colors && card.colors.length < 2))) {
+        multiOk = false
+      }
       // Converted mana cost test
       let cmcOk = false
       if (state.cmcType === 'minimum' && (card.cmc || 0) >= state.cmcValue) cmcOk = true
@@ -193,8 +188,8 @@ class SearchModule extends Component {
 
   // Passes filtering function to a particular reducer
   filter = state => {
-    if (state.whereToSearch === 'allCards') this.props.filterAllCards(this.search(state))
-    if (state.whereToSearch === 'myCards') this.props.filterMyCards(this.search(state))
+    if (this.props.pathname === '/all-cards') this.props.filterAllCards(this.search(state))
+    if (this.props.pathname === '/my-cards') this.props.filterMyCards(this.search(state))
   }
 
   focusNameInput = () => {
@@ -219,10 +214,6 @@ class SearchModule extends Component {
 
   render () {
     const { cardSets } = this.props
-    const {
-      queryName, queryTypes, queryText, colors, showSearchForm,
-      monocoloredOnly, multicoloredOnly, cmcValue, cmcType
-    } = this.state
 
     const searchButton = (
       <button
@@ -236,69 +227,75 @@ class SearchModule extends Component {
       <div className="search-form">
         <div className="text-inputs form-group">
           <input
-            type="text"
             className="form-control"
             ref="nameInput"
             placeholder="Name"
-            value={queryName}
-            onChange={e => this.updateQuery('queryName', e.target.value)}
-            onBlur={() => { this.setState({ showSearchForm: false }) }}
+            value={this.state.queryName}
+            onChange={this.handleChange('queryName')}
+            onBlur={() => {
+              this.setState({ showSearchForm: false })
+            }}
           />
           <input
-            type="text"
             className="form-control"
             placeholder="Type"
-            value={queryTypes}
-            onChange={e => this.updateQuery('queryTypes', e.target.value)}
+            value={this.state.queryTypes}
+            onChange={this.handleChange('queryTypes')}
           />
           <input
-            type="text"
             className="form-control"
             placeholder="Text"
-            value={queryText}
-            onChange={e => this.updateQuery('queryText', e.target.value)}
+            value={this.state.queryText}
+            onChange={this.handleChange('queryText')}
           />
         </div>
         <div className="form-group">
           <select
             className="form-control"
             value={this.state.cardSet}
-            onChange={e => this.updateQuery('cardSet', e.target.value)}
+            onChange={this.handleChange('cardSet')}
           >
             <option value="all-sets">All sets</option>
-            {cardSets.map(set => <option key={set.code} value={set.code}>{set.name}</option>)}
+            {cardSets.map(set =>
+              <option key={set.code} value={set.code}>
+                {set.name}
+              </option>
+            )}
           </select>
         </div>
         <div className="color-filter-group form-group">
-          <ColorFilter
-            colors={colors}
-            onColorChange={this.handleChangeColor}
-          />
+          <ColorFilter colors={this.state.colors} onColorChange={this.handleChangeColor} />
           <ColorButtons
-            colors={colors}
-            toggleAll={() => { this.toggleColors(true) }}
-            toggleNone={() => { this.toggleColors(false) }}
-            monocoloredOnly={monocoloredOnly}
-            multicoloredOnly={multicoloredOnly}
+            colors={this.state.colors}
+            toggleAll={() => {
+              this.toggleColors(true)
+            }}
+            toggleNone={() => {
+              this.toggleColors(false)
+            }}
+            monocoloredOnly={this.state.monocoloredOnly}
+            multicoloredOnly={this.state.multicoloredOnly}
             handleChangeMonocolored={this.handleChangeMonocolored}
             handleChangeMulticolored={this.handleChangeMulticolored}
           />
         </div>
         <CmcFilter
-          cmcValue={cmcValue}
-          cmcType={cmcType}
-          changeCmcValue={value => this.updateQuery('cmcValue', value)}
-          changeCmcType={value => this.updateQuery('cmcType', value)}
+          cmcValue={this.state.cmcValue}
+          cmcType={this.state.cmcType}
+          changeCmcValue={this.handleChange('cmcValue')}
+          changeCmcType={this.handleChange('cmcType')}
         />
         <div>
-          <button className="btn" onClick={this.clearState}>Reset</button>
+          <button className="btn" onClick={this.resetState}>
+            Reset
+          </button>
         </div>
       </div>
     )
 
     return (
       <div
-        className={cn('search-module', { 'form-visible': showSearchForm })}
+        className={cn('search-module', { 'form-visible': this.state.showSearchForm })}
         onMouseLeave={this.searchModuleMouseLeave}
       >
         {searchButton}
