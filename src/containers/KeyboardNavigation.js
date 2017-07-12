@@ -4,16 +4,16 @@ import { connect } from 'react-redux'
 import key from 'keyboardjs'
 
 const mapStateToProps = ({ keyboard }) => ({
-  mainCardFocusSetIndex: keyboard.mainCardFocusSetIndex,
-  variantCardFocusSetIndex: keyboard.variantCardFocusSetIndex
+  mainCardFocusIndex: keyboard.mainCardFocusIndex,
+  variantCardFocusIndex: keyboard.variantCardFocusIndex
 })
 
 class KeyboardNavigation extends Component {
   static propTypes = {
     onCardsListPage: PropTypes.bool.isRequired,
     onCardDetailsPage: PropTypes.bool.isRequired,
-    mainCardFocusSetIndex: PropTypes.number,
-    variantCardFocusSetIndex: PropTypes.number
+    mainCardFocusIndex: PropTypes.object.isRequired,
+    variantCardFocusIndex: PropTypes.object.isRequired
   }
 
   state = {
@@ -30,28 +30,24 @@ class KeyboardNavigation extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    if (this.props.mainCardFocusSetIndex !== nextProps.mainCardFocusSetIndex) {
-      this.setState({ mainCardIndex: nextProps.mainCardFocusSetIndex })
+    if (this.props.mainCardFocusIndex.time !== nextProps.mainCardFocusIndex.time) {
+      this.setState({ mainCardIndex: nextProps.mainCardFocusIndex.index })
     }
 
-    if (this.props.variantCardFocusSetIndex !== nextProps.variantCardFocusSetIndex) {
-      this.setState({ variantCardIndex: nextProps.variantCardFocusSetIndex })
+    if (this.props.variantCardFocusIndex.time !== nextProps.variantCardFocusIndex.time) {
+      this.setState({ variantCardIndex: nextProps.variantCardFocusIndex.index })
     }
   }
 
   componentDidUpdate (prevProps, prevState) {
     // Blur active card if 'mainCardIndex' got nullified
     if (this.props.onCardsListPage && this.state.mainCardIndex === null && prevState.mainCardIndex !== null) {
-      if (document.activeElement.getAttribute('class') === 'card atvImg') {
-        document.activeElement.blur()
-      }
+      this.blurActiveCard()
     }
 
     // Blur active card if 'variantCardIndex' got nullified
     if (this.props.onCardDetailsPage && this.state.variantCardIndex === null && prevState.variantCardIndex !== null) {
-      if (document.activeElement.getAttribute('class') === 'card atvImg') {
-        document.activeElement.blur()
-      }
+      this.blurActiveCard()
     }
 
     // Update focus state on search list's cards
@@ -74,6 +70,11 @@ class KeyboardNavigation extends Component {
   getVariants = () => document.querySelectorAll('.card-variants-list .card')
 
   getVariantWrappers = () => document.querySelectorAll('.card-variants-list .card-wrapper')
+
+  blurActiveCard = () => {
+    const activeCard = document.querySelector('.card:focus')
+    if (activeCard) activeCard.blur()
+  }
 
   initMouseEvents = () => {
     key.bind('up', e => {
@@ -249,7 +250,10 @@ class KeyboardNavigation extends Component {
     })
   }
 
-  render = () => null
+  render = () => {
+    console.log('state', this.state.mainCardIndex, 'props', this.props.mainCardFocusIndex.index)
+    return null
+  }
 }
 
 export default connect(mapStateToProps)(KeyboardNavigation)
