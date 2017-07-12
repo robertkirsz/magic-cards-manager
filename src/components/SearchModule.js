@@ -1,13 +1,17 @@
 import React, { Component } from 'react'
 import PropTypes from 'proptypes'
 import { connect } from 'react-redux'
+// --- Helpers ---
 import cn from 'classnames'
 import _get from 'lodash/get'
 import _debounce from 'lodash/debounce'
 import _every from 'lodash/every'
 import _find from 'lodash/find'
+// --- Store ---
 import { filterAllCards } from 'store/allCards'
 import { filterMyCards } from 'store/myCards'
+import { resetMainCardFocus } from 'store/keyboard'
+// --- Components ---
 import { ColorFilter, CmcFilter, ColorButtons } from 'components'
 
 // TODO: make filetr query stay between route changes
@@ -18,7 +22,7 @@ const mapStateToProps = ({ location, allCards }) => ({
   cardSets: allCards.cardSets
 })
 
-const mapDispatchToProps = { filterAllCards, filterMyCards }
+const mapDispatchToProps = { filterAllCards, filterMyCards, resetMainCardFocus }
 
 const initialState = () => ({
   queryName: '',
@@ -44,7 +48,8 @@ class SearchModule extends Component {
     pathname: PropTypes.string.isRequired,
     cardSets: PropTypes.array.isRequired,
     filterAllCards: PropTypes.func.isRequired,
-    filterMyCards: PropTypes.func.isRequired
+    filterMyCards: PropTypes.func.isRequired,
+    resetMainCardFocus: PropTypes.func.isRequired
   }
 
   state = {
@@ -187,6 +192,7 @@ class SearchModule extends Component {
 
   // Passes filtering function to a particular reducer
   filter = state => {
+    this.props.resetMainCardFocus()
     if (this.props.pathname === '/all-cards') this.props.filterAllCards(this.search(state))
     if (this.props.pathname === '/my-cards') this.props.filterMyCards(this.search(state))
   }

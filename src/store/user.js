@@ -58,7 +58,7 @@ export const authRequest = () => ({ type: 'AUTH_REQUEST' })
 export const authSuccess = user => ({ type: 'AUTH_SUCCESS', user })
 export const authError = error => ({ type: 'AUTH_ERROR', error })
 export const signOutSuccess = () => {
-  browserHistory.push('all-cards')
+  browserHistory.push('/all-cards')
   return { type: 'SIGN_OUT_SUCCESS' }
 }
 export const clearAuthErrors = () => ({ type: 'CLEAR_AUTH_ERROR' })

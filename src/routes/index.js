@@ -10,7 +10,7 @@ import NotFoundView  from 'routes/NotFoundView'
 
 // Redirects unathorized users
 // const requireAuth = (nextState, replace) => {
-//   if (!auth.currentUser) replace('all-cards')
+//   if (!auth.currentUser) replace('/all-cards')
 // }
 
 // TODO: show spinner when loading stuff on routes like settings and stats
@@ -20,7 +20,7 @@ export const createRoutes = () => ({
   component: CoreLayout,
   indexRoute: { component: AllCardsView },
   onEnter: (nextState, replace) => {
-    if (nextState.location.pathname === '/') replace('all-cards')
+    if (nextState.location.pathname === '/') replace('/all-cards')
   },
   childRoutes: [
     {
