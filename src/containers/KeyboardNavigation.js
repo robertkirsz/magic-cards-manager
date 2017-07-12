@@ -3,6 +3,11 @@ import PropTypes from 'proptypes'
 import { connect } from 'react-redux'
 import key from 'keyboardjs'
 
+// TODO: on card details page focus on first card by default
+// TODO: add card on enter key
+// TODO: on start (when index is null) "up, right, left" goes to first car, "down" does to last
+// TODO: clear index on Esc
+
 const mapStateToProps = ({ keyboard }) => ({
   mainCardFocusSetIndex: keyboard.mainCardFocusSetIndex,
   mainCardFocusResetIndexTimestamp: keyboard.mainCardFocusResetIndexTimestamp,
