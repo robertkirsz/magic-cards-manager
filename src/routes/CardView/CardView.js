@@ -40,7 +40,6 @@ class CardView extends Component {
   isCollectionPage = this.props.routes[1].path === 'my-cards'
 
   componentDidMount () {
-    console.log('setVariantCardFocus')
     this.props.setVariantCardFocus(0)
   }
 
@@ -52,7 +51,6 @@ class CardView extends Component {
     // Hide modal
     this.setState({ modalOpened: false })
     // Go back, if animation is disabled (because normally we go back when exit animation finishes)
-    console.log('resetVariantCardFocus')
     this.props.resetVariantCardFocus()
     if (!this.props.cardModalAnimation) this.goBack()
   }

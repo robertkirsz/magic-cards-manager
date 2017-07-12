@@ -89,7 +89,6 @@ class SearchModule extends Component {
 
   // Updates various search queries
   handleChange = property => value => {
-    console.log(property)
     const newState = {
       ...this.state,
       [property]: _get(value, 'target.value', value)
